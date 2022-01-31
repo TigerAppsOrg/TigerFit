@@ -265,10 +265,12 @@ function titleCase(str) {
       return word.charAt(0).toUpperCase() + word.slice(1);
     })
     .join("-");
-  let parenCapitalized = hyphenCapitalized.replace(
-    /(?<=\().+?(?=\))/g,
-    (x) => x.charAt(0).toLocaleUpperCase() + x.slice(1)
-  );
+  let parenCapitalized = hyphenCapitalized
+    .split("(")
+    .map(function (word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join("(");
   return parenCapitalized;
 }
 
