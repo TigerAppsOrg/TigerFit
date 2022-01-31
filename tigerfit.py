@@ -49,7 +49,7 @@ app = Flask(__name__, template_folder="./templates")
 app.secret_key = os.environ["APP_SECRET_KEY"]
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = os.environ["DATABASE_URL"]
+] = "postgresql" + os.environ["DATABASE_URL"][8:]
 
 # Helper function to map date_range string to date object
 def get_earliest_date(date_range):
