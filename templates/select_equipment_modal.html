@@ -1,0 +1,209 @@
+<div class="modal fade" id="equipment-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-header--sticky">
+                <div class="container-fluid justify-content-center">
+                    <div class="row">
+                        <h2 class="modal-title col-12 text-center py-1" id="exampleModalLabel" style="font-weight: bolder">
+                            Select Exercise
+                        </h2>
+
+                        <button type="button" id="close-modal-button" class="col-1 btn btn-danger btn-red m-3" data-bs-dismiss="modal" style="
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 30px;
+                height: 30px;
+              ">
+                            <i class="fa fa-times" style="position: absolute; right: 7.5px; top: 6px"></i>
+                        </button>
+                    </div>
+
+                    <div class="row justify-content-center">
+                        <div class="col-4"></div>
+                        <button id="select_equipment_button" type="button" class="col-4 btn btn-outline-success btn-green px-2">
+                            Select
+                        </button>
+                        <!--QR button-->
+                        <div class="col-4 justify-content-left">
+                            <button class="qr-btn-cls btn qr-active" id="qr-btn" data-toggle="modal" data-target="#qr-modal">
+                                <!--Height to match adjacent button-->
+
+                                <img src="{{url_for('static', filename='Pictures/qr_img.png')}}" style="width: 38px; height: 38px" />
+                            </button>
+                        </div>
+                        <!-- <button type=" button" class="col-1 btn btn-danger btn-red px-2" data-bs-dismiss="modal">
+                            <i class="fa fa-times"></i>
+                        </button> -->
+                        <!--EXPLICITLY SET THE MUSCLE GROUP TO 'ALL MUSCLE GROUPS' ON QR LOAD-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="card" style="width: 100%">
+                    <div id="equipment-modal-header-box" class="card-header">
+                        <select name="main_muscle_group_select" id="main_muscle_group_select" class="form-select save_value">
+                            <!-- <option disabled selected value value="All">
+                                Select Muscle Group
+                            </option> -->
+                            <option selected value="All">All Muscle Groups</option>
+                            <option value="Core">Core</option>
+                            <option value="Arms">Arms</option>
+                            <option value="Back">Back</option>
+                            <option value="Chest">Chest</option>
+                            <option value="Legs">Legs</option>
+                            <option value="Shoulders">Shoulders</option>
+                            {% if custom_equipment_list|length > 0 %}
+                            <option value="Custom">Custom</option>
+                            {% endif %}
+                        </select>
+
+                        <input id="modal-equipment-search-bar" class="form-control" type="search" placeholder="Search" aria-label="Search" autocomplete="off" />
+                    </div>
+                    <ul class="list-group list-group-flush" id="equipment_card_list">
+                        {%if is_add_workout_page == true %}
+                        <label class="custom-equipment option_item m-0 p-0" data-main_group="Custom">
+                            <input type="radio" class="checkbox" name="equipment_list_radios" data-equipment_name="custom-equipment-placeholder" />
+                            <div class="option_inner outline-card">
+                                <div>
+                                    <div class="tickmark"></div>
+
+                                    <li class="list-group-item" value="Custom Equipment">
+                                        <strong> Custom Exercise </strong>
+                                        <input class="form-control" type="text" id="custom-equipment-input" placeholder="To be added to your custom exercises"
+                                            autocomplete="off" />
+                                    </li>
+                                </div>
+                            </div>
+                        </label>
+                        {% endif %} {% for equip in equipment_list %} {% if
+                        is_add_workout_page == true or equip['equipment_name'] in
+                        used_equipment_list%}
+                        <label data-main_group="{{equip['main_muscle_group']}}" data-equipment_name="{{equip['equipment_name']}}" class="option_item m-0 p-0">
+                            <input type="radio" class="checkbox" name="equipment_list_radios" data-equipment_name="{{equip['equipment_name']}}" />
+                            <div class="option_inner outline-card">
+                                <div>
+                                    <div class="tickmark"></div>
+
+                                    <li class="list-group-item" value="{{equip['equipment_name']}}">
+                                        <div class="container">
+                                            <div class="row">
+                                                <!--EQUIPMENT NAME & BADGE-->
+                                                <div class="col-sm-12">
+                                                    <strong>{{equip['equipment_name']}}</strong>
+                                                    <p>
+                                                        {% for tag in equip["sub_muscle_groups"]["tags"] %}
+                                                        <span class="badge">{{tag}}</span>
+                                                        {% endfor %}
+                                                    </p>
+                                                </div>
+                                                <!--ICON INFO BUTTON-->
+                                                <div style="height: 0;">
+                                                    <button type="button" style="background-color:
+                                                    transparent; border:
+                                                    none; width: 100%" id="more_ex_info_button" data-toggle="modal" data-target="#more-ex-info-modal">
+                                                        <span class="material-icons" style="position:
+                                                        absolute; right:
+                                                        2%; top: 5%;">info</span>
+                                                    </button>
+                                                    <!--DATA CONTAINER-->
+                                                    <div class="data-mule" data-equipment_name="{{equip['equipment_name']}}"
+                                                        data-gif_path="{{equip['gif_path']}}" data-equipment_description="{{equip['equipment_description']}}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </div>
+                            </div>
+                        </label>
+                        {% endif %} {% endfor %} {% if custom_equipment_list|length > 0 %}
+                        {% for equip_name in custom_equipment_list %}
+                        <label data-main_group="Custom" data-equipment_name="{{equip_name}}" class="option_item m-0 p-0">
+                            <input type="radio" class="checkbox" name="equipment_list_radios" data-equipment_name="{{equip_name}}" />
+                            <div class="option_inner outline-card">
+                                <div>
+                                    <div class="tickmark"></div>
+
+                                    <li class="list-group-item" value="{{equip_name}}">
+                                        <strong>{{equip_name}}</strong>
+                                        <p>
+                                            <span class="badge">Custom</span>
+                                        </p>
+                                    </li>
+                                </div>
+                            </div>
+                        </label>
+                        {% endfor %} {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <!--END MODAL BODY-->
+        </div>
+    </div>
+</div>
+<!--END MAIN MODAL-->
+
+<!--START INFOBUTTON MODAL-->
+<div class="modal more-ex-info-cls" id="more-ex-info-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--START MODAL HEADER-->
+            <div class="modal-header">
+                <h2 id="more-ex-info-header" class="modal-title w-100 text-center"></h2>
+            </div>
+            <!--END MODAL HEADER-->
+
+            <!--START MODAL BODY-->
+            <div class="modal-body w-100 text-center">
+                <p id="more-ex-info-body"></p>
+                <img id="more-ex-info-gif" src="" />
+            </div>
+            <button type="button" class="btn btn-outline-danger" id="close-modal-btn">
+                Close
+            </button>
+            <!--END MODAL BODY-->
+        </div>
+
+        <!--END INFOBUTTON MODAL-->
+
+        <!-- Loads jQuery scripts from static folder (Flask thing) -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/select_equipment_modal.css') }}" />
+
+        <!-- <script src="https://kit.fontawesome.com/b99e675b6e.js"></script> -->
+    </div>
+</div>
+
+<div class="modal" id="qr-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--START MODAL HEADER-->
+            <!--END MODAL HEADER-->
+
+            <!--START MODAL BODY-->
+            <!--<div class="modal-body w-100 text-center">{#% include "qr-modal.html" %#}</div>-->
+            <div class="modal-body w-100 text-center">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">{% include "qr.html" %}</div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-danger btn-redbtn btn-outline-danger btn-red" id="close-qr-btn">
+                Dismiss
+            </button>
+            <!--END MODAL BODY-->
+        </div>
+
+        <!--END INFOBUTTON MODAL-->
+
+        <!-- Loads jQuery scripts from static folder (Flask thing) -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/select_equipment_modal.css') }}" />
+
+        <!-- <script src="https://kit.fontawesome.com/b99e675b6e.js"></script> -->
+    </div>
+</div>
+
+<!-- Loads jQuery scripts from static folder (Flask thing) -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/select_equipment_modal.css') }}" />

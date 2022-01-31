@@ -1,0 +1,44 @@
+<!-- Load Google icon library -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+<div style="height: 55px;"></div>
+<nav class="nav__bottom sticky-bottom">
+    <a href="/history" class="nav__link">
+        <i class="material-icons nav__icon">import_contacts</i>
+        <span class="nav__text">History</span>
+    </a>
+    <a href="/data" class="nav__link">
+        <i class="material-icons nav__icon">insights</i>
+        <span class="nav__text">Data</span>
+    </a>
+    <a href="/add" class="nav__link nav__link--active">
+        <i class="material-icons nav__icon">control_point</i>
+        <span class="nav__text">Add Workout</span>
+    </a>
+    <a href="/fitness" class="nav__link">
+        <i class="material-icons nav__icon">accessibility</i>
+        <span class="nav__text">Fitness</span>
+    </a>
+    <a href="/profile" class="nav__link">
+        <i class="material-icons nav__icon">account_circle</i>
+        <span class="nav__text">Profile</span>
+    </a>
+</nav>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // this will get the full URL at the address bar
+        let url = window.location.href;
+
+        // passes on every "a" tag
+        $(".nav__bottom a").each(function () {
+            // checks if its the same on the address bar
+            console.log(url);
+            console.log(this.href);
+            if (url == this.href) {
+                $(this).closest("a").addClass("active");
+            }
+        });
+    });
+</script>

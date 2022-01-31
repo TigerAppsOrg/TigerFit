@@ -1,0 +1,89 @@
+body {
+  padding-top: 100px !important;
+}
+
+.navbar {
+  color: orange;
+  font-size: 2rem;
+  background-color: black;
+}
+
+.dillon-background {
+  height: 90vh;
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)
+    ),
+    url("../Pictures/workout.jpg");
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.section {
+  padding: 0 2% 1%;
+  /* margin-left: 2%;
+	padding-bottom: 1%; */
+}
+
+/* .section-last {
+	padding-bottom: 1%;
+} */
+
+#login {
+  text-decoration: none;
+  color: orange;
+  font-size: 3em;
+  border: 3px solid;
+  padding: 10px 40px;
+  border-radius: 20px;
+}
+#login:hover {
+  background: rgba(255, 166, 0, 0.438);
+  color: white;
+  transition: background, color 500ms linear;
+}
+
+#info-sec {
+  margin-top: 50px;
+}
+
+#a:hover {
+  background-color: orange;
+  color: black;
+  border: 3px solid black;
+}
+
+.header {
+  background-color: black;
+}
+.headshot {
+  width: 150px;
+  height: 200px;
+}
+
+/* .Title {
+	font-size: 4rem;
+} */
+#TitleColor1 {
+  color: white;
+}
+#TitleColor2 {
+  color: orange;
+}
+
+@media (max-width: 576px) {
+  .welcome-bio-container {
+    padding-bottom: 20px;
+    align-items: center;
+  }
+  .member {
+    padding-left: 10px;
+    align-items: center;
+  }
+}

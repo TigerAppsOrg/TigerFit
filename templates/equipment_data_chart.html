@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+    <!-- Loads jQuery scripts from static folder (Flask thing) (with
+    access to Jinja variables) -->
+    {% block javascript %}
+    <script type="text/javascript">
+        {% include "js/equipment_data_chart.js" %}
+    </script>
+    {% endblock %}
+
+    <title>Equipment Data Chart</title>
+</head>
+
+
+<body>
+    {% include 'select_equipment_modal.html' %}
+
+    <form id="equipment_chart_form" class="form-inline" method="POST" action='{{url_for("data")}}'>
+        <div class="container">
+            <div class="row">
+                <h2 class="subheader">
+                    Past Exercise Data
+                    <span class="info-tooltip" data-toggle="tooltip" data-placement="top" title="View your past lifts
+                    over time in a graphical format, grouped into four
+                    different rep-ranges (click legend to filter)">
+                        &nbsp;
+                        <span class="material-icons" style="font-size:15px">info</span>
+                    </span>
+                </h2>
+            </div>
+
+        </div>
+        <input hidden type="text" class="form-select" id="hidden-chart-equipment-name" name="equipment_name">
+        <div class="row p-2 justify-content-center">
+            <div class="col-6 col-md-4 p-0 p-md-2">
+                <button type="button" id="equipment-chart-button" class="btn btn-outline-warning btn-orange" data-bs-toggle="modal"
+                    data-bs-target="#equipment-modal">
+                    Select Exercise
+                </button>
+            </div>
+            <div class="col-6 col-md-4 p-0 p-md-2">
+                <select name="date_range" id="date_range" class="form-select save_value">
+                    <option selected value="All Time">All Time</option>
+                    <option value="1 Month">Past 1 Month</option>
+                    <option value="3 Months">Past 3 Months</option>
+                    <option value="6 Months">Past 6 Months</option>
+                    <option value="12 Months">Past 12 Months</option>
+                </select>
+            </div>
+        </div>
+
+        </div>
+    </form>
+
+    <div class="container-fluid">
+        <h3 style="display: flex; justify-content: center;">
+            <strong id="chart-equipment-name-header"></strong>
+        </h3>
+    </div>
+    <div class="chart-canvas-wrapper">
+
+        <canvas id="equipment_chart_canvas" height="400"></canvas>
+    </div>
+</body>
+
+</html>

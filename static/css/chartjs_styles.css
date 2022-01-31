@@ -1,0 +1,31 @@
+.chart-canvas-wrapper {
+	width: 90%;
+	height: 350px;
+	margin: 0px auto;
+	display: flex;
+	justify-content: center;
+}
+
+@media (max-width: 576px) {
+	.chart-canvas-wrapper {
+		height: 250px;
+	}
+}
+
+#submit_bodyweight_button {
+	background: rgba(0, 128, 0, 0.2) !important;
+	color: green;
+	width: 100%;
+}
+#submit_bodyweight_button:active {
+	background: green !important;
+}
+#equipment-chart-button {
+	background: rgba(255, 166, 0, 0.2) !important;
+	color: rgb(141, 92, 1);
+	width: 100%;
+}
+#equipment-chart-button:active {
+	background: orange !important;
+	color: white !important;
+}

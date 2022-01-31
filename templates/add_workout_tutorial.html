@@ -1,0 +1,154 @@
+<!-- IntroJS Tutorial -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.3.0/intro.min.js"
+    integrity="sha512-WYNEDpX7FCz0ejmdUFl444n+v7gDgDFYmxy2YBx99v15UUk3zU5ZWYFBXFCvWYvd+nv/guwUnXmrecK7Ee0Wtg==" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.3.0/introjs.min.css"
+    integrity="sha512-YZO1kAqr8VPYJMaOgT4ZAIP4OeCuAWoZqgdvVYjeqyfieNWrUTzZrrxpgAdDrS7nV3sAVTKdP6MSKhqaMU5Q4g==" crossorigin="anonymous"
+    referrerpolicy="no-referrer" />
+
+<script>
+    // Creates tutorial object to be ran with createTutorial().start()
+    let createTutorial = () => {
+        // Define introJs tutorial and outline steps
+        let tutorial = introJs();
+        tutorial.setOptions({
+            disableInteraction: true,
+            showProgress: true,
+            showBullets: false,
+            hidePrev: true,
+            hideNext: false,
+            nextToDone: true,
+            exitOnEsc: true,
+            exitOnOverlayClick: false,
+            showStepNumbers: false,
+            keyboardNavigation: true,
+            overlayOpacity: 0.5
+        })
+        tutorial
+            .addSteps(
+                [{
+                    title: 'Welcome to TigerFit!',
+                    intro: 'Follow the tutorial to learn how to log your first workout!'
+                },
+                {
+                    element: document.querySelector('#workout_title'),
+                    title: 'Workout Title',
+                    intro: "Write a title here to identify this workout later (defaults to today's date)"
+                },
+                {
+                    element: document.querySelector('#workout_date'),
+                    title: 'Workout Date',
+                    intro: 'Select the day this workout was completed'
+                },
+                {
+                    element: document.querySelector('#workout_start_time'),
+                    title: 'Workout Start Time',
+                    intro: "Choose the time you began your workout. We'll do the rest when you press 'Submit'"
+                },
+                {
+                    element: document.querySelector('#add_exercise_button'),
+                    title: 'Add Exercise',
+                    intro: "Click this button to select the next exercise that you'd like to perform",
+
+                },
+                {
+                    title: 'Add an Exercise',
+                    intro: 'Use this page to find exercises, create custom exercises, and learn more information about exercises'
+                },
+                {
+                    element: document.querySelector('#equipment-modal-header-box'),
+                    title: 'Search Exercises',
+                    intro: "Search exercises by muscle groups worked or by name"
+                },
+                {
+                    element: document.querySelector('#custom-equipment-input'),
+                    title: 'Custom Exercises',
+                    intro: 'Create custom exercises which will appear in your exercise list in future workouts'
+                },
+                {
+                    element: document.querySelectorAll('.list-group-item')[1],
+                    title: 'Choose Exercises',
+                    intro: "Click on an exercise to choose it, or click the 'i' button for more info. Click the green 'Select' button above when you've chosen an exercise"
+                },
+
+                {
+                    element: document.querySelector('#clear-workout-button'),
+                    title: 'Clear Workout',
+                    intro: "Use this button if you ever need to completely clear a workout and start fresh"
+                },
+                {
+                    element: document.querySelector('#submit-workout-button'),
+                    title: 'Submit Workout',
+                    intro: "Use this button at the end of your workout to submit your finalized workout to TigerFit!"
+                },
+                {
+                    element: document.querySelector('.nav__bottom'),
+                    title: 'Other Features',
+                    intro: "Finally, use our navigation bar to explore the other features TigerFit has to offer, including workout history, body weight tracking, and fitness education information"
+                }
+                ]
+            )
+
+        // Open and close Add Exercise Modal on correct parts of tutorial
+        tutorial.onchange(function (e) {
+            if (this._currentStep < 5) {
+                $("#close-modal-button").trigger("click")
+                return true;
+            }
+            else if (this._currentStep >= 5 && this._currentStep <= 8) {
+                $(".add_exercise_button").trigger("click")
+                return true;
+            }
+            else if (this._currentStep === 9) {
+                $("#close-modal-button").trigger("click")
+                return true;
+            }
+        });
+        // tutorial.start();
+
+        // Send AJAX call that tutorial has been watched
+        tutorial.onexit(function () {
+            handleWatchingTutorial()
+        })
+
+        return tutorial
+    }
+
+    // Run tutorial right away if user has agreed to liability
+    // Else wait until they agree to liability to begin tutorial
+    if ("{{ has_agreed_liability }}" == "True") {
+        let tutorial = createTutorial()
+        tutorial.start()
+    }
+    else {
+        $(document).ready(() => {
+            $(document).on("click", "#agree-liability-button", function () {
+                let tutorial = createTutorial()
+                tutorial.start()
+            })
+        })
+    }
+
+    // Ajax functions to handle successful watch of tutorial in DB
+    function handleWatchingTutorial() {
+        let user_name = "{{ user_name }}";
+        let url =
+            "/watched_tutorial?user_name=" +
+            encodeURIComponent(user_name)
+        console.log("url", url);
+        console.log("Watching...");
+
+        // if (request != null) request.abort() // ? confused about this
+
+        let request = $.ajax({
+            type: "GET",
+            url: url,
+            success: updateWatchingTutorial,
+        });
+    }
+
+    function updateWatchingTutorial(response) {
+        console.log("Reached the response function")
+        console.log("reponse.success", response.success)
+    }
+</script>

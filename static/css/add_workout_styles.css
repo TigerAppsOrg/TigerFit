@@ -1,0 +1,183 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+  background: bisque !important;
+}
+
+.header-input input {
+  text-align: center;
+}
+#workout_title {
+  margin: 5px;
+}
+
+/* Styles for exercises table */
+table.exercises_table td {
+  position: relative;
+}
+
+input[id$="_reps"],
+input[id$="_weight"] {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  border: none;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+input[id$="_failed"] {
+  /* position: absolute; */
+  display: flex;
+  justify-content: center;
+  /* top: 0;
+	left: 0; */
+  height: 90%;
+  width: 80%;
+  margin: auto;
+  border: none;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.exercises_table td,
+th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.notes-section {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+.notes-section textarea {
+  width: 100%;
+}
+#add-set-button-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+#add-set-button-container button {
+  width: 100%;
+}
+#add-exercise-button-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+#add-exercise-button-container button {
+  width: 100%;
+}
+
+#clear-submit-buttons-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+#clear-submit-buttons-container button {
+  width: 50%;
+}
+
+.badge {
+  background: rgba(255, 0, 0, 0.5);
+}
+
+@media (max-width: 576px) {
+  #workout_title {
+    width: 50%;
+  }
+  #workout_date,
+  #workout_start_time {
+    width: 100%;
+  }
+
+  table input[type="number"] {
+    font-size: 12px;
+  }
+
+  .notes-section textarea {
+    width: 100%;
+  }
+  #add-set-button-container button {
+    width: 100%;
+  }
+  #add-exercise-button-container button {
+    width: 100%;
+  }
+  #clear-submit-buttons-container button {
+    width: 50%;
+  }
+}
+
+@media (min-width: 576px) {
+  #workout_title {
+    width: 30%;
+  }
+  #workout_date,
+  #workout_start_time {
+    width: 60%;
+  }
+
+  table input[type="number"] {
+    font-size: 16px;
+  }
+
+  .notes-section textarea {
+    width: 50%;
+  }
+  #add-set-button-container button {
+    width: 50%;
+  }
+  #add-exercise-button-container button {
+    width: 50%;
+  }
+  #clear-submit-buttons-container button {
+    width: 35%;
+  }
+}
+
+#delete_set_button {
+  height: 20%;
+  padding: 50px;
+  line-height: 1 !important;
+}
+
+#select_equipment_button:disabled {
+  background: rgba(128, 128, 128, 0.5) !important;
+  color: black;
+  border: 1px solid black;
+}
+
+.modal-header--sticky {
+  position: sticky;
+  top: 0;
+  background-color: inherit;
+  z-index: 1055;
+}
+
+input[type="checkbox"] {
+  box-shadow: 0 0 0 3px #0d6efd;
+  height: 25px;
+  width: 25px;
+}

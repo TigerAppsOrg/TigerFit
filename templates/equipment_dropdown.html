@@ -1,0 +1,41 @@
+<script>
+    $(document).ready(() => {
+        $(document).on("change", "#main_muscle_group_select", function () {
+            if ($(this).data("options") === undefined) {
+                // Array of all options
+                $(this).data("options", $("#datalist_options option").clone());
+            }
+            let main_group = $(this).val();
+            // Filter options with only correct main_group
+            let options = $(this)
+                .data("options")
+                .filter("[data-main_group=" + main_group + "]");
+            $("#datalist_options").html(options);
+        });
+    });
+</script>
+
+<select name="?ex_num?_main_muscle_group_select" id="?ex_num?_main_muscle_group_select" class="form-select save_value">
+    <option hidden disabled selected value>Select Muscle Group</option>
+    <option value="Core">Core</option>
+    <option value="Arms">Arms</option>
+    <option value="Back">Back</option>
+    <option value="Chest">Chest</option>
+    <option value="Legs">Legs</option>
+    <option value="Shoulders">Shoulders</option>
+</select>
+
+<input class="form-select save_value" list="datalist_options" placeholder="Select Equipment..." id="?ex_num?_equipment_name" name="?ex_num?_equipment_name"
+    spellcheck="false" autocomplete="off" />
+<datalist id="datalist_options">
+    {% for equip in equipment_list %}
+
+    <option data-main_group="{{equip['main_muscle_group']}}" value="{{equip['equipment_name']}}">
+        {% for tag in equip["sub_muscle_groups"]["tags"] %} {% if not loop.last %}
+        <span>{{tag}}, </span>
+        {% else %}
+        <span>{{tag}}</span>
+        {% endif %} {% endfor %}
+    </option>
+    {% endfor %}
+</datalist>

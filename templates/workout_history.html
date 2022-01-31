@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Inlcude favicons on all devices -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#ffc40d">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Include css page-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/consistent_styles.css') }}" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+
+    <!-- jQuery - hosted from Google CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <title>TigerFit</title>
+</head>
+
+<body>
+    {% include "header_title.html" %} {% if has_agreed_liability==false
+    %} {% include "liability_modal.html" %} {% endif %}
+    <h2 class="page-title-header">
+        Workout History
+        <span class="info-tooltip" data-toggle="tooltip" data-placement="top" title="View yours past workouts based on the date and workout name">
+            <span class="material-icons" style="font-size:15px">info</span>
+        </span>
+    </h2>
+
+
+    {% if past_workouts|length == 0 %}
+    <div class="d-flex justify-content-center align-items-center">
+        <img class="resize-img" src="/static/Pictures/sad_tiger.png">
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+        <h2>No Past Workouts!</h2>
+    </div>
+    {% else %}
+
+    <center>
+        <div style="overflow: auto; width: 90vw;">
+            <div class="accordion" id="history_accordion">
+                {% for workout in past_workouts %}
+                <div class="accordion-item" data-workout_id={{workout['workoutinfo']['id']}}>
+                    <h2 class="accordion-header" id="heading_{{
+                    loop.index }}">
+                        <button class="accordion-button {% if loop.index > 1 %} collapsed {% endif %}" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse_{{ loop.index }}" aria-expanded="{% if loop.index == 1 %}true{%
+                        else %} false {% endif %}" aria-controls="collapse_{{ loop.index
+                        }}">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div>
+                                        <strong>
+                                            {{workout['workoutinfo']['title']}}
+                                        </strong>
+                                    </div>
+                                    <div>
+                                        {{workout['workoutinfo']['date']}}
+                                        ({{workout['workoutinfo']['minutes_taken']
+                                        //60}}:{%
+                                        if workout['workoutinfo']['minutes_taken'] % 60 < 10 %}0{% endif %}{{workout['workoutinfo']['minutes_taken'] % 60}} hrs)
+                                            </div>
+                                    </div>
+                                </div>
+                        </button>
+                    </h2>
+                    <div id="collapse_{{ loop.index }}" class="accordion-collapse collapse {% if loop.index == 1 %}show{% endif %}"
+                        aria-labelledby="heading_{{ loop.index }}" data-bs-parent="#history_accordion">
+                        <div class="accordion-body">
+                            {% for exercise in workout['exerciseinfo']: %}
+                            <div>
+                                <strong class="underline-text">{{exercise['equip_name']}}</strong>
+                            </div>
+                            <div>
+                                {% for seti in range(exercise['sets']["num_sets"]):%}
+                                <strong>Set:</strong> {{seti+1}}
+                                <strong>Reps:</strong> {{exercise['sets']["num_reps"][seti]}}
+                                <strong>Weight:</strong>
+                                {{exercise['sets']["weight"][seti]}} lbs {% if exercise['sets']["failed"][seti] ==
+                                true %}
+                                <i class="fa fa-times-circle" data-toggle="tooltip" data-placement="top" title="You did not
+                                complete all the reps of this set" style="color: red"></i>
+                                {% endif %} {% if 'was_pr' in exercise['sets'] and exercise['sets']["was_pr"][seti]
+                                == true%}
+                                <span class="badge bg-primary" data-toggle="tooltip" data-placement="top"
+                                    title="You lifted more than your previous 1-rep max estimation">PR</span>
+
+                                {% endif %}
+
+                                <br />
+
+                                {%endfor%}
+                            </div>
+
+                            <div>
+                                {% if exercise['notes'] != '' %}
+                                <strong>Notes:</strong>
+                                {{exercise['notes']}} {% endif %}
+                            </div>
+                            <br />
+
+                            {% endfor %}
+                            <button class="btn btn-danger delete_workout_and_exercises_button" data-workout_id={{workout['workoutinfo']['id']}}
+                                onclick="console.log($(this).data('workout_id'))"><i class="fa fa-trash"></i></button>
+                        </div>
+
+                    </div>
+
+                </div>
+                {% endfor %}
+
+
+            </div>
+        </div>
+    </center>
+
+    <!-- Handle workout and exercise deletion -->
+    <script>
+        $(document).ready(() => {
+            $(document).on("click", ".delete_workout_and_exercises_button", function () {
+                if (confirm('Are you sure you want to delete this workout?')) {
+                    let workout_id = $(this).data("workout_id")
+                    handleWorkoutDeletion(workout_id)
+                    $(this).closest(".accordion-item").remove()
+                }
+            })
+
+            function handleWorkoutDeletion(workout_id) {
+                let user_name = "{{ user_name }}";
+
+                console.log("user name = ", user_name)
+                let url =
+                    "/delete_workout?user_name=" +
+                    encodeURIComponent(user_name) + "&workout_id=" + workout_id
+                console.log("url", url);
+                console.log("Agreeing...");
+
+                // if (request != null) request.abort() // ? confused about this
+
+                let request = $.ajax({
+                    type: "GET",
+                    url: url,
+                    success: updateWorkoutDeletion,
+                });
+            }
+
+            function updateWorkoutDeletion(response) {
+                console.log("Reached the response function")
+                console.log("reponse.success", response.success)
+            }
+        })
+    </script>
+
+    {% endif %}
+
+    {% include "navbar.html" %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(() => {
+            $('[data-toggle="tooltip"]').tooltip({
+                position: 'botttom'
+            })
+        });
+    </script>
+
+</body>
+
+</html>

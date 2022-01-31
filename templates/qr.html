@@ -1,0 +1,124 @@
+<script
+  type="text/javascript"
+  src="{{ url_for('static', filename='qr-scanner.umd.min.js') }}"
+></script>
+
+<!--jQuery-->
+<script
+  crossorigin="anonymous"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+></script>
+
+<div>
+  <video id="qr-video" playsinline preload="none" style="width: 100%"></video>
+  <br />
+  <span id="cam-has-camera"></span>
+  <div>
+    <select id="cam-list"></select>
+  </div>
+  <span id="cam-qr-result">No result yet</span>
+</div>
+<script>
+  $("#qr-btn").on("click", function () {
+    import("../static/qr-scanner.min.js").then((module) => {
+      console.log("Scanner successfully imported (dynamic)");
+      //import QrScanner from "../static/qr-scanner.min.js";
+      QrScanner.WORKER_PATH = "../static/qr-scanner-worker.min.js";
+      console.log("Successfully set QrScanner worker path :)");
+
+      const video = document.getElementById("qr-video");
+      const camHasCamera = document.getElementById("cam-has-camera");
+      const camList = document.getElementById("cam-list");
+      const camQrResult = document.getElementById("cam-qr-result");
+
+      // add all possible cameras to list
+      console.log("Adding all cameras...");
+      QrScanner.listCameras(true).then((cameras) =>
+        cameras.forEach((camera) => {
+          const option = document.createElement("option");
+          option.value = camera.id;
+          option.text = camera.label;
+          camList.add(option);
+        })
+      );
+      console.log("Cameras successfully added");
+      function setResult(label, result) {
+        label.textContent = result;
+        handleQR(result);
+        // then stop scanning and close video
+        console.log("QR scanned, stopping camera...");
+        scanner.stop();
+      }
+
+      // ####### Web Cam Scanning #######
+      console.log("Making scanner...");
+      console.log("Localstorage:");
+      for (var i = 0; i < localStorage.length; i++) {
+        // do something with localStorage.getItem(localStorage.key(i));
+        console.log(localStorage.getItem(i));
+      }
+      const scanner = new QrScanner(
+        video,
+        (result) => setResult(camQrResult, result),
+        (error) => {
+          camQrResult.textContent = error;
+          camQrResult.style.color = "inherit";
+        }
+      );
+      console.log("Scanner made...");
+      console.log("Starting camera");
+      scanner.start();
+      QrScanner.hasCamera().then((hasCamera) => {
+        if (hasCamera === true) {
+          camHasCamera.textContent = "Camera detected";
+        } else {
+          camHasCamera.textContent = "No camera detected";
+        }
+      });
+
+      // for debugging
+      window.scanner = scanner;
+
+      camList.addEventListener("change", (event) => {
+        scanner.setCamera(event.target.value);
+        console.log("camera changed to: " + event.target.value);
+      });
+
+      //$("#qr-btn").on("click", function () {
+      //  console.log("QR button clicked, starting camera...");
+      //  scanner.start();
+      //});
+
+      $("#close-qr-btn").on("click", function () {
+        console.log("modal dismissed, stopping scan...");
+        scanner.stop();
+      });
+      function handleQR(qrcode) {
+        console.log("Handling QR code: " + qrcode);
+        $.getJSON("../static/json/qr-links.json", function (data) {
+          var qr_dict = data[0];
+          if (qr_dict.hasOwnProperty(qrcode)) {
+            console.log("key in dictionary with hasown");
+
+            // if theres a QR in the list, then find the corresponding exercise
+            // and scroll to it and/or highlight it
+            console.log($("#modal-equipment-search-bar").val());
+
+            // SET THE MUSCLE GROUP TO BE 'ALL MUSCLE GROUPS' TO NOT EXCLUDE ANY WORKOUTS
+            $("#main_muscle_group_select").val("All");
+            // SET THE SEARCH BAR TO BE THE EQUIPMENT NAME
+            $("#modal-equipment-search-bar").val(qr_dict[qrcode]);
+            $("#modal-equipment-search-bar").trigger("input");
+
+            $("#qr-modal").modal("toggle");
+          } else {
+            console.log("no such QR codes");
+          }
+        }).fail(function () {
+          console.log("error loading json");
+        });
+      }
+    });
+  });
+</script>

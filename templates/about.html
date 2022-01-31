@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,
+    initial-scale=1.0" />
+
+    <!-- Inlcude favicons on all devices -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#ffc40d">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>TigerFit</title>
+    <!-- Import Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/consistent_styles.css') }}" />
+</head>
+
+<body>
+    {% include "navbar_top.html" %}
+    <div class="section" id="info-sec">
+        <h1 style="font-size: 3rem; color: orange">What is TigerFit?</h1>
+
+        <h3>
+            Good Question! TigerFit is a Princeton University fitness app that aims to create a more efficient and
+            centralized way to track workouts, visualize progress, and promote healthy lifestyles on campus.
+            TigerFit aims to simplify the process of working out for new and advanced lifters alike.
+        </h3>
+    </div>
+    <hr />
+    <div class="section" id="info-cont">
+        <h1 style="font-size: 3rem; color: orange">What can I do here?</h1>
+
+        <ul>
+            <li>
+                <h3>Log your workouts and keep notes of them</h3>
+            </li>
+            <li>
+                <h3>View your workout history</h3>
+            </li>
+            <li>
+                <h3>View the progression of your exercises and bodyweight</h3>
+            </li>
+            <li>
+                <h3>Find different exercises for specified muscle groups</h3>
+            </li>
+            <li>
+                <h3>Receive recommendations weights for certain workouts based on your past history</h3>
+            </li>
+        </ul>
+    </div>
+    <hr />
+
+    <div class="section" id="about-us">
+        <h1 style="font-size: 3rem; color: orange">Who is TigerFit?</h1>
+        <center>
+            <div class="container container-fluid" id="names">
+                <div class="row">
+                    <!-- Ian -->
+                    <div class="col-12 col-sm-3 welcome-bio-container">
+                        <img class="headshot" src="{{ url_for('static', filename='Pictures/IanM.jpg') }}" />
+                        <div class="d-inline-block member">
+                            <h2>Ian Murray '23</h2>
+                            <h3 style="opacity: 0.5">Project Leader<br />Backend Developer</h3>
+                        </div>
+                    </div>
+                    <!-- Adam -->
+                    <div class="col-12 col-sm-3 welcome-bio-container">
+                        <img class="headshot" src="{{ url_for('static', filename='Pictures/AdamG.jpeg') }}" />
+                        <div class="d-inline-block member">
+                            <h2>Adam Gamba '23</h2>
+                            <h3 style="opacity: 0.5">Lead Backend<br />Developer</h3>
+                        </div>
+                    </div>
+                    <!-- Kevin -->
+                    <div class="col-12 col-sm-3 welcome-bio-container">
+                        <img class="headshot" src="{{ url_for('static', filename='Pictures/KevinC.jpeg') }}" />
+                        <div class="d-inline-block member">
+                            <h2>Kevin Castro '23</h2>
+                            <h3 style="opacity: 0.5">Frontend Developer</h3>
+                        </div>
+                    </div>
+                    <!-- Darren -->
+                    <div class="col-12 col-sm-3 welcome-bio-container">
+                        <img class="headshot" src="{{ url_for('static', filename='Pictures/DarrenZ.jpg') }}" />
+                        <div class="d-inline-block member">
+                            <h2>Darren Zheng '23</h2>
+                            <h3 style="opacity: 0.5">Frontend Developer</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+    </div>
+
+    <hr />
+
+    <div class="section section-last">
+        <h1 style="font-size: 3rem; color: orange">Liability Agreement</h1>
+
+        <div class="row justify-content-center">
+            <h3>
+                The content in this application is for educational purposes, and it should be taken as mere suggestions. Users should take necessary
+                precautions when using weightlifting equipment.
+                Please use a spotter when available and only
+                lift what is comfortable. The owners of TigerFit
+                are not responsible for any injuries that may
+                occur while using the application.
+            </h3>
+            <h3>
+                If you are in the United States and think you are having a medical or health emergency, call your health care professional, or 911,
+                immediately.
+            </h3>
+        </div>
+    </div>
+    <!-- <div class="section">
+        <h1 style="font-size: 3rem; color: orange">Instructions to Add
+            to Mobile Home Screen</h1>
+        <h3>
+            To add the site to your phone's homescreen, open the
+            homepage
+        </h3>
+        <h3>
+            On iPhone, click the button on the bottom of Safari
+        </h3>
+        <h3>
+            On Android, click on the button on the top right of Chrome
+        </h3>
+        <h3>
+            Click "Add to Home Screen"
+        </h3>
+    </div> -->
+</body>
+
+</html>

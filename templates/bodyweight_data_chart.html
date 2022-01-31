@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+    <!-- Loads jQuery scripts from static folder (Flask thing) (with
+        access to Jinja variables) -->
+    {% block javascript %}
+    <script type="text/javascript">
+        {% include "js/bodyweight_data_chart.js" %}
+    </script>
+    {% endblock %}
+
+
+    <title>Equipment Data Chart</title>
+</head>
+
+<body>
+    <form id="bodyweight_chart_form" class="form-inline" method="POST" action='{{url_for("data")}}'>
+        <div class="container">
+            <div class="row">
+                <div class="col-12"></div>
+                <h2 class="subheader">
+                    Body Weight Tracker
+                    <span class="info-tooltip" data-toggle="tooltip" data-placement="top" title="Track your body weight.
+                    If the daily change is green, you are getting closer
+                    to your goal!">
+                        &nbsp
+                        <span class="material-icons" style="font-size:15px">info</span>
+                    </span>
+
+                </h2>
+            </div>
+        </div>
+
+        <p class="d-flex justify-content-center p-2 m-0" id="bodyweight_change_container"></p>
+
+        <div class="row p-2 justify-content-center">
+            <div class="col-6 col-md-4 p-0 p-md-2">
+                <input required placeholder="Today's Weight (lbs)" name="bodyweight_input" id="bodyweight_input" type="number" min="0" step="0.1"
+                    class="form-control" />
+            </div>
+            <div class="col-6 col-md-4 p-0 p-md-2">
+                <button type="submit" class="btn btn-outline-success
+                    btn-green" id="submit_bodyweight_button">
+                    Submit <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        </div>
+    </form>
+
+
+
+    <div class="chart-canvas-wrapper" id="bodyweight_chart_canvas_container" style="display: none;">
+        <canvas id="bodyweight_chart_canvas">
+        </canvas>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+<div class="modal fade" id="liability-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h1>Liability Agreement</h1>
+                <!-- <div class="container-fluid justify-content-center">
+                    <div class="row">
+                        <h2 class="modal-title col-12 text-center py-1" id="exampleModalLabel" style="font-weight: bolder">
+                            Select Equipment
+                        </h2>
+
+                        <button type="button" class="col-1 btn btn-danger btn-red m-3" data-bs-dismiss="modal"
+                            style="position: absolute; right: 0; top: 0; width: 30px; height: 30px">
+                            <i class="fa fa-times" style="position: absolute; right: 7.5px; top: 6px"></i>
+                        </button>
+                    </div> -->
+
+
+
+            </div>
+            <div class="modal-body container">
+
+                <div class="row justify-content-center">
+                    <p>
+                        The content in this application is for educational purposes, and it should be taken as mere suggestions. Users should take necessary
+                        precautions when using weightlifting equipment.
+                        Please use a spotter when available and only
+                        lift what is comfortable. The owners of TigerFit
+                        are not responsible for any injuries that may
+                        occur while using the application.
+                    </p>
+                    <p>
+                        If you are in the United States and think you are having a medical or health emergency, call your health care professional, or 911,
+                        immediately.
+                    </p>
+                    <p>
+                        By clicking the “Agree” button below, you agree
+                        to the statements above.
+                    </p>
+                </div>
+
+                <div class="row justify-content-center">
+                    <button class="btn btn-green" id="agree-liability-button">Agree</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Handles click of "Agree" button -->
+<script>
+    // Opens liability modal
+    $(document).ready(() => {
+        $('#liability-modal').modal({ backdrop: 'static', keyboard: false })
+
+        $("#liability-modal").modal("toggle");
+    });
+    $(document).ready(() => {
+        $(document).on("click", "#agree-liability-button", function () {
+            console.log("agreed")
+            handleLiabilityAgreement()
+            // $("#liability-modal").modal("toggle");
+        })
+    });
+    function handleLiabilityAgreement() {
+        let user_name = "{{ user_name }}";
+        console.log("user name = ", user_name)
+        let url =
+            "/agree_liability?user_name=" +
+            encodeURIComponent(user_name)
+        console.log("url", url);
+        console.log("Agreeing...");
+
+        // if (request != null) request.abort() // ? confused about this
+
+        let request = $.ajax({
+            type: "GET",
+            url: url,
+            success: updateLiabilityAgreement,
+        });
+    }
+
+    function updateLiabilityAgreement(response) {
+        console.log("Reached the response function")
+        console.log("reponse.success", response.success)
+        if (response.success) {
+            $("#liability-modal").modal("toggle");
+
+            //alert("toggled" + "{{ has_watched_tutorial }}")
+            //if ("{{ has_watched_tutorial }}" === "False") {
+            //    alert('need tutorial still')
+            //    introJs().start()
+            //}
+        }
+
+    }
+</script>
