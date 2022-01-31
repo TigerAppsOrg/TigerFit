@@ -36,20 +36,20 @@ from database_methods import (
 )
 
 from casclient import CasClient
-from keys import APP_SECRET_KEY
 from format_chart_data import (
     format_rep_range_data,
     format_bodyweight_data,
 )
 import html
+import os
 
 session, engine = create_session()
 
 app = Flask(__name__, template_folder="./templates")
-app.secret_key = APP_SECRET_KEY
+app.secret_key = os.environ["APP_SECRET_KEY"]
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "postgres://sjgzfdzvqahofp:10ce9d501c3c2b68bcaa3f2130da9dbfb1ede742c3efa52b2b7a23e0a4ba1ec8@ec2-44-198-236-169.compute-1.amazonaws.com:5432/d96lb2r2kfsl1g?sslmode=require"
+] = os.environ["DATABASE_URL"]
 
 # Helper function to map date_range string to date object
 def get_earliest_date(date_range):

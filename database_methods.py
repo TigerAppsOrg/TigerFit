@@ -990,7 +990,7 @@ def create_local_session(
 
 
 def create_session():
-    db_url = "postgresql+psycopg2://sjgzfdzvqahofp:10ce9d501c3c2b68bcaa3f2130da9dbfb1ede742c3efa52b2b7a23e0a4ba1ec8@ec2-44-198-236-169.compute-1.amazonaws.com:5432/d96lb2r2kfsl1g"
+    db_url = os.environ["DATABASE_URL"]
     engine = create_engine(db_url)
     # Session = sessionmaker(bind=engine)
     # return Session(), engine
