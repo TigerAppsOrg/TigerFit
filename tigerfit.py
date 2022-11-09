@@ -11,6 +11,7 @@ from dateutil.relativedelta import relativedelta
 from flask.helpers import make_response
 from database_methods import (
     create_session,
+    # create_local_session,
     get_all_custom_equipment,
     get_all_used_equipment,
     get_all_equipment,
@@ -43,13 +44,20 @@ from format_chart_data import (
 import html
 import os
 
+# ! Production
 session, engine = create_session()
+
+# ! Local testing
+# session, engine = create_local_session()
+# from dotenv import load_dotenv
+# load_dotenv()
+
 
 app = Flask(__name__, template_folder="./templates")
 app.secret_key = os.environ["APP_SECRET_KEY"]
-app.config[
-    "SQLALCHEMY_DATABASE_URI"
-] = "postgresql" + os.environ["DATABASE_URL"][8:]
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "postgresql" + os.environ["DATABASE_URL"][8:]
+)
 
 # Helper function to map date_range string to date object
 def get_earliest_date(date_range):
