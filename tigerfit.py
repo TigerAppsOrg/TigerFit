@@ -44,13 +44,16 @@ from format_chart_data import (
 import html
 import os
 
+
 # ! Production
 session, engine = create_session()
 
 # ! Local testing
-# session, engine = create_local_session()
 # from dotenv import load_dotenv
+
 # load_dotenv()
+
+# session, engine = create_local_session()
 
 
 app = Flask(__name__, template_folder="./templates")
@@ -615,7 +618,7 @@ def recommend_reps():
     print("Handling recommend_reps...")
     user_name = request.args.get("user_name")
     equipment_name = request.args.get("equipment_name")
-    weight = int(request.args.get("weight"))
+    weight = float(request.args.get("weight"))
     element_name = request.args.get("element_name")
 
     # Contact database
