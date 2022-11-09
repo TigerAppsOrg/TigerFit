@@ -11,7 +11,7 @@ from dateutil.relativedelta import relativedelta
 from flask.helpers import make_response
 from database_methods import (
     create_session,
-    # create_local_session,
+    create_local_session,
     get_all_custom_equipment,
     get_all_used_equipment,
     get_all_equipment,
@@ -44,13 +44,15 @@ from format_chart_data import (
 import html
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # ! Production
 session, engine = create_session()
 
 # ! Local testing
 # session, engine = create_local_session()
-# from dotenv import load_dotenv
-# load_dotenv()
 
 
 app = Flask(__name__, template_folder="./templates")
@@ -615,7 +617,7 @@ def recommend_reps():
     print("Handling recommend_reps...")
     user_name = request.args.get("user_name")
     equipment_name = request.args.get("equipment_name")
-    weight = int(request.args.get("weight"))
+    weight = float(request.args.get("weight"))
     element_name = request.args.get("element_name")
 
     # Contact database

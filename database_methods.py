@@ -982,14 +982,16 @@ def create_local_session(
     database="tigerfit",
 ):
     engine = create_engine(
-        "postgresql+psycopg2://%s:%s@%s:%s/%s"
-        % (user, password, host, port, database)
+        "postgresql"
+        + os.environ["DATABASE_URL"][8:]
+        # % (user, password, host, port, database)
     )
     Session = sessionmaker(bind=engine)
     return Session(), engine
 
 
 def create_session():
+    # postgres://username:password@hostname:port/database
     db_url = "postgresql" + os.environ["DATABASE_URL"][8:]
     engine = create_engine(db_url)
     # Session = sessionmaker(bind=engine)

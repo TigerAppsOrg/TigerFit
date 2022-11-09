@@ -77,7 +77,6 @@ class CasClient:
     # Authenticate the remote user, and return the user's username.
     # Do not return unless the user is successfully authenticated.
     def authenticate(self, remote_session):
-
         # If the username is in the session, then the user was
         # authenticated previously.  So return the username.
         if "username" in session:
