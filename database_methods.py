@@ -545,6 +545,21 @@ def get_most_recent_workout(session, user_name):
         .first()
     )
 
+# Returns one most recent bodyweight of selected user
+def get_most_recent_bodyweight(session, user_name):
+    return (
+        session.query(Users, UserBodyweights)
+        .join(UserBodyweights, Users.user_name == UserBodyweights.user_name)
+        .filter(
+            and_(
+                Users.user_name == user_name,
+                UserBodyweights.user_name == user_name,
+            )
+        )
+        .order_by(desc(UserBodyweights.date))
+        .first()
+    )
+
 
 # Returns all past exercises for selected user and selected piece of
 # equipment, starting at the start date and ending today
