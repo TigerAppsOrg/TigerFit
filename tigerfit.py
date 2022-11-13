@@ -11,7 +11,7 @@ from dateutil.relativedelta import relativedelta
 from flask.helpers import make_response
 from database_methods import (
     create_session,
-    # create_local_session,
+    create_local_session,
     get_all_custom_equipment,
     get_all_used_equipment,
     get_all_equipment,

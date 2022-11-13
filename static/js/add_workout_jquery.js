@@ -35,7 +35,10 @@ let restore_local_storage = (storage) => {
         console.log("ELEMENT NAME", element_name);
         $(this).val(localStorage.getItem(element_name));
 
-        if (element_name.includes("weight") || element_name.includes("reps")) {
+        if (
+          element_name.includes("weight") ||
+          element_name.includes("reps")
+        ) {
           $(this).attr(
             "placeholder",
             localStorage.getItem(`${element_name}_ph`)
@@ -114,7 +117,10 @@ $(document).ready(() => {
     // Store attributes for inputs into localStorage
     if (!$(this).attr("name").includes("?")) {
       if ($(this).attr("type") == "checkbox") {
-        localStorage.setItem($(this).attr("name"), $("this").prop("checked"));
+        localStorage.setItem(
+          $(this).attr("name"),
+          $("this").prop("checked")
+        );
       } else {
         localStorage.setItem($(this).attr("name"), $(this).val());
       }
@@ -138,6 +144,18 @@ $(document).ready(() => {
       .replaceAll("?set_num?", set_num);
 
     $(`#exercise_${ex_num}_sets`).append(html);
+
+    // Copy data from previous set
+    if (set_num > 1) {
+      // Get data from previous set
+      let prev_reps = $(`input#${ex_num}_${set_num - 1}_reps`).val();
+      let prev_weight = $(
+        `input#${ex_num}_${set_num - 1}_weight`
+      ).val();
+      // Set info for newly created set
+      $(`input#${ex_num}_${set_num}_reps`).val(prev_reps);
+      $(`input#${ex_num}_${set_num}_weight`).val(prev_weight);
+    }
 
     // Adds "required" attribute to non-hidden, number inputs
     add_required_attribute();
@@ -164,14 +182,73 @@ $(document).ready(() => {
       delete_exercise(ex_num);
     }
 
-    // ! not done
-    // Update "Set #" of all sets after deleting set (text only)
-    // let set_num_text = 0;
-    // $(`ul#exercise_${ex_num}_sets>li`).each(function () {
-    // 	console.log($(this).children("span.set_num").prop("innerHTML"));
-    // 	$(this).children("span.set_num").prop("innerHTML", `Set ${set_num_text}:`);
-    // 	set_num_text += 1;
-    // });
+    // Adjust set numbers after deleting any set (excluding the last)
+    if (set_num != num_sets_remaining + 1) {
+      let adjusted_set_number = 1;
+      $(`#exercise_${ex_num}_sets>tbody`)
+        .children()
+        .each(function () {
+          if ($(this).prop("hidden")) {
+            return;
+          } else {
+            $(this).attr("id", `${ex_num}_${adjusted_set_number}_set`);
+            let tds = $(this).children();
+            for (let i = 0; i < 4; i++) {
+              switch (i) {
+                case 0:
+                  $(tds[i])
+                    .children("input")
+                    .attr(
+                      "name",
+                      `${ex_num}_${adjusted_set_number}_reps`
+                    );
+                  $(tds[i])
+                    .children("input")
+                    .attr(
+                      "id",
+                      `${ex_num}_${adjusted_set_number}_reps`
+                    );
+                  break;
+                case 1:
+                  $(tds[i])
+                    .children("input")
+                    .attr(
+                      "name",
+                      `${ex_num}_${adjusted_set_number}_weight`
+                    );
+                  $(tds[i])
+                    .children("input")
+                    .attr(
+                      "id",
+                      `${ex_num}_${adjusted_set_number}_weight`
+                    );
+                  break;
+                case 2:
+                  $(tds[i])
+                    .children("input")
+                    .attr(
+                      "name",
+                      `${ex_num}_${adjusted_set_number}_failed`
+                    );
+                  $(tds[i])
+                    .children("input")
+                    .attr(
+                      "id",
+                      `${ex_num}_${adjusted_set_number}_failed`
+                    );
+                  break;
+                case 3:
+                  $(tds[i])
+                    .children("button")
+                    .data("set_num", adjusted_set_number);
+                  break;
+              }
+            }
+
+            adjusted_set_number++;
+          }
+        });
+    }
 
     // Let local storage be current contents of form
     set_local_storage();
@@ -221,7 +298,11 @@ $(document).ready(() => {
     console.log("num exercises", num_exercises);
     if (num_exercises <= 0) {
       $(`#alerts`).html(
-        generateAlert("warning", "Please add at least one exercise", "#664d03")
+        generateAlert(
+          "warning",
+          "Please add at least one exercise",
+          "#664d03"
+        )
       );
       event.preventDefault();
       return;
@@ -299,7 +380,9 @@ $(document).ready(() => {
           return $(this)
             .data("equipment_name")
             .toLowerCase()
-            .includes($("#modal-equipment-search-bar").val().toLowerCase());
+            .includes(
+              $("#modal-equipment-search-bar").val().toLowerCase()
+            );
         });
     } else {
       options = $(this)
@@ -315,7 +398,9 @@ $(document).ready(() => {
           return $(this)
             .data("equipment_name")
             .toLowerCase()
-            .includes($("#modal-equipment-search-bar").val().toLowerCase());
+            .includes(
+              $("#modal-equipment-search-bar").val().toLowerCase()
+            );
         });
     }
     $("#equipment_card_list").html(options);
@@ -347,7 +432,9 @@ $(document).ready(() => {
           return $(this)
             .data("equipment_name")
             .toLowerCase()
-            .includes($("#modal-equipment-search-bar").val().toLowerCase());
+            .includes(
+              $("#modal-equipment-search-bar").val().toLowerCase()
+            );
         });
     } else {
       options = $("#main_muscle_group_select")
@@ -363,7 +450,9 @@ $(document).ready(() => {
           return $(this)
             .data("equipment_name")
             .toLowerCase()
-            .includes($("#modal-equipment-search-bar").val().toLowerCase());
+            .includes(
+              $("#modal-equipment-search-bar").val().toLowerCase()
+            );
         });
     }
 
@@ -419,27 +508,33 @@ $(document).ready(() => {
     // Let local storage be current contents of form
     set_local_storage();
 
-    console.log(`Selected ${selected_equip_name} for Exercise ${ex_num}`);
+    console.log(
+      `Selected ${selected_equip_name} for Exercise ${ex_num}`
+    );
   });
 });
 
 // Disable select_equipment_button when not clickable
 $(document).ready(() => {
-  $(document).on("change", 'input[name="equipment_list_radios"]', function () {
-    let selected_equip_name = $(this).data("equipment_name");
+  $(document).on(
+    "change",
+    'input[name="equipment_list_radios"]',
+    function () {
+      let selected_equip_name = $(this).data("equipment_name");
 
-    if (selected_equip_name === undefined) {
-      disableButton("select_equipment_button");
-    } else if (
-      selected_equip_name === "custom-equipment-placeholder" &&
-      $("#custom-equipment-input").val() === ""
-    ) {
-      disableButton("select_equipment_button");
-    } else {
-      selected_equip_name = titleCase(selected_equip_name);
-      enableButton("select_equipment_button");
+      if (selected_equip_name === undefined) {
+        disableButton("select_equipment_button");
+      } else if (
+        selected_equip_name === "custom-equipment-placeholder" &&
+        $("#custom-equipment-input").val() === ""
+      ) {
+        disableButton("select_equipment_button");
+      } else {
+        selected_equip_name = titleCase(selected_equip_name);
+        enableButton("select_equipment_button");
+      }
     }
-  });
+  );
   $(document).on("input", "#custom-equipment-input", function () {
     let selected_equip_name = $(
       'input[name="equipment_list_radios"]:checked'
@@ -501,7 +596,10 @@ $(document).ready(() => {
     $("#equipment-modal").modal("show");
 
     $(".badge").each(function () {
-      $(this).css("background", `#${intToRGB(hashCode($(this).html()))}55`);
+      $(this).css(
+        "background",
+        `#${intToRGB(hashCode($(this).html()))}55`
+      );
     });
 
     let selected_equip_name = $(this).data("equipment_name");
@@ -523,12 +621,18 @@ $(document).ready(() => {
     // utf8.encode(string);
 
     // set contents of each div dynamically
-    $("#more-ex-info-header").text(data_mule.attr("data-equipment_name"));
+    $("#more-ex-info-header").text(
+      data_mule.attr("data-equipment_name")
+    );
     $("#more-ex-info-gif").attr("src", data_mule.attr("data-gif_path"));
-    $("#more-ex-info-body").text(data_mule.attr("data-equipment_description"));
+    $("#more-ex-info-body").text(
+      data_mule.attr("data-equipment_description")
+    );
 
     // hide/show modal
-    console.log("Additional info modal button clicked. Toggling modal...");
+    console.log(
+      "Additional info modal button clicked. Toggling modal..."
+    );
     $("#more-ex-info-modal").modal("toggle");
   });
 });
