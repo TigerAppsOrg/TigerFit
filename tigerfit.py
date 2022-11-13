@@ -11,7 +11,7 @@ from dateutil.relativedelta import relativedelta
 from flask.helpers import make_response
 from database_methods import (
     create_session,
-    # create_local_session,
+    create_local_session,
     get_all_custom_equipment,
     get_all_used_equipment,
     get_all_equipment,
@@ -46,14 +46,14 @@ import os
 
 
 # ! Production
-session, engine = create_session()
+# session, engine = create_session()
 
 # ! Local testing
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 
-# session, engine = create_local_session()
+session, engine = create_local_session()
 
 
 app = Flask(__name__, template_folder="./templates")
