@@ -126,9 +126,18 @@ def create_new_exercise(
             weight = sets["weight"][i]
             reps = sets["num_reps"][i]
             print("w,r", weight, reps)
-            one_rep_estimation = OneRepEstimation.estimate_one_rep_max(
-                weight, reps
-            )
+
+            if is_bodyweight_exercise(session, equipment_name):
+                one_rep_estimation = (
+                    OneRepEstimation.bodyweight_estimate_one_rep_max(
+                        session, user_name, weight, reps
+                    )
+                )
+            else:
+                one_rep_estimation = (
+                    OneRepEstimation.estimate_one_rep_max(weight, reps)
+                )
+
             new_1RM = insert_1RM_if_greater(
                 session, user_name, equipment_name, one_rep_estimation
             )
@@ -545,11 +554,15 @@ def get_most_recent_workout(session, user_name):
         .first()
     )
 
+
 # Returns one most recent bodyweight of selected user
 def get_most_recent_bodyweight(session, user_name):
     return (
         session.query(Users, UserBodyweights)
-        .join(UserBodyweights, Users.user_name == UserBodyweights.user_name)
+        .join(
+            UserBodyweights,
+            Users.user_name == UserBodyweights.user_name,
+        )
         .filter(
             and_(
                 Users.user_name == user_name,
@@ -557,6 +570,17 @@ def get_most_recent_bodyweight(session, user_name):
             )
         )
         .order_by(desc(UserBodyweights.date))
+        .first()
+    )
+
+
+# Returns true if the given equipment_name is a bodyweight exercise
+def is_bodyweight_exercise(session, equipment_name):
+    return (
+        session.query(EquipmentList.is_bodyweight)
+        .filter(
+            EquipmentList.equipment_name == equipment_name,
+        )
         .first()
     )
 
@@ -623,7 +647,16 @@ def get_rep_estimation(session, user_name, equipment_name, weight):
     )
     if one_rep_estimation == 0:
         return 0
-    return OneRepEstimation.estimate_reps(one_rep_estimation, weight)
+
+    if is_bodyweight_exercise(session, equipment_name):
+        return OneRepEstimation.bodyweight_estimate_reps(
+            session, user_name, one_rep_estimation, weight
+        )
+    else:
+        return OneRepEstimation.estimate_reps(
+            one_rep_estimation, weight
+        )
+    # return OneRepEstimation.estimate_reps(one_rep_estimation, weight)
 
 
 # Estimate recommended reps of a user on a piece of equipment, given reps
@@ -635,7 +668,17 @@ def get_weight_estimation(session, user_name, equipment_name, reps):
     )
     if one_rep_estimation == 0:
         return 0
-    return OneRepEstimation.estimate_weight(one_rep_estimation, reps)
+
+    if is_bodyweight_exercise(session, equipment_name):
+        return OneRepEstimation.bodyweight_estimate_weight(
+            session, user_name, one_rep_estimation, reps
+        )
+    else:
+        return OneRepEstimation.estimate_weight(
+            one_rep_estimation, reps
+        )
+
+    # return OneRepEstimation.estimate_weight(one_rep_estimation, reps)
 
 
 # Returns all users, or [] if empty

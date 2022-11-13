@@ -34,6 +34,7 @@ from database_methods import (
     has_watched_tutorial,
     watch_tutorial,
     unwatch_tutorial,
+    is_bodyweight_exercise,
 )
 
 from casclient import CasClient
