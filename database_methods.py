@@ -20,7 +20,8 @@ from database import (
     UserBodyweights,
 )
 from datetime import datetime, date, timedelta
-from one_rep_estimation import OneRepEstimation
+
+# from one_rep_estimation import OneRepEstimation
 import json
 import os
 
@@ -126,9 +127,18 @@ def create_new_exercise(
             weight = sets["weight"][i]
             reps = sets["num_reps"][i]
             print("w,r", weight, reps)
-            one_rep_estimation = OneRepEstimation.estimate_one_rep_max(
-                weight, reps
-            )
+
+            if is_bodyweight_exercise(session, equipment_name):
+                one_rep_estimation = (
+                    OneRepEstimation.bodyweight_estimate_one_rep_max(
+                        session, user_name, weight, reps
+                    )
+                )
+            else:
+                one_rep_estimation = (
+                    OneRepEstimation.estimate_one_rep_max(weight, reps)
+                )
+
             new_1RM = insert_1RM_if_greater(
                 session, user_name, equipment_name, one_rep_estimation
             )
@@ -546,6 +556,63 @@ def get_most_recent_workout(session, user_name):
     )
 
 
+# Returns one most recent bodyweight of selected user
+def get_most_recent_bodyweight(session, user_name):
+    res = (
+        session.query(Users, UserBodyweights.bodyweight)
+        .join(
+            UserBodyweights,
+            Users.user_name == UserBodyweights.user_name,
+        )
+        .filter(
+            and_(
+                Users.user_name == user_name,
+                UserBodyweights.user_name == user_name,
+            )
+        )
+        .order_by(desc(UserBodyweights.date))
+        .first()
+    )
+    print("No bodyweight in DB. Returning 0")
+
+    if res == None:
+        return 0
+    else:
+        return res["bodyweight"]
+
+
+# Returns true if a bodyweight measurement exists for the given user
+def bodyweight_exists(session, user_name):
+    res = (
+        session.query(Users, UserBodyweights.bodyweight)
+        .join(
+            UserBodyweights,
+            Users.user_name == UserBodyweights.user_name,
+        )
+        .filter(
+            and_(
+                Users.user_name == user_name,
+                UserBodyweights.user_name == user_name,
+            )
+        )
+        .order_by(desc(UserBodyweights.date))
+        .first()
+    )
+
+    return res != None
+
+
+# Returns true if the given equipment_name is a bodyweight exercise
+def is_bodyweight_exercise(session, equipment_name):
+    return (
+        session.query(EquipmentList.is_bodyweight)
+        .filter(
+            EquipmentList.equipment_name == equipment_name,
+        )
+        .first()
+    )
+
+
 # Returns all past exercises for selected user and selected piece of
 # equipment, starting at the start date and ending today
 def get_equipment_data(session, user_name, equipment_name, start_date):
@@ -608,7 +675,16 @@ def get_rep_estimation(session, user_name, equipment_name, weight):
     )
     if one_rep_estimation == 0:
         return 0
-    return OneRepEstimation.estimate_reps(one_rep_estimation, weight)
+
+    if is_bodyweight_exercise(session, equipment_name):
+        return OneRepEstimation.bodyweight_estimate_reps(
+            session, user_name, one_rep_estimation, weight
+        )
+    else:
+        return OneRepEstimation.estimate_reps(
+            one_rep_estimation, weight
+        )
+    # return OneRepEstimation.estimate_reps(one_rep_estimation, weight)
 
 
 # Estimate recommended reps of a user on a piece of equipment, given reps
@@ -620,7 +696,17 @@ def get_weight_estimation(session, user_name, equipment_name, reps):
     )
     if one_rep_estimation == 0:
         return 0
-    return OneRepEstimation.estimate_weight(one_rep_estimation, reps)
+
+    if is_bodyweight_exercise(session, equipment_name):
+        return OneRepEstimation.bodyweight_estimate_weight(
+            session, user_name, one_rep_estimation, reps
+        )
+    else:
+        return OneRepEstimation.estimate_weight(
+            one_rep_estimation, reps
+        )
+
+    # return OneRepEstimation.estimate_weight(one_rep_estimation, reps)
 
 
 # Returns all users, or [] if empty
@@ -1033,3 +1119,84 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# One rep estimation methods
+class OneRepEstimation:
+    # * https://en.wikipedia.org/wiki/One-repetition_maximum
+    # * Brzycki Formula
+    @staticmethod
+    def estimate_one_rep_max(weight, reps):
+        MAX_REP_LIMIT = 20
+        if reps <= 0 or reps > MAX_REP_LIMIT:
+            return 0
+        return 36 * weight / (37 - reps)
+
+    @staticmethod
+    def estimate_weight(one_rep_max, reps):
+        MAX_REP_LIMIT = 20
+        if reps <= 0 or reps > MAX_REP_LIMIT:
+            return 0
+        return (37 - reps) * one_rep_max / 36
+
+    @staticmethod
+    def estimate_reps(one_rep_max, weight):
+        MAX_REP_LIMIT = 20
+        rep_estimation = 37 - 36 * weight / one_rep_max
+
+        if rep_estimation <= 0 or rep_estimation > MAX_REP_LIMIT:
+            return 0
+
+        return rep_estimation
+
+    # * For bodyweight workouts, use weight = bodyweight + weight added
+    @staticmethod
+    def bodyweight_estimate_one_rep_max(
+        session, user_name, weight_added, reps
+    ):
+        MAX_REP_LIMIT = 20
+        curr_bodyweight = get_most_recent_bodyweight(session, user_name)
+        total_weight = weight_added + curr_bodyweight
+
+        onerm_estimation = (
+            36 * total_weight / (37 - reps) - curr_bodyweight
+        )
+        if reps <= 0 or reps > MAX_REP_LIMIT:
+            return 0
+
+        if onerm_estimation < 0:
+            return 0
+        return onerm_estimation
+
+    @staticmethod
+    def bodyweight_estimate_weight(
+        session, user_name, one_rep_max, reps
+    ):
+        MAX_REP_LIMIT = 20
+        curr_bodyweight = get_most_recent_bodyweight(session, user_name)
+        total_weight = one_rep_max + curr_bodyweight
+
+        if reps <= 0 or reps > MAX_REP_LIMIT:
+            return 0
+
+        weight_estimation = (
+            37 - reps
+        ) * total_weight / 36 - curr_bodyweight
+        if weight_estimation < 0:
+            return 0
+        return weight_estimation
+
+    @staticmethod
+    def bodyweight_estimate_reps(
+        session, user_name, one_rep_max, weight_added
+    ):
+        MAX_REP_LIMIT = 20
+        curr_bodyweight = get_most_recent_bodyweight(session, user_name)
+
+        rep_estimation = 37 - 36 * (weight_added + curr_bodyweight) / (
+            one_rep_max + curr_bodyweight
+        )
+
+        if rep_estimation <= 0 or rep_estimation > MAX_REP_LIMIT:
+            return 0
+
+        return rep_estimation
