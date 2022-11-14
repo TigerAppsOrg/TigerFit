@@ -128,9 +128,7 @@ def create_new_exercise(
             reps = sets["num_reps"][i]
             print("w,r", weight, reps)
 
-            if is_bodyweight_exercise(
-                session, equipment_name
-            ) and bodyweight_exists(session, user_name):
+            if is_bodyweight_exercise(session, equipment_name):
                 one_rep_estimation = (
                     OneRepEstimation.bodyweight_estimate_one_rep_max(
                         session, user_name, weight, reps
@@ -575,7 +573,7 @@ def get_most_recent_bodyweight(session, user_name):
         .order_by(desc(UserBodyweights.date))
         .first()
     )
-    print("****************", res)
+    print("No bodyweight in DB. Returning 0")
 
     if res == None:
         return 0
@@ -678,9 +676,7 @@ def get_rep_estimation(session, user_name, equipment_name, weight):
     if one_rep_estimation == 0:
         return 0
 
-    if is_bodyweight_exercise(
-        session, equipment_name
-    ) and bodyweight_exists(session, user_name):
+    if is_bodyweight_exercise(session, equipment_name):
         return OneRepEstimation.bodyweight_estimate_reps(
             session, user_name, one_rep_estimation, weight
         )
@@ -701,9 +697,7 @@ def get_weight_estimation(session, user_name, equipment_name, reps):
     if one_rep_estimation == 0:
         return 0
 
-    if is_bodyweight_exercise(
-        session, equipment_name
-    ) and bodyweight_exists(session, user_name):
+    if is_bodyweight_exercise(session, equipment_name):
         return OneRepEstimation.bodyweight_estimate_weight(
             session, user_name, one_rep_estimation, reps
         )
