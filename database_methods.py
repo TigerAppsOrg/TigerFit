@@ -1157,9 +1157,15 @@ class OneRepEstimation:
         curr_bodyweight = get_most_recent_bodyweight(session, user_name)
         total_weight = weight_added + curr_bodyweight
 
+        onerm_estimation = (
+            36 * total_weight / (37 - reps) - curr_bodyweight
+        )
         if reps <= 0 or reps > MAX_REP_LIMIT:
             return 0
-        return 36 * total_weight / (37 - reps) - curr_bodyweight
+
+        if onerm_estimation < 0:
+            return 0
+        return onerm_estimation
 
     @staticmethod
     def bodyweight_estimate_weight(
@@ -1171,7 +1177,13 @@ class OneRepEstimation:
 
         if reps <= 0 or reps > MAX_REP_LIMIT:
             return 0
-        return (37 - reps) * total_weight / 36 - curr_bodyweight
+
+        weight_estimation = (
+            37 - reps
+        ) * total_weight / 36 - curr_bodyweight
+        if weight_estimation < 0:
+            return 0
+        return weight_estimation
 
     @staticmethod
     def bodyweight_estimate_reps(
