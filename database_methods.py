@@ -560,7 +560,6 @@ def get_most_recent_workout(session, user_name):
 
 # Returns one most recent bodyweight of selected user
 def get_most_recent_bodyweight(session, user_name):
-    user_name = "mtho"
     res = (
         session.query(Users, UserBodyweights.bodyweight)
         .join(
@@ -602,7 +601,7 @@ def bodyweight_exists(session, user_name):
         .first()
     )
 
-    return res == None
+    return res != None
 
 
 # Returns true if the given equipment_name is a bodyweight exercise
