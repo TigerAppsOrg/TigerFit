@@ -573,12 +573,12 @@ def get_most_recent_bodyweight(session, user_name):
         .order_by(desc(UserBodyweights.date))
         .first()
     )
-    print("No bodyweight in DB. Returning 0")
 
     if res == None:
+        print("No bodyweight in DB. Returning 0")
         return 0
     else:
-        return res["bodyweight"]
+        return res[1]
 
 
 # Returns true if a bodyweight measurement exists for the given user
@@ -676,11 +676,7 @@ def get_rep_estimation(session, user_name, equipment_name, weight):
     if one_rep_estimation == 0:
         return 0
 
-    print(
-        "***IS BODYWEIGHT?",
-        is_bodyweight_exercise(session, equipment_name),
-    )
-
+    print("***1RM estimation = ", one_rep_estimation)
     if is_bodyweight_exercise(session, equipment_name):
         return OneRepEstimation.bodyweight_estimate_reps(
             session, user_name, one_rep_estimation, weight
@@ -1151,7 +1147,9 @@ class OneRepEstimation:
         if rep_estimation <= 0:
             return 0
         if rep_estimation >= MAX_REP_LIMIT:
-            return 100
+            return (
+                MAX_REP_LIMIT * 5
+            )  # high number (so 0.8 * est >= MAX)
 
         return rep_estimation
 
