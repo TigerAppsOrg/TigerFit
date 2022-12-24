@@ -604,6 +604,16 @@ def bodyweight_exists(session, user_name):
 
 # Returns true if the given equipment_name is a bodyweight exercise
 def is_bodyweight_exercise(session, equipment_name):
+    query = (
+        session.query(EquipmentList.is_bodyweight)
+        .filter(EquipmentList.equipment_name == equipment_name)
+        .first()
+    )
+
+    # Returns False for custom workouts, and those without a designation
+    if query is None:
+        return False
+
     return (
         session.query(EquipmentList.is_bodyweight)
         .filter(
@@ -695,6 +705,7 @@ def get_weight_estimation(session, user_name, equipment_name, reps):
         .filter(Users.user_name == user_name)
         .one()[0][equipment_name]
     )
+
     if one_rep_estimation == 0:
         return 0
 

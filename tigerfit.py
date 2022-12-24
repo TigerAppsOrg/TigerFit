@@ -5,7 +5,14 @@
 # Author: Ian Murray, Adam Gamba & Darren Zheng
 # ----------
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    send_from_directory,
+)
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 from flask.helpers import make_response
@@ -600,7 +607,7 @@ def recommend_weight():
     weight_recommendation = get_weight_estimation(
         session, user_name, equipment_name, reps
     )
-    print(weight_recommendation)
+
     response = make_response(
         {
             "element_name": element_name,
@@ -778,6 +785,16 @@ def internal_server_error(e):  # need this e to work
 #         "Pictures/favicon.ico",
 #         mimetype="image/vnd.microsoft.icon",
 #     )
+@app.route("/android-chrome-384x384.png")
+def favicon():
+    print("****************** hello error")
+    return send_from_directory(
+        os.path.join(app.root_path, "static"),
+        "/static/favicon/android-chrome-384x384.png",
+        mimetype="image/vnd.microsoft.icon",
+    )
+
+
 # ? needed
 # @app.route("/qr", methods=["GET", "POST"])
 # def test_qr_codes():
