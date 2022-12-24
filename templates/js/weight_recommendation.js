@@ -135,14 +135,15 @@ function handleRepsRecommendation(response) {
   let reps_80percent = Math.round(0.8 * response.reps_recommendation);
   let reps_max = Math.round(response.reps_recommendation);
   let ph = "";
+  console.log("REPS MAX = ", reps_max);
 
   let insert_id = `#${response.element_name.slice(0, -6)}reps`;
-  if (reps_max <= 1) {
+  if (reps_max < 1) {
     ph = "Reps";
   } else if (reps_max === reps_80percent) {
     ph = `${reps_max} reps`;
-  } else if (reps_80percent >= 16) {
-    ph = `16+ reps`;
+  } else if (reps_80percent >= 20) {
+    ph = `20+ reps`;
   } else {
     ph = `${reps_80percent}-${reps_max} reps`;
   }

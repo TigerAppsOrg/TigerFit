@@ -609,7 +609,7 @@ def is_bodyweight_exercise(session, equipment_name):
         .filter(
             EquipmentList.equipment_name == equipment_name,
         )
-        .first()
+        .first()[0]
     )
 
 
@@ -675,6 +675,11 @@ def get_rep_estimation(session, user_name, equipment_name, weight):
     )
     if one_rep_estimation == 0:
         return 0
+
+    print(
+        "***IS BODYWEIGHT?",
+        is_bodyweight_exercise(session, equipment_name),
+    )
 
     if is_bodyweight_exercise(session, equipment_name):
         return OneRepEstimation.bodyweight_estimate_reps(
@@ -1143,8 +1148,10 @@ class OneRepEstimation:
         MAX_REP_LIMIT = 20
         rep_estimation = 37 - 36 * weight / one_rep_max
 
-        if rep_estimation <= 0 or rep_estimation > MAX_REP_LIMIT:
+        if rep_estimation <= 0:
             return 0
+        if rep_estimation >= MAX_REP_LIMIT:
+            return 100
 
         return rep_estimation
 
