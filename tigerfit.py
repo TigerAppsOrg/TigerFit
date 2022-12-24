@@ -53,13 +53,13 @@ import os
 
 
 # ! Production
-# session, engine = create_session()
+session, engine = create_session()
 
 # ! Local testing
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
-session, engine = create_local_session()
+# load_dotenv()
+# session, engine = create_local_session()
 
 
 app = Flask(__name__, template_folder="./templates")
@@ -777,14 +777,6 @@ def internal_server_error(e):  # need this e to work
         return render_template("error.html")
 
 
-# ? needed
-# @app.route("/favicon.ico")
-# def favicon():
-#     return send_from_directory(
-#         os.path.join(app.root_path, "static"),
-#         "Pictures/favicon.ico",
-#         mimetype="image/vnd.microsoft.icon",
-#     )
 @app.route("/favicon.ico")
 def favicon():
     return send_from_directory(
@@ -792,24 +784,6 @@ def favicon():
         "favicon.ico",
         mimetype="image/vnd.microsoft.icon",
     )
-
-
-# app.add_url_rule(
-#     "/android-chrome-384x384.png",
-#     redirect_to=url_for(
-#         "static", filename="/static/favicon/android-chrome-384x384.png"
-#     ),
-# )
-
-# @app.route("/android-chrome-384x384.png")
-# def favicon():
-#     print("****************** hello error")
-
-# return send_from_directory(
-#     os.path.join(app.root_path, "static"),
-#     "/static/favicon/android-chrome-384x384.png",
-#     mimetype="image/vnd.microsoft.icon",
-# )
 
 
 # ? needed
