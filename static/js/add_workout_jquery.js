@@ -155,6 +155,24 @@ $(document).ready(() => {
       // Set info for newly created set
       $(`input#${ex_num}_${set_num}_reps`).val(prev_reps);
       $(`input#${ex_num}_${set_num}_weight`).val(prev_weight);
+
+        localStorage.setItem(`${ex_num}_${set_num}_reps`, prev_reps);
+        localStorage.setItem(
+          `${ex_num}_${set_num}_weight`,
+          prev_weight
+        );
+
+    //   // Store attributes for inputs into localStorage
+    //   if (!$(this).attr("name").includes("?")) {
+    //     if ($(this).attr("type") == "checkbox") {
+    //       localStorage.setItem(
+    //         $(this).attr("name"),
+    //         $("this").prop("checked")
+    //       );
+    //     } else {
+    //       localStorage.setItem($(this).attr("name"), $(this).val());
+    //     }
+    //   }
     }
 
     // Adds "required" attribute to non-hidden, number inputs
