@@ -94,7 +94,10 @@
                                 range(exercise['sets']["num_sets"]):%}
                                 <!-- <strong>Set {{seti+1}}:</strong> -->
                                 {{exercise['sets']["num_reps"][seti]}}
-                                reps @ {{exercise['sets']["weight"][seti]}} lbs {% if exercise['sets']["failed"][seti] ==
+                                {% if
+                                exercise['sets']["num_reps"][seti] ==
+                                1 %}rep{% else %}reps{%endif%}
+                                @ {{exercise['sets']["weight"][seti]}} lbs {% if exercise['sets']["failed"][seti] ==
                                 true %}
                                 <i class="fa fa-times-circle" data-toggle="tooltip" data-placement="top" title="You did not
                                 complete all the reps of this set" style="color: red"></i>
@@ -104,13 +107,11 @@
                                     title="You lifted more than your previous 1-rep max estimation">PR</span>
 
                                 {% endif %}
-
-                                {% if 'was_new' in exercise['sets'] and exercise['sets']["was_new"][seti]
-                                == true%}
+                                {% if 'was_new' in exercise['sets'] and
+                                exercise['sets']["was_new"] == true%}
                                 <span class="badge bg-success" data-toggle="tooltip" data-placement="top" title="This
                                 was your first time completing this
                                 exercise">NEW</span>
-
                                 {% endif %}
 
                                 <br />

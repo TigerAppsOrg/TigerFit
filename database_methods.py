@@ -119,9 +119,10 @@ def create_new_exercise(
             "weight": [],
             "failed": [],
             "was_pr": [],
-            "was_new": was_new_equipment,
+            "was_new": False,
         }
 
+    sets["was_new"] = was_new_equipment
     new_1RMs = []
 
     # Update one rep estimations based on newly inserted exercise
@@ -422,7 +423,7 @@ def add_to_used_equipment(session, equipment_name, user_name):
         return was_new_equipment
     except exc.SQLAlchemyError as err:
         session.rollback()
-        return err
+        return False
 
 
 # Updates a user row with preferred name and their goal bodyweight
