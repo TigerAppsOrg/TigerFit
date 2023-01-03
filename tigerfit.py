@@ -618,6 +618,8 @@ def add_workout():
         workout_title=workout_title,
         workout_date=workout_date,
         weight_volume=weight_volume,
+        all_new_1RMs=all_new_1RMs,
+        workout_time_minutes=workout_time_minutes,
         volume_per_minute=volume_per_minute,
         reps_per_minute=reps_per_minute,
     )
