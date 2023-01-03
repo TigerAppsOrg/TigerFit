@@ -172,7 +172,7 @@ def history():
     has_agreed_liability = has_agreed_to_liability(session, user_name)
 
     past_workouts = get_past_workouts(session, user_name)
-    print("past_workouts", past_workouts)
+    print("past_workouts: ", len(past_workouts))
 
     workouts = []
     length = len(past_workouts)
