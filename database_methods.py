@@ -178,7 +178,7 @@ def create_new_exercise(
         return err
 
 
-# Inserts 1RM to given user only if one_rep_estimation is greater than
+# Inserts 1RM for given user only if one_rep_estimation is greater than
 # their previously saved 1RM
 def insert_1RM_if_greater(
     session, user_name, equipment_name, one_rep_estimation
@@ -193,24 +193,53 @@ def insert_1RM_if_greater(
 
     # New 1RM inserted
     if one_rep_estimation > previous_one_rep_estimation:
-        user = (
-            session.query(Users)
-            .filter(Users.user_name == user_name)
-            .one()
+        result = insert_1RM(
+            session, user_name, equipment_name, one_rep_estimation
         )
-        new_dict = user.one_rep_estimation
-        new_dict[equipment_name] = one_rep_estimation
-        user.one_rep_estimation = new_dict
+        return result
+        # user = (
+        #     session.query(Users)
+        #     .filter(Users.user_name == user_name)
+        #     .one()
+        # )
+        # new_dict = user.one_rep_estimation
+        # new_dict[equipment_name] = one_rep_estimation
+        # user.one_rep_estimation = new_dict
 
-        try:
-            session.commit()
-            return one_rep_estimation
-        except exc.SQLAlchemyError as err:
-            session.rollback()
-            return err
+        # try:
+        #     session.commit()
+        #     return one_rep_estimation
+        # except exc.SQLAlchemyError as err:
+        #     session.rollback()
+        #     return err
     # No 1RM inserted
     else:
         return -1
+
+
+# Inserts 1RM for given user and given equipment
+# Dangerous - Doesn't check if greater than previous
+def insert_1RM(session, user_name, equipment_name, one_rep_estimation):
+    user = (
+        session.query(Users).filter(Users.user_name == user_name).one()
+    )
+    new_dict = user.one_rep_estimation
+    new_dict[equipment_name] = one_rep_estimation
+    user.one_rep_estimation = new_dict
+
+    try:
+        session.commit()
+        return one_rep_estimation
+    except exc.SQLAlchemyError as err:
+        session.rollback()
+        return err
+
+
+# Resets 1RM for given user and given equipment to 0
+# Dangerous - Doesn't check if greater than previous
+def reset_1RM(session, user_name, equipment_name):
+    result = insert_1RM(session, user_name, equipment_name, 0)
+    return result
 
 
 # Creates blank equipment with given field values (or default)
