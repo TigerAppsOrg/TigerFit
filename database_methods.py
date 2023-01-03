@@ -721,6 +721,16 @@ def get_weight_estimation(session, user_name, equipment_name, reps):
     # return OneRepEstimation.estimate_weight(one_rep_estimation, reps)
 
 
+# Returns current one rep max estimation of a user on an equipment piece
+def get_1rm_estimation(session, user_name, equipment_name):
+    one_rep_estimation = (
+        session.query(Users.one_rep_estimation)
+        .filter(Users.user_name == user_name)
+        .one()[0][equipment_name]
+    )
+    return one_rep_estimation
+
+
 # Returns all users, or [] if empty
 def get_all_users(session):
     assert session is not None
