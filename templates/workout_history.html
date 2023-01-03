@@ -105,6 +105,14 @@
 
                                 {% endif %}
 
+                                {% if 'was_new' in exercise['sets'] and exercise['sets']["was_new"][seti]
+                                == true%}
+                                <span class="badge bg-success" data-toggle="tooltip" data-placement="top" title="This
+                                was your first time completing this
+                                exercise">NEW</span>
+
+                                {% endif %}
+
                                 <br />
 
                                 {%endfor%}

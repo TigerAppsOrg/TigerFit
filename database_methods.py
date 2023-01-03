@@ -108,7 +108,9 @@ def create_new_exercise(
     # assert equipment_name is not None
 
     # Add to used equipment list for specific user
-    add_to_used_equipment(session, equipment_name, user_name)
+    was_new_equipment = add_to_used_equipment(
+        session, equipment_name, user_name
+    )
 
     if sets is None:
         sets = {
@@ -117,6 +119,7 @@ def create_new_exercise(
             "weight": [],
             "failed": [],
             "was_pr": [],
+            "was_new": was_new_equipment,
         }
 
     new_1RMs = []
@@ -402,6 +405,7 @@ def add_to_used_equipment(session, equipment_name, user_name):
     user = (
         session.query(Users).filter(Users.user_name == user_name).one()
     )
+    was_new_equipment = False
     print("user", user)
     print("user dict", user.__dict__)
 
@@ -412,9 +416,10 @@ def add_to_used_equipment(session, equipment_name, user_name):
     if equipment_name not in used_equipment_list:
         used_equipment_list.append(equipment_name)
         user.used_equipment["names"] = used_equipment_list
+        was_new_equipment = True
     try:
         session.commit()
-        return equipment_name
+        return was_new_equipment
     except exc.SQLAlchemyError as err:
         session.rollback()
         return err
