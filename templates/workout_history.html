@@ -87,12 +87,12 @@
                             <div>
                                 <strong class="underline-text">{{exercise['equip_name']}}</strong>
                             </div>
-                            <div>
-                                {% for seti in range(exercise['sets']["num_sets"]):%}
-                                <strong>Set:</strong> {{seti+1}}
-                                <strong>Reps:</strong> {{exercise['sets']["num_reps"][seti]}}
-                                <strong>Weight:</strong>
-                                {{exercise['sets']["weight"][seti]}} lbs {% if exercise['sets']["failed"][seti] ==
+                            <div style="padding:0;">
+                                {% for seti in
+                                range(exercise['sets']["num_sets"]):%}
+                                <!-- <strong>Set {{seti+1}}:</strong> -->
+                                {{exercise['sets']["num_reps"][seti]}}
+                                reps @ {{exercise['sets']["weight"][seti]}} lbs {% if exercise['sets']["failed"][seti] ==
                                 true %}
                                 <i class="fa fa-times-circle" data-toggle="tooltip" data-placement="top" title="You did not
                                 complete all the reps of this set" style="color: red"></i>
@@ -106,14 +106,16 @@
                                 <br />
 
                                 {%endfor%}
+                                {% if
+                                exercise['notes'] != '' %}
+                                <p style="white-space: pre-line;"><strong>Notes:
+                                    </strong>{{exercise['notes']}}
+                                </p>
+                                {% else%}
+                                <br>
+                                {% endif %}
                             </div>
-
-                            <div>
-                                {% if exercise['notes'] != '' %}
-                                <strong>Notes:</strong>
-                                {{exercise['notes']}} {% endif %}
-                            </div>
-                            <br />
+                            <!-- <br /> -->
 
                             {% endfor %}
                             <button class="btn btn-danger delete_workout_and_exercises_button" data-workout_id={{workout['workoutinfo']['id']}}
