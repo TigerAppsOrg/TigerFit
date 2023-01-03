@@ -356,9 +356,10 @@ def create_custom_equipment(session, equipment_name, user_name):
     user = (
         session.query(Users).filter(Users.user_name == user_name).one()
     )
-    print("user", user)
-    print("user dict", user.__dict__)
+    # print("user", user)
+    # print("user dict", user.__dict__)
 
+    print("custom equipment: ", user.custom_equipment)
     # Append to custom_equipment in DB if not in list
     custom_equipment_list = user.custom_equipment["names"]
     print("old list", custom_equipment_list)
@@ -385,7 +386,7 @@ def create_custom_equipment(session, equipment_name, user_name):
         .one()[0]
     )
     previous_one_rep_dict[equipment_name] = 0
-    print("prev", previous_one_rep_dict)
+    # print("prev", previous_one_rep_dict)
     user.one_rep_estimation = previous_one_rep_dict
     print("* Created new 1RM")
     # !
@@ -407,12 +408,12 @@ def add_to_used_equipment(session, equipment_name, user_name):
         session.query(Users).filter(Users.user_name == user_name).one()
     )
     was_new_equipment = False
-    print("user", user)
-    print("user dict", user.__dict__)
+    # print("user", user)
+    # print("user dict", user.__dict__)
 
     # Append to used_equipment in DB if not in list
     used_equipment_list = user.used_equipment["names"]
-    print("old list", used_equipment_list)
+    # print("old list", used_equipment_list)
 
     if equipment_name not in used_equipment_list:
         used_equipment_list.append(equipment_name)
