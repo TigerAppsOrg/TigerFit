@@ -53,13 +53,13 @@ import os
 
 
 # ! Production
-session, engine = create_session()
+# session, engine = create_session()
 
 # ! Local testing
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv()
-# session, engine = create_local_session()
+load_dotenv()
+session, engine = create_local_session()
 
 
 app = Flask(__name__, template_folder="./templates")
@@ -472,8 +472,10 @@ def add_workout():
     weights_list = []
     failed_list = []
     weight_volume = 0
-    all_new_1RMs = []
     total_reps = 0
+
+    # Trim 1RMs by only taking the MAXIMUM per equipment
+    trimmed_1RMs = {}
 
     def dot_product(a, b):
         assert len(a) == len(b)
@@ -562,14 +564,47 @@ def add_workout():
                     notes,
                 )
 
+                print("****** new 1rms: ", new_1RMs)
+
                 # 1 or more new 1RMs added
                 if len(new_1RMs) > 0:
-                    for x in new_1RMs:
-                        all_new_1RMs.append(x)
+                    # Dict Format: {"equipment_name": "x",
+                    # "one_rep_estimation": 1.0}
+                    for dict in new_1RMs:
+                        dict_equip_name = dict["equipment_name"]
+                        dict_estimation = dict["one_rep_estimation"]
+                        if dict_equip_name in trimmed_1RMs:
+                            if (
+                                dict_estimation
+                                > trimmed_1RMs[dict_equip_name]
+                            ):
+                                trimmed_1RMs[
+                                    dict_equip_name
+                                ] = dict_estimation
+                        else:
+                            trimmed_1RMs[
+                                dict_equip_name
+                            ] = dict_estimation
+
                 else:
                     print("new_1rms length 0")
 
-    # Calculate some workout summary stats
+    # * Calculate unique 1RMs
+
+    # Format: [{"equipment_name": "x",
+    # "one_rep_estimation": 1.0}]
+    all_new_1RMs = []
+
+    for k in trimmed_1RMs:
+        all_new_1RMs.append(
+            {
+                "equipment_name": k,
+                "one_rep_estimation": round(trimmed_1RMs[k], 1),
+            }
+        )
+    print("***result", all_new_1RMs)
+
+    # * Calculate some workout summary stats
     volume_per_minute = 0
     reps_per_minute = 0
     if workout_time_minutes > 0:
@@ -578,8 +613,8 @@ def add_workout():
         )
         reps_per_minute = round(total_reps / workout_time_minutes, 1)
 
-    for d in all_new_1RMs:
-        d["one_rep_estimation"] = round(d["one_rep_estimation"], 1)
+    # for d in all_new_1RMs:
+    #     d["one_rep_estimation"] = round(d["one_rep_estimation"], 1)
 
     return render_template(
         "add_workout_success.html",
