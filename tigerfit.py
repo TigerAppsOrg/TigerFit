@@ -613,16 +613,11 @@ def add_workout():
         )
         reps_per_minute = round(total_reps / workout_time_minutes, 1)
 
-    # for d in all_new_1RMs:
-    #     d["one_rep_estimation"] = round(d["one_rep_estimation"], 1)
-
     return render_template(
         "add_workout_success.html",
         workout_title=workout_title,
         workout_date=workout_date,
         weight_volume=weight_volume,
-        all_new_1RMs=all_new_1RMs,
-        workout_time_minutes=workout_time_minutes,
         volume_per_minute=volume_per_minute,
         reps_per_minute=reps_per_minute,
     )

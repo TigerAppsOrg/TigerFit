@@ -617,6 +617,13 @@ $(document).ready(() => {
       );
     });
 
+    // ! testing - not sure if it has worked yet
+    // Fix case where #main_muscle_group_select shows as empty
+    if ($("#main_muscle_group_select").val() === "") {
+      // Set val to "All" for cases where its ""
+      $("#main_muscle_group_select").val("All");
+    }
+
     let selected_equip_name = $(this).data("equipment_name");
     if (selected_equip_name === undefined) {
       disableButton("select_equipment_button");
