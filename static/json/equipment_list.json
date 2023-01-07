@@ -56,13 +56,13 @@
     "is_bodyweight": false
   },
   {
-    "equipment_name": "Push-Up",
+    "equipment_name": "Push-up",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs", "Triceps", "Delts"],
     "is_bodyweight": true
   },
   {
-    "equipment_name": "Weighted Push-Up",
+    "equipment_name": "Weighted Push-up",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs", "Triceps", "Delts"],
     "is_bodyweight": false
@@ -154,13 +154,13 @@
   },
 
   {
-    "equipment_name": "Pull-Up",
+    "equipment_name": "Pull-up",
     "main_muscle_group": "Back",
     "sub_muscle_groups": ["Lats"],
     "is_bodyweight": true
   },
   {
-    "equipment_name": "Weighted Pull-Up",
+    "equipment_name": "Weighted Pull-up",
     "main_muscle_group": "Back",
     "sub_muscle_groups": ["Lats"],
     "is_bodyweight": false
@@ -256,7 +256,7 @@
     "is_bodyweight": false
   },
   {
-    "equipment_name": "Sit-Ups",
+    "equipment_name": "Sit-ups",
     "main_muscle_group": "Core",
     "sub_muscle_groups": ["Abdominals"],
     "is_bodyweight": true
