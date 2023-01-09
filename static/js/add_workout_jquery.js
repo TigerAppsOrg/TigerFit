@@ -9,7 +9,6 @@ let add_required_attribute = () => {
   $("#add_workout_form input").each(function () {
     let this_element = $(this);
     let name = this_element.attr("name");
-    console.log("name", name);
     if (
       name != undefined &&
       !name.includes("?") &&
@@ -500,16 +499,39 @@ $(document).ready(() => {
 
     selected_equip_name = titleCase(selected_equip_name);
 
-    let ex_num = $("ul#exercises>li").length;
+    // // ! Mistake line
+    // let ex_num = 100;
+
+    let ex_num = 1;
+    if (parseInt($("ul#exercises>li").length) > 1) {
+      ex_num =
+        parseInt(
+          $("ul#exercises>li:last-child").attr("id").split("_")[1]
+        ) + 1;
+      console.log(
+        "Last child id= " + $("ul#exercises>li:last-child").attr("id")
+      );
+    }
+    console.log("************* new ex num = " + ex_num);
+
+    // if ($("ul#exercises>li").length > 1) {
+    //   ex_num =
+    //     parseInt($("ul#exercises>li").last().data("ex_num")) + 10;
+    // }
+    // console.log("EX NUM = " + ex_num);
 
     // Append new exercise to exericses list
     let html = $(`ul#exercises>li`)
       .first()
       .clone()
       .prop("hidden", false)
+      .data("ex_num", ex_num)
       .prop("outerHTML")
       .replaceAll("?ex_num?", ex_num);
     $(`ul#exercises`).append(html);
+
+    // Append correct .data() attribute
+    // $(`ul#exercises`).last().data("ex_num", ex_num);
 
     // Adds "required" attribute to non-hidden, number inputs
     add_required_attribute();

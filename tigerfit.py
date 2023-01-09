@@ -500,7 +500,6 @@ def add_workout():
             # Find notes (if exists)
             if f"exercise_{ex}_notes" in form:
                 notes = form[f"exercise_{ex}_notes"][0]
-        # Done parsing exercises for this workout
         else:
             continue
 
