@@ -485,12 +485,11 @@ def add_workout():
             res += a[i] * b[i]
         return res
 
-    # expecting_checkbox = False
-    # print("FORM: ", form)
-
-    # ! TEST: better way to add these things
+    # Arbitrary limits
     MAX_EXERCISES = 100
     MAX_SETS = 100
+
+    # Structure of example request
     # {'title': ['fail 3'], 'date': ['2023-01-09'], 'start_time': [''], '?ex_num?_equipment_name': [''], '?ex_num?_?set_num?_reps': [''], '?ex_num?_?set_num?_weight': [''], '?ex_num?_1_reps': [''], '?ex_num?_1_weight': [''], 'exercise_?ex_num?_notes': [''], '1_equipment_name': ['Back Squat'], '1_?set_num?_reps': [''], '1_?set_num?_weight': [''], '1_1_reps': ['1'], '1_1_weight': ['1'], '1_2_reps': ['1'], '1_2_weight': ['1'], '1_3_reps': ['1'], '1_3_weight': ['1'], '1_3_failed': ['on'], '1_4_reps': ['1'], '1_4_weight': ['1'], 'exercise_1_notes': ['']}
     for ex in range(1, MAX_EXERCISES):
         # If equipment name in form, reps/weight must be as well
@@ -543,17 +542,10 @@ def add_workout():
         weights_list = []
         failed_list = []
 
-        # print(f"Equipment name for exercise: {equipment_name}")
-
         if not equipment_in_database(
             session, equipment_name, user_name
         ):
-            # print(
-            #     "Equipment NOT in database - Creating custom equipment..."
-            # )
             create_custom_equipment(session, equipment_name, user_name)
-        # else:
-        #     print("Equipment IN database")
 
         _, new_1RMs = create_new_exercise(
             session,
@@ -563,8 +555,6 @@ def add_workout():
             sets,
             notes,
         )
-
-        # print("****** new 1rms: ", new_1RMs)
 
         # 1 or more new 1RMs added
         if len(new_1RMs) > 0:
@@ -578,114 +568,6 @@ def add_workout():
                         trimmed_1RMs[dict_equip_name] = dict_estimation
                 else:
                     trimmed_1RMs[dict_equip_name] = dict_estimation
-
-        # else:
-        #     print("new_1rms length 0")
-
-    # ! END
-
-    # for i in form:
-    #     if "?" not in i:
-    #         # Once per exercises
-    #         if "equipment" in i:
-    #             equipment_name = form[i][0].title()
-    #         # Once per set
-    #         elif "reps" in i:
-    #             if "." in form[i][0]:
-    #                 print("FLOATING POINT IN FORM")
-    #                 print(form[i][0].split("."))
-    #                 num_reps_list.append(int(form[i][0].split(".")[0]))
-    #             else:
-    #                 num_reps_list.append(int(form[i][0]))
-    #             num_sets += 1
-
-    #             # Hacky solution since checkboxes only send when "on"
-    #             if expecting_checkbox:
-    #                 failed_list.append(False)
-
-    #         # Once per set
-    #         elif "weight" in i:
-    #             weights_list.append(float(form[i][0]))
-    #             expecting_checkbox = True
-    #         # Once per set (only if "on")
-    #         elif "failed" in i:
-    #             failed_list.append(True)
-    #             expecting_checkbox = False
-    #         # Once per exercise (at end of exercise)
-    #         elif (
-    #             "notes" in i
-    #         ):  # When we get here, we know we are done parsing through an exercises data so we can send it to the database
-    #             notes = form[i][0]
-
-    #             # Hacky solution since checkboxes only send when "on"
-    #             # Captures last checkbox
-    #             if expecting_checkbox:
-    #                 failed_list.append(False)
-
-    #             sets = {
-    #                 "num_sets": num_sets,
-    #                 "num_reps": num_reps_list,
-    #                 "weight": weights_list,
-    #                 "failed": failed_list,
-    #                 "was_pr": [],
-    #             }
-    #             weight_volume += dot_product(
-    #                 num_reps_list, weights_list
-    #             )
-    #             total_reps += sum(num_reps_list)
-
-    #             num_sets = 0
-    #             num_reps_list = []
-    #             weights_list = []
-    #             failed_list = []
-
-    #             print(f"Equipment name for exercise: {equipment_name}")
-
-    #             if not equipment_in_database(
-    #                 session, equipment_name, user_name
-    #             ):
-    #                 print(
-    #                     "Equipment NOT in database - Creating custom equipment..."
-    #                 )
-    #                 create_custom_equipment(
-    #                     session, equipment_name, user_name
-    #                 )
-    #             else:
-    #                 print("Equipment IN database")
-
-    #             _, new_1RMs = create_new_exercise(
-    #                 session,
-    #                 user_name,
-    #                 workout_id,
-    #                 equipment_name,
-    #                 sets,
-    #                 notes,
-    #             )
-
-    #             print("****** new 1rms: ", new_1RMs)
-
-    #             # 1 or more new 1RMs added
-    #             if len(new_1RMs) > 0:
-    #                 # Dict Format: {"equipment_name": "x",
-    #                 # "one_rep_estimation": 1.0}
-    #                 for dict in new_1RMs:
-    #                     dict_equip_name = dict["equipment_name"]
-    #                     dict_estimation = dict["one_rep_estimation"]
-    #                     if dict_equip_name in trimmed_1RMs:
-    #                         if (
-    #                             dict_estimation
-    #                             > trimmed_1RMs[dict_equip_name]
-    #                         ):
-    #                             trimmed_1RMs[
-    #                                 dict_equip_name
-    #                             ] = dict_estimation
-    #                     else:
-    #                         trimmed_1RMs[
-    #                             dict_equip_name
-    #                         ] = dict_estimation
-
-    #             else:
-    #                 print("new_1rms length 0")
 
     # * Calculate unique 1RMs
 
