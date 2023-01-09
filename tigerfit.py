@@ -502,7 +502,7 @@ def add_workout():
                 notes = form[f"exercise_{ex}_notes"][0]
         # Done parsing exercises for this workout
         else:
-            break
+            continue
 
         for set in range(1, MAX_SETS):
             if f"{ex}_{set}_reps" not in form:
