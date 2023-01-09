@@ -374,12 +374,8 @@ function substring_search_includes(equipment_name, search_str) {
   equipment_name = equipment_name.toLowerCase();
   search_str = search_str.toLowerCase();
 
-  //   console.log(
-  //     "****substr func: a = " + equipment_name + ", b = " + search_str
-  //   );
   let includes = true;
   for (word of search_str.split(" ")) {
-    // console.log("word:" + word);
     includes = includes && equipment_name.includes(word);
   }
   return includes;

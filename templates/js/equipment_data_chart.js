@@ -8,6 +8,17 @@ function titleCase(str) {
     .join(" ");
 }
 
+function substring_search_includes(equipment_name, search_str) {
+  equipment_name = equipment_name.toLowerCase();
+  search_str = search_str.toLowerCase();
+
+  let includes = true;
+  for (word of search_str.split(" ")) {
+    includes = includes && equipment_name.includes(word);
+  }
+  return includes;
+}
+
 // Filters list of equipment, given selected main muscle group
 $(document).ready(() => {
   $(document).on("change", "#main_muscle_group_select", function () {
@@ -34,12 +45,10 @@ $(document).ready(() => {
           if ($(this).hasClass("custom-equipment")) {
             return false;
           }
-          return $(this)
-            .data("equipment_name")
-            .toLowerCase()
-            .includes(
-              $("#modal-equipment-search-bar").val().toLowerCase()
-            );
+          return substring_search_includes(
+            $(this).data("equipment_name"),
+            $("#modal-equipment-search-bar").val()
+          );
         });
     } else {
       options = $(this)
@@ -52,12 +61,10 @@ $(document).ready(() => {
           if ($(this).hasClass("custom-equipment")) {
             return false;
           }
-          return $(this)
-            .data("equipment_name")
-            .toLowerCase()
-            .includes(
-              $("#modal-equipment-search-bar").val().toLowerCase()
-            );
+          return substring_search_includes(
+            $(this).data("equipment_name"),
+            $("#modal-equipment-search-bar").val()
+          );
         });
     }
     $("#equipment_card_list").html(options);
@@ -89,12 +96,10 @@ $(document).ready(() => {
           if ($(this).hasClass("custom-equipment")) {
             return false;
           }
-          return $(this)
-            .data("equipment_name")
-            .toLowerCase()
-            .includes(
-              $("#modal-equipment-search-bar").val().toLowerCase()
-            );
+          return substring_search_includes(
+            $(this).data("equipment_name"),
+            $("#modal-equipment-search-bar").val()
+          );
         });
     } else {
       options = $("#main_muscle_group_select")
@@ -107,12 +112,10 @@ $(document).ready(() => {
           if ($(this).hasClass("custom-equipment")) {
             return false;
           }
-          return $(this)
-            .data("equipment_name")
-            .toLowerCase()
-            .includes(
-              $("#modal-equipment-search-bar").val().toLowerCase()
-            );
+          return substring_search_includes(
+            $(this).data("equipment_name"),
+            $("#modal-equipment-search-bar").val()
+          );
         });
     }
 
