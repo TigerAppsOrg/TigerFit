@@ -89,7 +89,13 @@ function updateBodyweightChart(response) {
       showLine: true,
       label: `Goal Weight (lbs)`,
       borderColor: "#0000FFAA",
-      data: bodyweight_data["goal_dataset"],
+      // Take first and last data point from goal
+      data: [
+        bodyweight_data["goal_dataset"][0],
+        bodyweight_data["goal_dataset"][
+          bodyweight_data["goal_dataset"].length - 1
+        ],
+      ],
       fill: false,
       pointRadius: 2,
       borderDash: [10, 5],
@@ -115,7 +121,7 @@ function updateBodyweightChart(response) {
             {
               type: "time",
               time: {
-                unit: "day",
+                unit: "week",
               },
             },
           ],
@@ -126,7 +132,7 @@ function updateBodyweightChart(response) {
                 labelString: "Body Weight (lbs)",
               },
               ticks: {
-                beginAtZero: true,
+                beginAtZero: false,
               },
             },
           ],
