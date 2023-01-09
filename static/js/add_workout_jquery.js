@@ -53,7 +53,8 @@ let restore_local_storage = (storage) => {
   );
 };
 
-//Load current date automatically in the date input form item
+// Load current date automatically in the date input form item
+// This runs once
 $(document).ready(() => {
   var todayDate = new Date();
   var day = todayDate.getDate();
