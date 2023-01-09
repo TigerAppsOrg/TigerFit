@@ -20,7 +20,11 @@ $(document).ready(() => {
     let options = "";
 
     // Filter options with only correct main_group
-    if (main_group === "All") {
+    if (
+      main_group === "All" ||
+      main_group === undefined ||
+      main_group == ""
+    ) {
       options = $(this)
         .data("options")
         .filter(function () {
@@ -71,7 +75,11 @@ $(document).ready(() => {
     let options = "";
 
     // Filter options with only correct main_group
-    if (main_group === "All") {
+    if (
+      main_group === "All" ||
+      main_group === undefined ||
+      main_group == ""
+    ) {
       options = $("#main_muscle_group_select")
         .data("options")
         .filter(function () {

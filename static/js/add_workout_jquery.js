@@ -370,6 +370,21 @@ function titleCase(str) {
   return parenCapitalized;
 }
 
+function substring_search_includes(equipment_name, search_str) {
+  equipment_name = equipment_name.toLowerCase();
+  search_str = search_str.toLowerCase();
+
+  //   console.log(
+  //     "****substr func: a = " + equipment_name + ", b = " + search_str
+  //   );
+  let includes = true;
+  for (word of search_str.split(" ")) {
+    // console.log("word:" + word);
+    includes = includes && equipment_name.includes(word);
+  }
+  return includes;
+}
+
 // Filters list of equipment, given selected main muscle group
 $(document).ready(() => {
   $(document).on("change", "#main_muscle_group_select", function () {
@@ -382,7 +397,11 @@ $(document).ready(() => {
     let options = "";
 
     // Filter options with only correct main_group
-    if (main_group === "All" || main_group === "") {
+    if (
+      main_group === "All" ||
+      main_group === undefined ||
+      main_group === ""
+    ) {
       options = $(this)
         .data("options")
         .filter(function () {
@@ -392,12 +411,10 @@ $(document).ready(() => {
           if ($(this).hasClass("custom-equipment")) {
             return false;
           }
-          return $(this)
-            .data("equipment_name")
-            .toLowerCase()
-            .includes(
-              $("#modal-equipment-search-bar").val().toLowerCase()
-            );
+          return substring_search_includes(
+            $(this).data("equipment_name"),
+            $("#modal-equipment-search-bar").val()
+          );
         });
     } else {
       options = $(this)
@@ -410,12 +427,10 @@ $(document).ready(() => {
           if ($(this).hasClass("custom-equipment")) {
             return false;
           }
-          return $(this)
-            .data("equipment_name")
-            .toLowerCase()
-            .includes(
-              $("#modal-equipment-search-bar").val().toLowerCase()
-            );
+          return substring_search_includes(
+            $(this).data("equipment_name"),
+            $("#modal-equipment-search-bar").val()
+          );
         });
     }
     $("#equipment_card_list").html(options);
@@ -444,12 +459,10 @@ $(document).ready(() => {
           if ($(this).hasClass("custom-equipment")) {
             return false;
           }
-          return $(this)
-            .data("equipment_name")
-            .toLowerCase()
-            .includes(
-              $("#modal-equipment-search-bar").val().toLowerCase()
-            );
+          return substring_search_includes(
+            $(this).data("equipment_name"),
+            $("#modal-equipment-search-bar").val()
+          );
         });
     } else {
       options = $("#main_muscle_group_select")
@@ -462,12 +475,10 @@ $(document).ready(() => {
           if ($(this).hasClass("custom-equipment")) {
             return false;
           }
-          return $(this)
-            .data("equipment_name")
-            .toLowerCase()
-            .includes(
-              $("#modal-equipment-search-bar").val().toLowerCase()
-            );
+          return substring_search_includes(
+            $(this).data("equipment_name"),
+            $("#modal-equipment-search-bar").val()
+          );
         });
     }
 
@@ -499,26 +510,18 @@ $(document).ready(() => {
 
     selected_equip_name = titleCase(selected_equip_name);
 
-    // // ! Mistake line
-    // let ex_num = 100;
-
+    // Fixes bug with deleting exercises in middle
+    // Take LAST ex_num + 1 to be new ex_num
     let ex_num = 1;
     if (parseInt($("ul#exercises>li").length) > 1) {
       ex_num =
         parseInt(
           $("ul#exercises>li:last-child").attr("id").split("_")[1]
         ) + 1;
-      console.log(
-        "Last child id= " + $("ul#exercises>li:last-child").attr("id")
-      );
+      //   console.log(
+      // "Last child id= " + $("ul#exercises>li:last-child").attr("id")
+      //   );
     }
-    console.log("************* new ex num = " + ex_num);
-
-    // if ($("ul#exercises>li").length > 1) {
-    //   ex_num =
-    //     parseInt($("ul#exercises>li").last().data("ex_num")) + 10;
-    // }
-    // console.log("EX NUM = " + ex_num);
 
     // Append new exercise to exericses list
     let html = $(`ul#exercises>li`)
@@ -529,9 +532,6 @@ $(document).ready(() => {
       .prop("outerHTML")
       .replaceAll("?ex_num?", ex_num);
     $(`ul#exercises`).append(html);
-
-    // Append correct .data() attribute
-    // $(`ul#exercises`).last().data("ex_num", ex_num);
 
     // Adds "required" attribute to non-hidden, number inputs
     add_required_attribute();
