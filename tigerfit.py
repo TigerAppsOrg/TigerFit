@@ -5,6 +5,7 @@
 # Author: Ian Murray, Adam Gamba & Darren Zheng
 # ----------
 
+import json
 from flask import (
     Flask,
     render_template,
@@ -22,6 +23,7 @@ from database_methods import (
     get_all_custom_equipment,
     get_all_used_equipment,
     get_all_equipment,
+    get_past_workout_by_id,
     get_past_workouts,
     get_equipment_data,
     create_new_workout,
@@ -34,6 +36,7 @@ from database_methods import (
     get_rep_estimation,
     equipment_in_database,
     create_custom_equipment,
+    get_workout_title_by_id,
     update_profile_settings,
     has_agreed_to_liability,
     agree_to_liability,
@@ -53,13 +56,13 @@ import os
 
 
 # ! Production
-session, engine = create_session()
+# session, engine = create_session()
 
 # ! Local testing
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv()
-# session, engine = create_local_session()
+load_dotenv()
+session, engine = create_local_session()
 
 # Begin App
 
@@ -377,8 +380,48 @@ def add():
     user_name = CasClient().authenticate(session).strip()
     has_agreed_liability = has_agreed_to_liability(session, user_name)
     has_watched = has_watched_tutorial(session, user_name)
-    print("*has watched tutorial?", has_watched)
-    print("*has agreed liability?", has_agreed_liability)
+    # print("*has watched tutorial?", has_watched)
+    # print("*has agreed liability?", has_agreed_liability)
+
+    # * Handle case for copying workout from existing id
+    copying_past_workout = False
+    past_workout = {}
+    if "id" in request.args:
+        copying_past_workout = True
+        copy_id = request.args.get("id")
+
+        # Contact database
+        past_workout = get_past_workout_by_id(
+            session, user_name, copy_id
+        )
+
+        if past_workout == False:
+            print("no past workout")
+            copying_past_workout = False
+        # print(
+        #     "title = ",
+        #     get_workout_title_by_id(session, user_name, copy_id),
+        # )
+        print("past workout: ", past_workout)
+        # for set in past_workout:
+        #     print(set)
+        #     print(set["sets"])
+
+    # @app.route("/copy_workout", methods=["GET"])
+    # def copy_workout():
+    #     # Get parameters from GET request
+    #     print("Handling copy_workout...")
+    #     user_name = request.args.get("user_name")
+    #     workout_id = int(request.args.get("workout_id"))
+
+    #     # Contact database
+    #     workout = get_past_workout_by_id(session, user_name, workout_id)
+    #     print("**** * * * * retrieved workout:", workout)
+
+    #     return add()
+    #     # return response
+
+    # * END
 
     pref_name = get_preferred_name(session, user_name)
 
@@ -391,17 +434,32 @@ def add():
     )
 
     custom_equipment_list = get_all_custom_equipment(session, user_name)
-    print("***************")
-    return render_template(
-        "add_workout.html",
-        equipment_list=equipment_list,
-        custom_equipment_list=custom_equipment_list,
-        user_name=user_name,
-        pref_name=pref_name,
-        is_add_workout_page=True,
-        has_agreed_liability=has_agreed_liability,
-        has_watched_tutorial=has_watched,
-    )
+
+    if copying_past_workout:
+        return render_template(
+            "add_workout.html",
+            equipment_list=equipment_list,
+            custom_equipment_list=custom_equipment_list,
+            user_name=user_name,
+            pref_name=pref_name,
+            is_add_workout_page=True,
+            has_agreed_liability=has_agreed_liability,
+            has_watched_tutorial=has_watched,
+            copying_past_workout=copying_past_workout,
+            past_workout=past_workout,
+        )
+    else:
+        return render_template(
+            "add_workout.html",
+            equipment_list=equipment_list,
+            custom_equipment_list=custom_equipment_list,
+            user_name=user_name,
+            pref_name=pref_name,
+            is_add_workout_page=True,
+            has_agreed_liability=has_agreed_liability,
+            has_watched_tutorial=has_watched,
+            copying_past_workout=copying_past_workout,
+        )
 
 
 # Activated when user submits workout via /add page

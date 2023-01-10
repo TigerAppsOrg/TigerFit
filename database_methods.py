@@ -572,6 +572,74 @@ def get_past_workouts(session, user_name):
     return workouts
 
 
+def get_workout_title_by_id(session, user_name, workout_id):
+    assert session is not None
+
+    try:
+        title = (
+            session.query(UserWorkouts.workout_title)
+            .filter(
+                and_(
+                    Users.user_name == user_name,
+                    UserWorkouts.workout_id == workout_id,
+                )
+            )
+            .one()
+        )
+        return title[0]
+    except exc.SQLAlchemyError as err:
+        # session.rollback()
+        return ""
+
+
+# Returns one past workout of selected user by workout id
+def get_past_workout_by_id(session, user_name, workout_id):
+    assert session is not None
+    try:
+        workout = (
+            session.query(UserExercises)
+            .filter(
+                and_(
+                    Users.user_name == user_name,
+                    UserExercises.workout_id == workout_id,
+                )
+            )
+            .all()
+        )
+
+        # for exercise in workout:
+        #     print("d", exercise.sets)
+
+        result = {
+            "title": get_workout_title_by_id(
+                session, user_name, workout_id
+            ),
+            "exercises": [],
+            "num_exercises": len(workout),
+            "num_sets": [],
+            "equipment_names": [],
+            "reps": [],
+            "weights": [],
+        }
+
+        for exercise in workout:
+            result["exercises"].append(
+                {
+                    "equipment_name": exercise.equipment_name,
+                    "sets": exercise.sets,
+                }
+            )
+            result["num_sets"].append(exercise.sets["num_sets"])
+            result["equipment_names"].append(exercise.equipment_name)
+            result["reps"].append(exercise.sets["num_reps"])
+            result["weights"].append(exercise.sets["weight"])
+
+        return result
+    except exc.SQLAlchemyError as err:
+        # session.rollback()
+        return False
+
+
 # Returns one most recent workout of selected user
 def get_most_recent_workout(session, user_name):
     return (
