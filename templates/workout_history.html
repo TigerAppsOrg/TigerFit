@@ -128,8 +128,11 @@
                             <!-- <br /> -->
 
                             {% endfor %}
-                            <button class="btn btn-danger delete_workout_and_exercises_button" data-workout_id={{workout['workoutinfo']['id']}}
-                                onclick="console.log($(this).data('workout_id'))"><i class="fa fa-trash"></i></button>
+                            <button class="btn btn-info copy_workout_and_exercises_button" data-workout_id={{workout['workoutinfo']['id']}}><i
+                                    class="fa fa-copy" style="color:
+                            white; "></i></button>
+                            <button class="btn btn-danger delete_workout_and_exercises_button" data-workout_id={{workout['workoutinfo']['id']}}><i
+                                    class="fa fa-trash"></i></button>
                         </div>
 
                     </div>
@@ -179,6 +182,10 @@
         })
     </script>
 
+
+
+
+
     {% endif %}
 
     {% include "navbar.html" %}
@@ -191,6 +198,9 @@
             })
         });
     </script>
+    <!-- Handle workout copying -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/add_workout_jquery.js') }}"></script>
+
 
 </body>
 

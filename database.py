@@ -103,12 +103,12 @@ class UserWorkouts(Base):
     # Length (minutes) of recorded workout
     minutes_taken = Column(Integer)
 
-    def __repr__(self):
-        return "*UserWorkout %d: User %s, title %s" % (
-            self.workout_id,
-            self.user_name,
-            self.workout_title,
-        )
+    # def __repr__(self):
+    #     return "*UserWorkout %d: User %s, title %s" % (
+    #         self.workout_id,
+    #         self.user_name,
+    #         self.workout_title,
+    #     )
 
     def to_dict(self):
         return {
@@ -150,12 +150,12 @@ class UserExercises(Base):
     # Notes of recorded exercise
     notes = Column(String)
 
-    def __repr__(self):
-        return "*UserExercise %d: Equip %s, workout id %d" % (
-            self.exercise_id,
-            self.equipment_name,
-            self.workout_id,
-        )
+    # def __repr__(self):
+    #     return "*UserExercise %d: Equip %s, workout id %d" % (
+    #         self.exercise_id,
+    #         self.equipment_name,
+    #         self.workout_id,
+    #     )
 
     def to_dict(self):
         return {

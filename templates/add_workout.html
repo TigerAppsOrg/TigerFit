@@ -50,6 +50,24 @@
     <title>TigerFit</title>
 </head>
 
+{% if copying_past_workout == true %}
+<script type="text/javascript">
+    localStorage.clear();
+
+    localStorage.setItem("workout_title", "{{ past_workout.title }}");
+    localStorage.setItem("num_exercises", "{{ past_workout.num_exercises }}");
+    localStorage.setItem("num_sets", "{{ past_workout.num_sets }}");
+    localStorage.setItem("equipment_names", JSON.stringify({{ past_workout.equipment_names | tojson }}));
+    localStorage.setItem("reps", JSON.stringify({{ past_workout.reps | tojson }}));
+    localStorage.setItem("weights", JSON.stringify({{ past_workout.weights | tojson }}));
+    {% include "js/copy_workout.js" %}
+
+
+
+</script>
+
+{% endif %}
+
 <body>
     {% include "header_title.html" %} {% if has_agreed_liability == false %} {%
     include "liability_modal.html" %} {% endif %}

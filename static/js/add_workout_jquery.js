@@ -71,17 +71,20 @@ $(document).ready(() => {
 
 // On page load
 $(document).ready(() => {
+  // Because this jquery file is loaded in /history too
+  if (window.location.pathname != "/add") {
+    return;
+  }
+
   // Activates if form is in progress:
   let storage = localStorage.getItem("html");
   console.log("storage", storage);
   console.log("type", typeof storage);
   if (storage !== null && storage !== "undefined") {
-    console.log("A");
     // Restore attributes for inputs from localStorage
     restore_local_storage(storage);
     return;
   }
-  console.log("B");
 
   // Activates on first load of new form:
   // Create set as clone of "blueprint" set
@@ -301,7 +304,8 @@ function delete_exercise(ex_num) {
 $(document).ready(() => {
   $(document).on("click", ".form_clear_button", function () {
     localStorage.clear();
-    location.reload(); // Refresh page to take effect
+    location.search = "";
+    // location.reload(); // Refresh page to take effect
   });
 });
 
@@ -327,6 +331,7 @@ $(document).ready(() => {
     console.log("Redirected to success page...");
   });
 });
+
 // $(document).on("submit", "#bodyweight_chart_form", function (event) {
 // 	//if (!isNaN($(this).val()) && Number.isInteger(parseFloat($(this).val())) && $(this).val() !== "") {
 // 	// <!-- ? all cases work ? -->
@@ -493,60 +498,64 @@ $(document).ready(() => {
     ).data("equipment_name");
     console.log("selected equip", selected_equip_name);
 
-    if (selected_equip_name === "custom-equipment-placeholder") {
-      selected_equip_name = $("#custom-equipment-input").val();
-      if (selected_equip_name === "") {
-        return;
-      }
-    }
-    if (selected_equip_name === undefined) return;
-
-    // Uncheck all radio buttons
-    $(".checkbox").prop("checked", false);
-
-    selected_equip_name = titleCase(selected_equip_name);
-
-    // Fixes bug with deleting exercises in middle
-    // Take LAST ex_num + 1 to be new ex_num
-    let ex_num = 1;
-    if (parseInt($("ul#exercises>li").length) > 1) {
-      ex_num =
-        parseInt(
-          $("ul#exercises>li:last-child").attr("id").split("_")[1]
-        ) + 1;
-      //   console.log(
-      // "Last child id= " + $("ul#exercises>li:last-child").attr("id")
-      //   );
-    }
-
-    // Append new exercise to exericses list
-    let html = $(`ul#exercises>li`)
-      .first()
-      .clone()
-      .prop("hidden", false)
-      .data("ex_num", ex_num)
-      .prop("outerHTML")
-      .replaceAll("?ex_num?", ex_num);
-    $(`ul#exercises`).append(html);
-
-    // Adds "required" attribute to non-hidden, number inputs
-    add_required_attribute();
-
-    // Set values to be sent over form / displayed, and hide modal
-    $(`#${ex_num}_equipment_name`).val(selected_equip_name);
-    $(`#${ex_num}_equipment_name`).trigger("input");
-    $(`#${ex_num}_equipment_name_header`).text(selected_equip_name);
-    $(`#${ex_num}_equipment_name_header`).trigger("input");
-    $("#equipment-modal").modal("hide");
-
-    // Let local storage be current contents of form
-    set_local_storage();
+    clickSelectEquipmentButton(selected_equip_name);
 
     console.log(
       `Selected ${selected_equip_name} for Exercise ${ex_num}`
     );
   });
 });
+
+function clickSelectEquipmentButton(selected_equip_name) {
+  if (selected_equip_name === "custom-equipment-placeholder") {
+    selected_equip_name = $("#custom-equipment-input").val();
+    if (selected_equip_name === "") {
+      return;
+    }
+  }
+  if (selected_equip_name === undefined) return;
+
+  // Uncheck all radio buttons
+  $(".checkbox").prop("checked", false);
+
+  selected_equip_name = titleCase(selected_equip_name);
+
+  // Fixes bug with deleting exercises in middle
+  // Take LAST ex_num + 1 to be new ex_num
+  let ex_num = 1;
+  if (parseInt($("ul#exercises>li").length) > 1) {
+    ex_num =
+      parseInt(
+        $("ul#exercises>li:last-child").attr("id").split("_")[1]
+      ) + 1;
+    //   console.log(
+    // "Last child id= " + $("ul#exercises>li:last-child").attr("id")
+    //   );
+  }
+
+  // Append new exercise to exericses list
+  let html = $(`ul#exercises>li`)
+    .first()
+    .clone()
+    .prop("hidden", false)
+    .data("ex_num", ex_num)
+    .prop("outerHTML")
+    .replaceAll("?ex_num?", ex_num);
+  $(`ul#exercises`).append(html);
+
+  // Adds "required" attribute to non-hidden, number inputs
+  add_required_attribute();
+
+  // Set values to be sent over form / displayed, and hide modal
+  $(`#${ex_num}_equipment_name`).val(selected_equip_name);
+  $(`#${ex_num}_equipment_name`).trigger("input");
+  $(`#${ex_num}_equipment_name_header`).text(selected_equip_name);
+  $(`#${ex_num}_equipment_name_header`).trigger("input");
+  $("#equipment-modal").modal("hide");
+
+  // Let local storage be current contents of form
+  set_local_storage();
+}
 
 // Disable select_equipment_button when not clickable
 $(document).ready(() => {
@@ -750,3 +759,43 @@ $(document).ready(() => {
     });
   });
 });
+
+// * Handle copying workout from history to /add page
+$(document).ready(() => {
+  $(document).on(
+    "click",
+    ".copy_workout_and_exercises_button",
+    function () {
+      if (
+        confirm(
+          "Are you sure you want to overwrite your current workout and copy this one?"
+        )
+      ) {
+        let workout_id = $(this).data("workout_id");
+        handleWorkoutCopying(workout_id);
+      }
+    }
+  );
+});
+
+function handleWorkoutCopying(workout_id) {
+  localStorage.clear(); // Clear existing workout (if any)
+  window.location.assign("/add?id=" + workout_id);
+  //   window.location.search = "?id=" + workout_id;
+
+  //   //   location.reload(); // Refresh page to take effect
+  //   //   $("#add_exercise_button").trigger("click");
+  //   console.log("a");
+  //   //   clickSelectEquipmentButton("Back Squat");
+  //   console.log("b");
+  //   function sleep(ms) {
+  //     return new Promise((resolve) => setTimeout(resolve, ms));
+  //   }
+
+  //   console.log("Hello");
+  //   sleep(2000).then(() => {
+  //     console.log("World!");
+  //   });
+  //   clickSelectEquipmentButton("Back Squat");
+  //   console.log("c");
+}

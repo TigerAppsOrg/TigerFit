@@ -572,6 +572,94 @@ def get_past_workouts(session, user_name):
     return workouts
 
 
+def get_workout_title_by_id(session, user_name, workout_id):
+    assert session is not None
+
+    try:
+        title = (
+            session.query(UserWorkouts.workout_title)
+            .filter(
+                and_(
+                    Users.user_name == user_name,
+                    UserWorkouts.workout_id == workout_id,
+                )
+            )
+            .one()
+        )
+        return title[0]
+    except exc.SQLAlchemyError as err:
+        # session.rollback()
+        return ""
+
+
+def workout_owned_by_user(session, user_name, workout_id):
+    try:
+        res = (
+            session.query(Users)
+            .join(UserWorkouts)
+            .filter(
+                and_(
+                    Users.user_name == user_name,
+                    UserWorkouts.workout_id == workout_id,
+                )
+            )
+            .first()
+        )
+        return res != None
+    except exc.SQLAlchemyError as err:
+        # print("err:", err)
+        return False
+
+
+# Returns one past workout of selected user by workout id
+def get_past_workout_by_id(session, user_name, workout_id):
+    assert session is not None
+
+    if not workout_owned_by_user(session, user_name, workout_id):
+        return False
+    try:
+        workout = (
+            session.query(UserExercises)
+            .filter(
+                UserExercises.workout_id == workout_id,
+            )
+            .all()
+        )
+
+        print("Workout:", workout)
+        # for exercise in workout:
+        #     print("d", exercise.sets)
+
+        result = {
+            "title": get_workout_title_by_id(
+                session, user_name, workout_id
+            ),
+            "exercises": [],
+            "num_exercises": len(workout),
+            "num_sets": [],
+            "equipment_names": [],
+            "reps": [],
+            "weights": [],
+        }
+
+        for exercise in workout:
+            result["exercises"].append(
+                {
+                    "equipment_name": exercise.equipment_name,
+                    "sets": exercise.sets,
+                }
+            )
+            result["num_sets"].append(exercise.sets["num_sets"])
+            result["equipment_names"].append(exercise.equipment_name)
+            result["reps"].append(exercise.sets["num_reps"])
+            result["weights"].append(exercise.sets["weight"])
+
+        return result
+    except exc.SQLAlchemyError as err:
+        # session.rollback()
+        return False
+
+
 # Returns one most recent workout of selected user
 def get_most_recent_workout(session, user_name):
     return (
@@ -1166,11 +1254,22 @@ def dangerous_apply_to_all_users(session):
 # Used for testing of methods
 def main():
     try:
-        session, engine = create_session()
-        print("Test session", session)
-        print("Test engine", engine)
+        # Local session/engine
+        from dotenv import load_dotenv
 
-    finally:
+        load_dotenv()
+        session, engine = create_local_session()
+        # print("Test session", session)
+        # print("Test engine", engine)
+
+        res = workout_owned_by_user(session, "agamba", -100)
+        print("*RESULT:", res)
+
+        # session.close()
+        # engine.dispose
+
+    except exc.SQLAlchemyError as err:
+        print("error")
         session.close()
         engine.dispose
 
