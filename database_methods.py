@@ -592,21 +592,41 @@ def get_workout_title_by_id(session, user_name, workout_id):
         return ""
 
 
+def workout_owned_by_user(session, user_name, workout_id):
+    try:
+        res = (
+            session.query(Users)
+            .join(UserWorkouts)
+            .filter(
+                and_(
+                    Users.user_name == user_name,
+                    UserWorkouts.workout_id == workout_id,
+                )
+            )
+            .first()
+        )
+        return res != None
+    except exc.SQLAlchemyError as err:
+        # print("err:", err)
+        return False
+
+
 # Returns one past workout of selected user by workout id
 def get_past_workout_by_id(session, user_name, workout_id):
     assert session is not None
+
+    if not workout_owned_by_user(session, user_name, workout_id):
+        return False
     try:
         workout = (
             session.query(UserExercises)
             .filter(
-                and_(
-                    Users.user_name == user_name,
-                    UserExercises.workout_id == workout_id,
-                )
+                UserExercises.workout_id == workout_id,
             )
             .all()
         )
 
+        print("Workout:", workout)
         # for exercise in workout:
         #     print("d", exercise.sets)
 
@@ -1234,11 +1254,22 @@ def dangerous_apply_to_all_users(session):
 # Used for testing of methods
 def main():
     try:
-        session, engine = create_session()
-        print("Test session", session)
-        print("Test engine", engine)
+        # Local session/engine
+        from dotenv import load_dotenv
 
-    finally:
+        load_dotenv()
+        session, engine = create_local_session()
+        # print("Test session", session)
+        # print("Test engine", engine)
+
+        res = workout_owned_by_user(session, "agamba", -100)
+        print("*RESULT:", res)
+
+        # session.close()
+        # engine.dispose
+
+    except exc.SQLAlchemyError as err:
+        print("error")
         session.close()
         engine.dispose
 
