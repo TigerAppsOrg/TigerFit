@@ -304,7 +304,8 @@ function delete_exercise(ex_num) {
 $(document).ready(() => {
   $(document).on("click", ".form_clear_button", function () {
     localStorage.clear();
-    location.reload(); // Refresh page to take effect
+    location.search = "";
+    // location.reload(); // Refresh page to take effect
   });
 });
 
