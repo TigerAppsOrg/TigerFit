@@ -125,16 +125,18 @@
                                         id="?ex_num?_equipment_name_header"
                                         name="?ex_num?_equipment_name_header"></strong>
                                         -->
-                                    <h1>Length = </h1>
                                     <select class="custom-select
                                         form-select
                                         equipment-name-select save_value
                                     text-center" id="?ex_num?_equipment_name_header" name="?ex_num?_equipment_name">
-                                        <option value="default">Default</option>
                                         {% for equip in
                                         equipment_list %}
                                         <option value="{{equip['equipment_name']}}">{{equip['equipment_name']}}</option>
                                         {% endfor %}
+                                        {% for equip_name in
+                                        custom_equipment_list %}
+                                        <option value="{{equip_name}}">{{equip_name}}</option>
+                                        {%endfor%}
                                     </select>
                                     <!-- <strong class="save_value" id="?ex_num?_equipment_name_header" name="?ex_num?_equipment_name_header"></strong> -->
 

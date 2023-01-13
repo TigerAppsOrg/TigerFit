@@ -56,13 +56,13 @@ import os
 
 
 # ! Production
-session, engine = create_session()
+# session, engine = create_session()
 
 # ! Local testing
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv()
-# session, engine = create_local_session()
+load_dotenv()
+session, engine = create_local_session()
 
 # Begin App
 
@@ -433,7 +433,9 @@ def add():
         equipment_list, key=lambda x: x["equipment_name"]
     )
 
-    custom_equipment_list = get_all_custom_equipment(session, user_name)
+    custom_equipment_list = sorted(
+        get_all_custom_equipment(session, user_name)
+    )
 
     if copying_past_workout:
         return render_template(
