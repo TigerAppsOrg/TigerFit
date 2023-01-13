@@ -120,7 +120,6 @@
                             <ul style="list-style-type: none" id="exercises">
                                 <!-- Exercise Blueprint HTML -->
                                 <li hidden class="hidden_exercise" id="exercise_?ex_num?">
-                                    <!-- <h2 class="text-center"> -->
                                     <!-- Exercise ?ex_num? - -->
                                     <!-- <strong class="save_value"
                                         id="?ex_num?_equipment_name_header"
@@ -130,16 +129,12 @@
                                         form-select
                                         equipment-name-select save_value
                                         text-center" id="?ex_num?_equipment_name_header" name="?ex_num?_equipment_name">
-
-                                        <!-- <option value="2">Two</option>
-                                            <option value="3">Three</option> -->
                                         {% for equip in
                                         equipment_list %}
                                         <option value="{{equip['equipment_name']}}">{{equip['equipment_name']}}</option>
                                         {% endfor %}
                                     </select>
                                     <!-- <strong class="save_value" id="?ex_num?_equipment_name_header" name="?ex_num?_equipment_name_header"></strong> -->
-                                    <!-- </h2> -->
 
                                     {#{% include 'equipment_dropdown.html' %}#}
                                     <!-- <input hidden class="form-select save_value" id="?ex_num?_equipment_name" name="?ex_num?_equipment_name" /> -->

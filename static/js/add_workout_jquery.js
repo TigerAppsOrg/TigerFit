@@ -558,7 +558,8 @@ function clickSelectEquipmentButton(selected_equip_name) {
   console.log(`Selected ${selected_equip_name} for Exercise ${ex_num}`);
 }
 
-// ! TEST
+// Update relevant fields when the select dropdown option is changed on
+// equipment name
 $(document).ready(() => {
   $(document).on("change", ".equipment-name-select", function () {
     console.log("val=" + $(this).val());
@@ -647,7 +648,6 @@ function hashCode(str) {
 }
 function intToRGB(i) {
   var c = (i & 0x00ffffff).toString(16).toUpperCase();
-  console.log("test");
   return "00000".substring(0, 6 - c.length) + c;
 }
 
