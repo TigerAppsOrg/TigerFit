@@ -93,7 +93,7 @@ function addExercise(selected_equip_name) {
   // Set values to be sent over form / displayed, and hide modal
   $(`#${ex_num}_equipment_name`).val(selected_equip_name);
   $(`#${ex_num}_equipment_name`).trigger("input");
-  $(`#${ex_num}_equipment_name_header`).text(selected_equip_name);
+  $(`#${ex_num}_equipment_name_header`).val(selected_equip_name);
   $(`#${ex_num}_equipment_name_header`).trigger("input");
   $("#equipment-modal").modal("hide");
 

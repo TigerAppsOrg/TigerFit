@@ -32,6 +32,7 @@ let restore_local_storage = (storage) => {
         $(this).prop("checked", localStorage.getItem(element_name));
       } else {
         console.log("ELEMENT NAME", element_name);
+        console.log("ELEMENT NAME", element_name);
         $(this).val(localStorage.getItem(element_name));
 
         if (
@@ -499,10 +500,6 @@ $(document).ready(() => {
     console.log("selected equip", selected_equip_name);
 
     clickSelectEquipmentButton(selected_equip_name);
-
-    console.log(
-      `Selected ${selected_equip_name} for Exercise ${ex_num}`
-    );
   });
 });
 
@@ -549,13 +546,34 @@ function clickSelectEquipmentButton(selected_equip_name) {
   // Set values to be sent over form / displayed, and hide modal
   $(`#${ex_num}_equipment_name`).val(selected_equip_name);
   $(`#${ex_num}_equipment_name`).trigger("input");
-  $(`#${ex_num}_equipment_name_header`).text(selected_equip_name);
+  $(`#${ex_num}_equipment_name_header`)
+    .val(selected_equip_name)
+    .prop("selected", true);
   $(`#${ex_num}_equipment_name_header`).trigger("input");
   $("#equipment-modal").modal("hide");
 
   // Let local storage be current contents of form
   set_local_storage();
+
+  console.log(`Selected ${selected_equip_name} for Exercise ${ex_num}`);
 }
+
+// ! TEST
+$(document).ready(() => {
+  $(document).on("change", ".equipment-name-select", function () {
+    console.log("val=" + $(this).val());
+    console.log("id=" + $(this).attr("id"));
+    let newVal = $(this).val();
+    let id = $(this).attr("id");
+    let ex_num = id.split("_")[0];
+
+    localStorage.setItem(`${ex_num}_equipment_name`, newVal);
+
+    $(`#${ex_num}_equipment_name`).val(selected_equip_name);
+    $(`#${ex_num}_equipment_name`).trigger("input");
+    set_local_storage();
+  });
+});
 
 // Disable select_equipment_button when not clickable
 $(document).ready(() => {

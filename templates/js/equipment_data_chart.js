@@ -159,21 +159,6 @@ $(document).ready(() => {
   });
 });
 
-// function clickSelectEquipmentButton(equipment_name) {
-//   equipment_name = titleCase(equipment_name);
-//   // Uncheck all radio buttons
-//   $(".checkbox").prop("checked", false);
-
-//   // Set values to be sent sent back to input, and hide modal
-//   $(`#hidden-chart-equipment-name`).val(selected_equip_name);
-//   $(`#hidden-chart-equipment-name`).trigger("change");
-//   $(`#chart-equipment-name-header`).html(selected_equip_name);
-//   $(`#chart-equipment-name-header`).css("color", "orange");
-//   $("#equipment-modal").modal("hide");
-
-//   console.log(`Selected ${selected_equip_name}`);
-// }
-
 // Disable select_equipment_button when not clickable
 $(document).ready(() => {
   $(document).on(
