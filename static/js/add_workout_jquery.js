@@ -504,10 +504,48 @@ $(document).ready(() => {
 });
 
 function clickSelectEquipmentButton(selected_equip_name) {
+  let isNewCustomEquipment = false;
   if (selected_equip_name === "custom-equipment-placeholder") {
     selected_equip_name = $("#custom-equipment-input").val();
+    isNewCustomEquipment = true;
     if (selected_equip_name === "") {
       return;
+    }
+
+    // If its a valid new custom equipment - add name to select dropdown
+    else {
+      //   selected_equip_name = titleCase(selected_equip_name);
+      //   console.log("valid new custom: " + selected_equip_name);
+      //   let ex_num = 1;
+      //   if (parseInt($("ul#exercises>li").length) > 1) {
+      //     ex_num =
+      //       parseInt(
+      //         $("ul#exercises>li:last-child").attr("id").split("_")[1]
+      //       ) + 1;
+      //   }
+      //   console.log("exnum: " + ex_num);
+      //   console.log(
+      //     "names: " + $(`#${ex_num}_equipment_name_header`).attr("name")
+      //   );
+      //   // Append new option to select
+      //   $(`#${ex_num}_equipment_name_header`).append(
+      //     $("<option>", {
+      //       value: selected_equip_name,
+      //       text: selected_equip_name,
+      //     })
+      //   );
+      //   let html = $(`#${ex_num}_equipment_name_header>option`).prop(
+      //     "outerHTML"
+      //   );
+      // .first()
+      // .clone()
+      // .prop("outerHTML");
+      //   console.log("html: " + html);
+      // .val(selected_equip_name)
+      // .html(selected_equip_name);
+      // .prop("outerHTML")
+      // .replaceAll("?ex_num?", ex_num);
+      //   $(`#${ex_num}_equipment_name_header`).append(html);
     }
   }
   if (selected_equip_name === undefined) return;
@@ -525,12 +563,9 @@ function clickSelectEquipmentButton(selected_equip_name) {
       parseInt(
         $("ul#exercises>li:last-child").attr("id").split("_")[1]
       ) + 1;
-    //   console.log(
-    // "Last child id= " + $("ul#exercises>li:last-child").attr("id")
-    //   );
   }
 
-  // Append new exercise to exericses list
+  // Append new exercise to exercises list
   let html = $(`ul#exercises>li`)
     .first()
     .clone()
@@ -543,6 +578,16 @@ function clickSelectEquipmentButton(selected_equip_name) {
   // Adds "required" attribute to non-hidden, number inputs
   add_required_attribute();
 
+  // ! testing
+  if (isNewCustomEquipment) {
+    // Append new option to select
+    $(`#${ex_num}_equipment_name_header`).append(
+      $("<option>", {
+        value: selected_equip_name,
+        text: selected_equip_name,
+      })
+    );
+  }
   // Set values to be sent over form / displayed, and hide modal
   $(`#${ex_num}_equipment_name`).val(selected_equip_name);
   $(`#${ex_num}_equipment_name`).trigger("input");
@@ -551,6 +596,8 @@ function clickSelectEquipmentButton(selected_equip_name) {
     .prop("selected", true);
   $(`#${ex_num}_equipment_name_header`).trigger("input");
   $("#equipment-modal").modal("hide");
+
+  // ! end
 
   // Let local storage be current contents of form
   set_local_storage();
@@ -570,7 +617,7 @@ $(document).ready(() => {
 
     localStorage.setItem(`${ex_num}_equipment_name`, newVal);
 
-    $(`#${ex_num}_equipment_name`).val(selected_equip_name);
+    $(`#${ex_num}_equipment_name`).val(newVal);
     $(`#${ex_num}_equipment_name`).trigger("input");
     set_local_storage();
   });
