@@ -9,12 +9,19 @@ html {
 body {
   min-height: 100vh;
   /* background: linear-gradient(25deg, rgba(199, 109, 0, 0.315) 5%, bisque) !important; */
-  background: linear-gradient(0deg, rgb(192, 192, 192) 0%, #eeeeee) !important;
+  background: linear-gradient(
+    0deg,
+    rgb(192, 192, 192) 0%,
+    #eeeeee
+  ) !important;
   background: #eeee !important;
 }
 
 .header-background-image {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)
+    ),
     url("../Pictures/workout.jpg");
   background-repeat: none;
   background-size: cover;
@@ -145,6 +152,23 @@ body {
   text-align: center;
   font-weight: 700;
   color: orange;
+}
+
+.equipment-name-select {
+  text-align: center !important;
+  /* translate: 10% !important; */
+  margin: auto !important;
+  width: 80% !important;
+  /* left: 50% !important; */
+  font-weight: 1000 !important;
+  font-size: x-large !important;
+  color: darkorange !important;
+  text-shadow: black 0px 0px 2px !important;
+}
+.equipment-name-select option {
+  font-weight: 400 !important;
+  font-size: small !important;
+  color: black !important;
 }
 
 .info-tooltip {
