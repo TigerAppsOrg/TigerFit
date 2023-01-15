@@ -1194,7 +1194,8 @@ def dangerous_reset_database(engine):
     Base.metadata.create_all(engine)
 
 
-def create_table(engine):
+# Creates all tables in database.py which DO NOT exist already
+def create_tables(engine):
     assert engine is not None
     Base.metadata.create_all(engine)
 
@@ -1254,7 +1255,6 @@ def main():
         session, engine = create_local_session()
         print("Test session", session)
         print("Test engine", engine)
-
 
     finally:
         session.close()
