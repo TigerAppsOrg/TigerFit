@@ -53,13 +53,10 @@ import os
 
 
 # ! Production
-session, engine = create_session()
+# session, engine = create_session()
 
 # ! Local testing
-# from dotenv import load_dotenv
-
-# load_dotenv()
-# session, engine = create_local_session()
+session, engine = create_local_session()
 
 # Begin App
 

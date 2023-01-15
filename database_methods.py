@@ -254,6 +254,9 @@ def create_new_equipment(
     main_muscle_group,
     sub_muscle_groups=[],
     is_bodyweight=False,
+    is_timed=False,
+    is_cardio=False,
+    is_misc=False,
 ):
     # ! ignore asserts for now
     # assert session is not None
@@ -276,10 +279,14 @@ def create_new_equipment(
         equipment_name=equipment_name,
         main_muscle_group=main_muscle_group,
         sub_muscle_groups=sub_muscle_groups,
-        is_bodyweight=is_bodyweight
+        is_bodyweight=is_bodyweight,
+        is_timed=is_timed,
+        is_cardio=is_cardio,
+        is_misc=is_misc,
         # youtube_link=youtube_link,
     )
     session.add(new)
+    print("added equipment: ", equipment_name)
     try:
         session.commit()
         return new.equipment_name
@@ -389,6 +396,80 @@ def create_custom_equipment(session, equipment_name, user_name):
     # print("prev", previous_one_rep_dict)
     user.one_rep_estimation = previous_one_rep_dict
     print("* Created new 1RM")
+    # !
+
+    try:
+        session.commit()
+        return equipment_name
+    except exc.SQLAlchemyError as err:
+        session.rollback()
+        return err
+
+
+# Add to user-specific list of equipment they have used in the past
+# Only adds if new equipment_name is unique in list
+def add_to_used_equipment(session, equipment_name, user_name):
+    assert session is not None
+
+    user = (
+        session.query(Users).filter(Users.user_name == user_name).one()
+    )
+    was_new_equipment = False
+    # print("user", user)
+    # print("user dict", user.__dict__)
+
+    # Append to used_equipment in DB if not in list
+    used_equipment_list = user.used_equipment["names"]
+    # print("old list", used_equipment_list)
+
+    if equipment_name not in used_equipment_list:
+        used_equipment_list.append(equipment_name)
+        user.used_equipment["names"] = used_equipment_list
+        was_new_equipment = True
+    try:
+        session.commit()
+        return was_new_equipment
+    except exc.SQLAlchemyError as err:
+        session.rollback()
+        return False
+
+
+def delete_custom_equipment(session, equipment_name, user_name):
+    assert session is not None
+
+    user = (
+        session.query(Users).filter(Users.user_name == user_name).one()
+    )
+    # Remove from custom_equipment in DB if in in list
+    custom_equipment_list = user.custom_equipment["names"]
+
+    if equipment_name in custom_equipment_list:
+        custom_equipment_list.remove(equipment_name)
+        user.custom_equipment["names"] = custom_equipment_list
+        # print("new list", custom_equipment_list)
+        # print(
+        #     "new queried list",
+        #     (
+        #         session.query(Users.custom_equipment)
+        #         .filter(Users.user_name == user_name)
+        #         .one()[0]["names"]
+        #     ),
+        # )
+
+        # print("* Appended to custom equip list")
+
+    # ! STILL NEED TO ADD TO 1RMs JSON OBJ in users
+    previous_one_rep_dict = (
+        session.query(Users.one_rep_estimation)
+        .filter(Users.user_name == user_name)
+        .one()[0]
+    )
+
+    if equipment_name in previous_one_rep_dict:
+        previous_one_rep_dict.pop(equipment_name)
+        # print("prev", previous_one_rep_dict)
+        user.one_rep_estimation = previous_one_rep_dict
+    # print("* Created new 1RM")
     # !
 
     try:
@@ -1125,6 +1206,10 @@ def create_local_session(
     port="5432",
     database="tigerfit",
 ):
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
     engine = create_engine(
         "postgresql"
         + os.environ["DATABASE_URL"][8:]
@@ -1166,9 +1251,10 @@ def dangerous_apply_to_all_users(session):
 # Used for testing of methods
 def main():
     try:
-        session, engine = create_session()
+        session, engine = create_local_session()
         print("Test session", session)
         print("Test engine", engine)
+
 
     finally:
         session.close()

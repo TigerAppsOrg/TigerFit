@@ -3,281 +3,423 @@
     "equipment_name": "Barbell Bench Press",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs", "Triceps", "Delts"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
-
   {
     "equipment_name": "Dumbell Bench Press",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs", "Triceps", "Delts"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Barbell Incline Bench Press",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs", "Triceps", "Delts"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Dumbell Incline Bench Press",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs", "Triceps", "Delts"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Barbell Decline Bench Press",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs", "Triceps", "Delts"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Dumbell Decline Bench Press",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs", "Triceps", "Delts"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Skullcrushers",
     "main_muscle_group": "Arms",
     "sub_muscle_groups": ["Triceps"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
 
   {
     "equipment_name": "Overhead Extension",
     "main_muscle_group": "Arms",
     "sub_muscle_groups": ["Triceps"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Tricep Pushdown",
     "main_muscle_group": "Arms",
     "sub_muscle_groups": ["Triceps"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Push-Up",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs", "Triceps", "Delts"],
-    "is_bodyweight": true
-  },
-  {
-    "equipment_name": "Weighted Push-Up",
-    "main_muscle_group": "Chest",
-    "sub_muscle_groups": ["Pecs", "Triceps", "Delts"],
-    "is_bodyweight": false
+    "is_bodyweight": true,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Cable Chest Fly",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
 
   {
     "equipment_name": "Dumbell Chest Fly",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Dip",
     "main_muscle_group": "Arms",
     "sub_muscle_groups": ["Triceps", "Pecs"],
-    "is_bodyweight": true
-  },
-  {
-    "equipment_name": "Weighted Dip",
-    "main_muscle_group": "Arms",
-    "sub_muscle_groups": ["Triceps", "Pecs"],
-    "is_bodyweight": false
+    "is_bodyweight": true,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Barbell Deadlift",
     "main_muscle_group": "Back",
     "sub_muscle_groups": ["Lower Back", "Glutes", "Hamstrings"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Good Mornings",
     "main_muscle_group": "Back",
     "sub_muscle_groups": ["Lower Back", "Hamstrings"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Lower Back Extension",
     "main_muscle_group": "Back",
     "sub_muscle_groups": ["Lower Back", "Hamstrings"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Trap Bar Deadlift",
     "main_muscle_group": "Back",
-    "sub_muscle_groups": ["Quads", "Lower Back", "Glutes", "Hamstrings"],
-    "is_bodyweight": false
+    "sub_muscle_groups": [
+      "Quads",
+      "Lower Back",
+      "Glutes",
+      "Hamstrings"
+    ],
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Lat Pulldown",
     "main_muscle_group": "Back",
     "sub_muscle_groups": ["Lats"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Seated Cable Row",
     "main_muscle_group": "Back",
     "sub_muscle_groups": ["Lats"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "T-Bar Row",
     "main_muscle_group": "Back",
     "sub_muscle_groups": ["Lats"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Barbell Curl",
     "main_muscle_group": "Arms",
     "sub_muscle_groups": ["Biceps"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Dumbell Curl",
     "main_muscle_group": "Arms",
     "sub_muscle_groups": ["Biceps"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Rear Delt Fly",
     "main_muscle_group": "Shoulders",
     "sub_muscle_groups": ["Delts"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
 
   {
     "equipment_name": "Pull-Up",
     "main_muscle_group": "Back",
     "sub_muscle_groups": ["Lats"],
-    "is_bodyweight": true
-  },
-  {
-    "equipment_name": "Weighted Pull-Up",
-    "main_muscle_group": "Back",
-    "sub_muscle_groups": ["Lats"],
-    "is_bodyweight": false
+    "is_bodyweight": true,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Lower Back Extension",
     "main_muscle_group": "Back",
     "sub_muscle_groups": ["Lower Back"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Back Squat",
     "main_muscle_group": "Legs",
     "sub_muscle_groups": ["Quads", "Glutes"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Front Squat",
     "main_muscle_group": "Legs",
     "sub_muscle_groups": ["Quads", "Glutes"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Goblet Squat",
     "main_muscle_group": "Legs",
     "sub_muscle_groups": ["Quads", "Glutes"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Calf Raise",
     "main_muscle_group": "Legs",
     "sub_muscle_groups": ["Calves"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Leg Press",
     "main_muscle_group": "Legs",
     "sub_muscle_groups": ["Quads"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Leg Extension",
     "main_muscle_group": "Legs",
     "sub_muscle_groups": ["Quads"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Leg Curl",
     "main_muscle_group": "Legs",
     "sub_muscle_groups": ["Hamstrings"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Hip Abduction",
     "main_muscle_group": "Legs",
     "sub_muscle_groups": ["Hip Abductors", "Glutes"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Hip Adduction",
     "main_muscle_group": "Legs",
     "sub_muscle_groups": ["Hip Adductors", "Glutes"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Barbell Shoulder Press",
     "main_muscle_group": "Shoulders",
     "sub_muscle_groups": ["Delts", "Side Delts", "Triceps"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Dumbell Shoulder Press",
     "main_muscle_group": "Shoulders",
     "sub_muscle_groups": ["Delts", "Side Delts", "Triceps"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Lateral Raise",
     "main_muscle_group": "Shoulders",
     "sub_muscle_groups": ["Delts"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Chest Press",
     "main_muscle_group": "Chest",
     "sub_muscle_groups": ["Pecs", "Delts", "Triceps"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Wrist Curl",
     "main_muscle_group": "Arms",
     "sub_muscle_groups": ["Forearms"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Sit-Ups",
     "main_muscle_group": "Core",
     "sub_muscle_groups": ["Abdominals"],
-    "is_bodyweight": true
+    "is_bodyweight": true,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Crunches",
     "main_muscle_group": "Core",
     "sub_muscle_groups": ["Abdominals"],
-    "is_bodyweight": true
+    "is_bodyweight": true,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
 
   {
     "equipment_name": "Russian Twists",
     "main_muscle_group": "Core",
     "sub_muscle_groups": ["Abdominals", "Obliques"],
-    "is_bodyweight": true
+    "is_bodyweight": true,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
   },
   {
     "equipment_name": "Shrugs",
     "main_muscle_group": "Back",
     "sub_muscle_groups": ["Traps"],
-    "is_bodyweight": false
+    "is_bodyweight": false,
+    "is_timed": false,
+    "is_cardio": false,
+    "is_misc": false
+  },
+  {
+    "equipment_name": "Wall Sit",
+    "main_muscle_group": "Back",
+    "sub_muscle_groups": ["Traps"],
+    "is_bodyweight": false,
+    "is_timed": true,
+    "is_cardio": false,
+    "is_misc": false
+  },
+  {
+    "equipment_name": "Plank",
+    "main_muscle_group": "Back",
+    "sub_muscle_groups": ["Traps"],
+    "is_bodyweight": false,
+    "is_timed": true,
+    "is_cardio": false,
+    "is_misc": false
+  },
+  {
+    "equipment_name": "Dead Hang",
+    "main_muscle_group": "Back",
+    "sub_muscle_groups": ["Traps"],
+    "is_bodyweight": false,
+    "is_timed": true,
+    "is_cardio": false,
+    "is_misc": false
   }
 ]
