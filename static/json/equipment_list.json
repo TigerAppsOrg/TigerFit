@@ -397,8 +397,8 @@
   },
   {
     "equipment_name": "Wall Sit",
-    "main_muscle_group": "Back",
-    "sub_muscle_groups": ["Traps"],
+    "main_muscle_group": "Legs",
+    "sub_muscle_groups": ["Quads", "Glutes"],
     "is_bodyweight": false,
     "is_timed": true,
     "is_cardio": false,
@@ -406,8 +406,8 @@
   },
   {
     "equipment_name": "Plank",
-    "main_muscle_group": "Back",
-    "sub_muscle_groups": ["Traps"],
+    "main_muscle_group": "Core",
+    "sub_muscle_groups": ["Abdominals"],
     "is_bodyweight": false,
     "is_timed": true,
     "is_cardio": false,
@@ -415,8 +415,8 @@
   },
   {
     "equipment_name": "Dead Hang",
-    "main_muscle_group": "Back",
-    "sub_muscle_groups": ["Traps"],
+    "main_muscle_group": "Arms",
+    "sub_muscle_groups": ["Forearms"],
     "is_bodyweight": false,
     "is_timed": true,
     "is_cardio": false,
