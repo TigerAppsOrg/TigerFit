@@ -56,10 +56,10 @@ import os
 
 
 # ! Production
-session, engine = create_session()
+# session, engine = create_session()
 
 # ! Local testing
-# session, engine = create_local_session()
+session, engine = create_local_session()
 
 # Begin App
 
@@ -668,6 +668,7 @@ def recommend_weight():
     print("Handling recommend_weight...")
     user_name = request.args.get("user_name")
     equipment_name = request.args.get("equipment_name")
+    print("***********equip name = ", equipment_name)
     reps = int(request.args.get("reps"))
     element_name = request.args.get("element_name")
 

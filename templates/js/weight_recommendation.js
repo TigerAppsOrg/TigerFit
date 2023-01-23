@@ -78,7 +78,8 @@ function recommendWeight(element) {
   let element_name = element.prop("name");
   let equipment_dropdown_id = `#${
     element_name.split("_")[0]
-  }_equipment_name`;
+  }_equipment_name_header`;
+  console.log("dropdownid = " + equipment_dropdown_id);
   let equipment_name = $(equipment_dropdown_id).val();
   let reps = element.val();
 
@@ -163,7 +164,7 @@ function recommendReps(element) {
   let element_name = element.prop("name");
   let equipment_dropdown_id = `#${
     element_name.split("_")[0]
-  }_equipment_name`;
+  }_equipment_name_header`;
   let equipment_name = $(equipment_dropdown_id).val();
   let weight = element.val();
 
