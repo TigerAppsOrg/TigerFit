@@ -186,6 +186,12 @@ class EquipmentList(Base):
     sub_muscle_groups = Column(MutableDict.as_mutable(JSON))
     # True if equipment is a bodyweight exercise (no weight added)
     is_bodyweight = Column(Boolean)
+    # True if equipment is a timed exercise (time/ (opt) weight inputs)
+    is_timed = Column(Boolean)
+    # TODO - True if equipment is a cardio exercise (time/dist inputs)
+    is_cardio = Column(Boolean)
+    # TODO - True if equipment is a misc exercise (misc.)
+    is_misc = Column(Boolean)
 
     def __repr__(self):
         return "*Equipment %s" % (self.equipment_name)
