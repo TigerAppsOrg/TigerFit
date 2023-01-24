@@ -44,6 +44,7 @@ from database_methods import (
     has_watched_tutorial,
     watch_tutorial,
     unwatch_tutorial,
+    get_all_1rms,
 )
 
 from casclient import CasClient
@@ -276,6 +277,59 @@ def data():
     )
 
 
+# Ajax function for /data equipment manager table
+@app.route("/equipment_manager", methods=["POST"])
+def equipment_manager():
+    print("Handling /equipment_manager...")
+    all_equip = get_all_equipment(session)
+    user_name = request.json["user_name"]
+    custom_equip = get_all_custom_equipment(session, user_name)
+    one_rms = get_all_1rms(session, user_name)
+
+    data = []
+    for row in all_equip:
+        row = row.__dict__
+        # print("entry:", row)
+        name = row["equipment_name"]
+        one_rm = one_rms[name] if name in one_rms else 0
+        main = row["main_muscle_group"]
+        sub = row["sub_muscle_groups"]["tags"]
+        sub = ", ".join(sub)
+
+        data.append(
+            {
+                "name": name,
+                "1rm": round(one_rm, 1),
+                "main_group": main,
+                "sub_groups": sub,
+                "is_custom": "False",
+            }
+        )
+
+    for name in custom_equip:
+        # row = row.__dict__
+        # print("entry:", row)
+        # name = row["equipment_name"]
+        one_rm = one_rms[name] if name in one_rms else 0
+        main = row["main_muscle_group"]
+        sub = row["sub_muscle_groups"]["tags"]
+        sub = ", ".join(sub)
+
+        data.append(
+            {
+                "name": name,
+                "1rm": round(one_rm, 1),
+                "main_group": main,
+                "sub_groups": sub,
+                "is_custom": "True",
+            }
+        )
+
+    # print("***ALL", all_equip)
+
+    return {"data": data}
+
+
 # Ajax function for /data bodyweight chart
 @app.route("/update_bodyweight_chart", methods=["GET"])
 def update_bodyweight_chart():
@@ -303,7 +357,7 @@ def update_bodyweight_chart():
             change,
             good_change,
         ) = format_bodyweight_data(bodyweight_history, goal_bodyweight)
-        print("***bodyweight data", bodyweight_data)
+        # print("***bodyweight data", bodyweight_data)
         response = make_response(
             {
                 "bodyweight_data": bodyweight_data,
@@ -329,7 +383,7 @@ def update_bodyweight_chart():
         change,
         good_change,
     ) = format_bodyweight_data(bodyweight_history, goal_bodyweight)
-    print("***bodyweight data", bodyweight_data)
+    # print("***bodyweight data", bodyweight_data)
     response = make_response(
         {
             "bodyweight_data": bodyweight_data,

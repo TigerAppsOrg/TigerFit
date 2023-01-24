@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Equipment Manager</title>
+
+    <!-- <script src="https://unpkg.com/jquery/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/gridjs-jquery/dist/gridjs.production.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" />
+
+</head>
+
+<body>
+    <div id="equipment-manager-wrapper"></div>
+    <script type="module">
+        import {
+            Grid,
+            h
+        } from "https://unpkg.com/gridjs?module";
+
+
+        // <!-- TODO - customize search with "selector" -->
+
+        new Grid({
+            columns: [
+                { id: 'name', name: 'Equipment Name' },
+                { id: '1rm', name: '1RM (lbs)' },
+                { id: 'main_group', name: 'Main Muscle Group' },
+                { id: 'sub_groups', name: 'Sub Muscle Groups' },
+                { id: 'is_custom', name: 'Custom?' },
+
+            ],
+            server: {
+                url: '/equipment_manager',
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                then: results => results.data,
+                body: JSON.stringify({
+                    user_name: "{{ user_name }}",
+                    //[ev.target.dataset.columnId]: ev.target.textContent
+                }),
+
+            },
+            style: {
+                table: {
+                    'white-space': 'nowrap'
+                }
+            },
+
+            search: true,
+            sort: true,
+            pagination: true,
+        }).render(document.getElementById('equipment-manager-wrapper'));
+
+    </script>
+</body>
+
+</html>

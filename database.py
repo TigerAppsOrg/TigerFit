@@ -193,5 +193,5 @@ class EquipmentList(Base):
     # TODO - True if equipment is a misc exercise (misc.)
     is_misc = Column(Boolean)
 
-    def __repr__(self):
-        return "*Equipment %s" % (self.equipment_name)
+    # def __repr__(self):
+    #     return "*Equipment %s" % (self.equipment_name)

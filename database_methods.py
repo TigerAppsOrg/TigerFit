@@ -948,6 +948,16 @@ def get_all_equipment(session):
     return session.query(EquipmentList).all()
 
 
+# Returns all 1rms, or [] if empty
+def get_all_1rms(session, user_name):
+    assert session is not None
+    return (
+        session.query(Users.one_rep_estimation)
+        .filter(Users.user_name == user_name)
+        .all()[0][0]
+    )
+
+
 # Returns all custom equipment (user specific), or [] if empty
 def get_all_custom_equipment(session, user_name):
     assert session is not None
