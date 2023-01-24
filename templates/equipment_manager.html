@@ -67,7 +67,7 @@
                                         return
                                     }
 
-                                    let new_1rm = prompt("Change one-rep max for " + JSON.stringify(equipment_name) + "? Table value will change on page refresh.")
+                                    let new_1rm = prompt("Change one-rep max for " + JSON.stringify(equipment_name) + "?")
                                     //console.log("NEW 1RM TO UPDATE: " + new_1rm)
 
                                     if (new_1rm == "" || isNaN(new_1rm) || new_1rm == null) {
@@ -76,11 +76,15 @@
 
 
                                     // Changes value in table
+                                    // <!-- ! BUG where sorting table right after update appends the PREVIOUS value ??? -->
                                     let td_index_to_change = -1
                                     $(`tbody.gridjs-tbody td`).each((i, v) => {
 
                                         if (i === td_index_to_change) {
-                                            $(v).text(new_1rm)
+                                            //console.log("new 1rm currently: " + new_1rm)
+                                            //$(v).text('')
+                                            $(v).html(new_1rm)
+                                            td_index_to_change = -1
                                             //$(v).text(new_1rm)
                                             return false // breaks loop
                                         }
@@ -91,7 +95,6 @@
                                     })
 
                                     // Changes value in database
-                                    // <!-- TODO - /update_1rm func in tigerfit.py-->
                                     handle1RMUpdate(equipment_name, new_1rm)
 
                                 },
@@ -124,7 +127,7 @@
 
             search: true,
             sort: true,
-            pagination: true,
+            pagination: { resetPageOnUpdate: true },
         }).render(document.getElementById('equipment-manager-wrapper'));
 
         function handle1RMUpdate(equipment_name, new_1rm) {
