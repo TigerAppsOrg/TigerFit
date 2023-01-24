@@ -120,9 +120,9 @@ function updateBodyweightChart(response) {
           xAxes: [
             {
               type: "time",
-              time: {
-                unit: "week",
-              },
+              //   time: {
+              //     unit: "week",
+              //   },
             },
           ],
           yAxes: [
