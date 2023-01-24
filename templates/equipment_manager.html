@@ -16,7 +16,8 @@
     <script type="module">
         import {
             Grid,
-            h
+            h,
+            html
         } from "https://unpkg.com/gridjs?module";
 
 
@@ -24,8 +25,41 @@
 
         new Grid({
             columns: [
-                { id: 'name', name: 'Equipment Name' },
-                { id: '1rm', name: '1RM (lbs)' },
+
+                {
+                    id: 'name',
+                    name: 'Equipment Name',
+                    formatter: (cell) => html(`<b>${cell}</b>`)
+                },
+                {
+                    id: '1rm',
+                    name: '1RM (lbs)',
+                    //formatter: (cell) => html(`<div style="border-bottom: 1px dotted;">${cell}</div>`),
+
+                    // attributes: {
+                    //     "contenteditable": "true"
+                    // },
+                    attributes: (cell, row, col) => {
+                        // add these attributes to the td elements only
+                        console.log("cell: " + cell)
+                        console.log("row: " + JSON.stringify(row))
+                        console.log("col: " + JSON.stringify(col))
+                        if (cell || cell === 0) {
+                            return {
+                                "data-cell-content": cell,
+                                onclick: () => {
+                                    let new_1rm = prompt("Change one-rep max for " + JSON.stringify(row.cell(0).data) + "? Table value will change on page refresh.")
+                                    console.log("NEW 1RM TO UPDATE: " + new_1rm)
+
+                                    $(`tbody.gridjs-tbody`).children().eq(3).children().eq(1).html(new_1rm)
+                                    // <!-- TODO - /update_1rm func in tigerfit.py-->
+                                    //console.log("val" + val)
+                                },
+                                style: "cursor: pointer"
+                            };
+                        }
+                    }
+                },
                 { id: 'main_group', name: 'Main Muscle Group' },
                 { id: 'sub_groups', name: 'Sub Muscle Groups' },
                 { id: 'is_custom', name: 'Custom?' },
@@ -53,6 +87,14 @@
             pagination: true,
         }).render(document.getElementById('equipment-manager-wrapper'));
 
+        //// On Input change of value
+        //$(document).ready(() => {
+        //    $(document).on("input", function () {
+        //        alert($(this).attr('id'))
+        //    });
+        //
+//
+        //});
     </script>
 </body>
 

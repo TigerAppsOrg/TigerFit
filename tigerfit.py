@@ -307,20 +307,17 @@ def equipment_manager():
         )
 
     for name in custom_equip:
-        # row = row.__dict__
-        # print("entry:", row)
-        # name = row["equipment_name"]
         one_rm = one_rms[name] if name in one_rms else 0
-        main = row["main_muscle_group"]
-        sub = row["sub_muscle_groups"]["tags"]
-        sub = ", ".join(sub)
+        # main = row["main_muscle_group"]
+        # sub = row["sub_muscle_groups"]["tags"]
+        # sub = ", ".join(sub)
 
         data.append(
             {
                 "name": name,
                 "1rm": round(one_rm, 1),
-                "main_group": main,
-                "sub_groups": sub,
+                "main_group": "",
+                "sub_groups": "",
                 "is_custom": "True",
             }
         )
