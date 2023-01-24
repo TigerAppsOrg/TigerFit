@@ -29,7 +29,19 @@
                 {
                     id: 'name',
                     name: 'Equipment Name',
-                    formatter: (cell) => html(`<b>${cell}</b>`)
+                    //attributes: { style: "font-weight: bold;" }
+                    //formatter: (cell) => html(`<b>${cell}</b>`)
+                    attributes: (cell, row, col) => {
+                        // add these attributes to the td elements only
+                        //console.log("cell: " + cell)
+                        //console.log("row: " + JSON.stringify(row))
+                        //console.log("col: " + JSON.stringify(col))
+                        if (cell) {
+                            return {
+                                style: "font-weight: bold;"
+                            };
+                        }
+                    }
                 },
                 {
                     id: '1rm',
@@ -41,21 +53,49 @@
                     // },
                     attributes: (cell, row, col) => {
                         // add these attributes to the td elements only
-                        console.log("cell: " + cell)
-                        console.log("row: " + JSON.stringify(row))
-                        console.log("col: " + JSON.stringify(col))
+                        //console.log("cell: " + cell)
+                        //console.log("row: " + JSON.stringify(row))
+                        //console.log("col: " + JSON.stringify(col))
                         if (cell || cell === 0) {
+
                             return {
                                 "data-cell-content": cell,
                                 onclick: () => {
-                                    let new_1rm = prompt("Change one-rep max for " + JSON.stringify(row.cell(0).data) + "? Table value will change on page refresh.")
-                                    console.log("NEW 1RM TO UPDATE: " + new_1rm)
 
-                                    $(`tbody.gridjs-tbody`).children().eq(3).children().eq(1).html(new_1rm)
+                                    let equipment_name = row.cell(0).data
+                                    if (equipment_name == "" || equipment_name == null) {
+                                        return
+                                    }
+
+                                    let new_1rm = prompt("Change one-rep max for " + JSON.stringify(equipment_name) + "? Table value will change on page refresh.")
+                                    //console.log("NEW 1RM TO UPDATE: " + new_1rm)
+
+                                    if (new_1rm == "" || isNaN(new_1rm) || new_1rm == null) {
+                                        return
+                                    }
+
+
+                                    // Changes value in table
+                                    let td_index_to_change = -1
+                                    $(`tbody.gridjs-tbody td`).each((i, v) => {
+
+                                        if (i === td_index_to_change) {
+                                            $(v).text(new_1rm)
+                                            //$(v).text(new_1rm)
+                                            return false // breaks loop
+                                        }
+
+                                        if ($(v).text() === equipment_name) {
+                                            td_index_to_change = i + 1
+                                        }
+                                    })
+
+                                    // Changes value in database
                                     // <!-- TODO - /update_1rm func in tigerfit.py-->
-                                    //console.log("val" + val)
+                                    handle1RMUpdate(equipment_name, new_1rm)
+
                                 },
-                                style: "cursor: pointer"
+                                style: "cursor: pointer; text-decoration: underline dotted 1px; text-underline-offset: 3px;"
                             };
                         }
                     }
@@ -87,6 +127,27 @@
             pagination: true,
         }).render(document.getElementById('equipment-manager-wrapper'));
 
+        function handle1RMUpdate(equipment_name, new_1rm) {
+            let user_name = "{{ user_name }}";
+            let url =
+                "/update_1rm?user_name=" +
+                encodeURIComponent(user_name) +
+                "&equipment_name=" +
+                encodeURIComponent(equipment_name) +
+                "&new_1rm=" +
+                encodeURIComponent(new_1rm);
+            console.log("url", url);
+
+            console.log("Updating...");
+
+            // if (request != null) request.abort() // ? confused about this
+
+            let request = $.ajax({
+                type: "POST",
+                url: url,
+                //success: updateBodyweightChart,
+            });
+        }
         //// On Input change of value
         //$(document).ready(() => {
         //    $(document).on("input", function () {

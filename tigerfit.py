@@ -45,6 +45,7 @@ from database_methods import (
     watch_tutorial,
     unwatch_tutorial,
     get_all_1rms,
+    insert_1RM,
 )
 
 from casclient import CasClient
@@ -325,6 +326,25 @@ def equipment_manager():
     # print("***ALL", all_equip)
 
     return {"data": data}
+
+
+# Ajax function for /data/equipment_manager update 1rm
+@app.route("/update_1rm", methods=["POST"])
+def update_1rm():
+    user_name = request.args.get("user_name")
+    equipment_name = request.args.get("equipment_name")
+    new_1rm = float(request.args.get("new_1rm"))
+
+    print("new 1rm", new_1rm)
+
+    insert_1RM(session, user_name, equipment_name, new_1rm)
+
+    response = make_response(
+        {
+            "success": True,
+        }
+    )
+    return response
 
 
 # Ajax function for /data bodyweight chart
