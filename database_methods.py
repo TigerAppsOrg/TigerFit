@@ -1390,10 +1390,8 @@ class OneRepEstimation:
     @staticmethod
     def estimate_weight(one_rep_max, reps):
         MAX_REP_LIMIT = 12
-        if reps <= 0:
+        if reps <= 0 or reps > MAX_REP_LIMIT:
             return 0
-        elif reps > MAX_REP_LIMIT:
-            return (37 - MAX_REP_LIMIT) * one_rep_max / 36
         return (37 - reps) * one_rep_max / 36
 
     @staticmethod
@@ -1403,7 +1401,7 @@ class OneRepEstimation:
 
         if rep_estimation <= 0:
             return 0
-        if rep_estimation >= MAX_REP_LIMIT:
+        if rep_estimation > MAX_REP_LIMIT:
             return (
                 MAX_REP_LIMIT * 5
             )  # high number (so 0.8 * est >= MAX)
@@ -1422,10 +1420,15 @@ class OneRepEstimation:
         onerm_estimation = (
             36 * total_weight / (37 - reps) - curr_bodyweight
         )
-        if reps <= 0 or reps > MAX_REP_LIMIT:
+        if reps <= 0:
             return 0
-
-        if onerm_estimation < 0:
+        elif reps > MAX_REP_LIMIT:
+            onerm_estimation = (
+                36 * total_weight / (37 - MAX_REP_LIMIT)
+                - curr_bodyweight
+            )
+            return onerm_estimation
+        elif onerm_estimation < 0:
             return 0
         return onerm_estimation
 
@@ -1458,7 +1461,11 @@ class OneRepEstimation:
             one_rep_max + curr_bodyweight
         )
 
-        if rep_estimation <= 0 or rep_estimation > MAX_REP_LIMIT:
+        if rep_estimation <= 0:
             return 0
+        elif rep_estimation > MAX_REP_LIMIT:
+            return (
+                MAX_REP_LIMIT * 5
+            )  # high number (so 0.8 * est >= MAX)
 
         return rep_estimation
