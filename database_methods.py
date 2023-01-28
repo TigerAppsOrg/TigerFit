@@ -1354,16 +1354,14 @@ def main():
         print("Test session", session)
         print("Test engine", engine)
 
-        load_dotenv()
         session, engine = create_local_session()
         # print("Test session", session)
         # print("Test engine", engine)
 
-        res = workout_owned_by_user(session, "agamba", -100)
-        print("*RESULT:", res)
+        multiy_all_1rms(session, "agamba", 1)
 
-        # session.close()
-        # engine.dispose
+        session.close()
+        engine.dispose
 
     except exc.SQLAlchemyError as err:
         print("error")

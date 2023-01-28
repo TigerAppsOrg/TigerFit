@@ -59,10 +59,10 @@ import os
 
 
 # ! Production
-session, engine = create_session()
+# session, engine = create_session()
 
 # ! Local testing
-# session, engine = create_local_session()
+session, engine = create_local_session()
 
 # Begin App
 
@@ -291,6 +291,11 @@ def equipment_manager():
     data = []
     for row in all_equip:
         row = row.__dict__
+        if "equipment_name" in row:
+            equipment_name = row["equipment_name"]
+            print("passed on row: ", equipment_name)
+        else:
+            print("failed on row: ", row)
         # print("entry:", row)
         name = row["equipment_name"]
         one_rm = one_rms[name] if name in one_rms else 0
