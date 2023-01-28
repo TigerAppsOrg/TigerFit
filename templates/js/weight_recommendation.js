@@ -58,12 +58,12 @@ function handleWeightRecommendation(response) {
     return;
   }
 
-  let weight_90percent =
-    Math.round(2 * 0.9 * response.weight_recommendation) / 2;
+  let weight_80percent =
+    Math.round(2 * 0.8 * response.weight_recommendation) / 2;
   let weight_max = Math.round(2 * response.weight_recommendation) / 2;
 
   let insert_id = `#${response.element_name.slice(0, -4)}weight`;
-  let ph = `${weight_90percent}-${weight_max} lbs`;
+  let ph = `${weight_80percent}-${weight_max} lbs`;
   $(insert_id).prop("placeholder", ph);
 
   // Add placeholder to localstorage
@@ -137,14 +137,17 @@ function handleRepsRecommendation(response) {
   let reps_max = Math.round(response.reps_recommendation);
   let ph = "";
   console.log("REPS MAX = ", reps_max);
+  let MAX_REP_LIMIT = 12;
 
   let insert_id = `#${response.element_name.slice(0, -6)}reps`;
   if (reps_max < 1) {
     ph = "Reps";
   } else if (reps_max === reps_80percent) {
     ph = `${reps_max} reps`;
-  } else if (reps_80percent >= 20) {
-    ph = `20+ reps`;
+  } else if (reps_80percent >= MAX_REP_LIMIT) {
+    ph = `${MAX_REP_LIMIT}+ reps`;
+  } else if (reps_max > MAX_REP_LIMIT) {
+    ph = `${reps_80percent}-${MAX_REP_LIMIT}+ reps`;
   } else {
     ph = `${reps_80percent}-${reps_max} reps`;
   }

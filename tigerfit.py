@@ -644,6 +644,8 @@ def add_workout():
             "failed": failed_list,
             "was_pr": [],
         }
+
+        # Includes failed sets in volume too
         weight_volume += dot_product(num_reps_list, weights_list)
         total_reps += sum(num_reps_list)
 

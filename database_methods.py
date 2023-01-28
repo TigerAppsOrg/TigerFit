@@ -1380,21 +1380,25 @@ class OneRepEstimation:
     # * Brzycki Formula
     @staticmethod
     def estimate_one_rep_max(weight, reps):
-        MAX_REP_LIMIT = 20
-        if reps <= 0 or reps > MAX_REP_LIMIT:
+        MAX_REP_LIMIT = 12
+        if reps <= 0:
             return 0
+        elif reps > MAX_REP_LIMIT:
+            return 36 * weight / (37 - MAX_REP_LIMIT)
         return 36 * weight / (37 - reps)
 
     @staticmethod
     def estimate_weight(one_rep_max, reps):
-        MAX_REP_LIMIT = 20
-        if reps <= 0 or reps > MAX_REP_LIMIT:
+        MAX_REP_LIMIT = 12
+        if reps <= 0:
             return 0
+        elif reps > MAX_REP_LIMIT:
+            return (37 - MAX_REP_LIMIT) * one_rep_max / 36
         return (37 - reps) * one_rep_max / 36
 
     @staticmethod
     def estimate_reps(one_rep_max, weight):
-        MAX_REP_LIMIT = 20
+        MAX_REP_LIMIT = 12
         rep_estimation = 37 - 36 * weight / one_rep_max
 
         if rep_estimation <= 0:
@@ -1411,7 +1415,7 @@ class OneRepEstimation:
     def bodyweight_estimate_one_rep_max(
         session, user_name, weight_added, reps
     ):
-        MAX_REP_LIMIT = 20
+        MAX_REP_LIMIT = 12
         curr_bodyweight = get_most_recent_bodyweight(session, user_name)
         total_weight = weight_added + curr_bodyweight
 
@@ -1429,7 +1433,7 @@ class OneRepEstimation:
     def bodyweight_estimate_weight(
         session, user_name, one_rep_max, reps
     ):
-        MAX_REP_LIMIT = 20
+        MAX_REP_LIMIT = 12
         curr_bodyweight = get_most_recent_bodyweight(session, user_name)
         total_weight = one_rep_max + curr_bodyweight
 
@@ -1447,7 +1451,7 @@ class OneRepEstimation:
     def bodyweight_estimate_reps(
         session, user_name, one_rep_max, weight_added
     ):
-        MAX_REP_LIMIT = 20
+        MAX_REP_LIMIT = 12
         curr_bodyweight = get_most_recent_bodyweight(session, user_name)
 
         rep_estimation = 37 - 36 * (weight_added + curr_bodyweight) / (
