@@ -45,6 +45,8 @@ from database_methods import (
     watch_tutorial,
     unwatch_tutorial,
     get_all_1rms,
+    insert_1RM,
+    delete_custom_equipment,
 )
 
 from casclient import CasClient
@@ -293,7 +295,7 @@ def equipment_manager():
         name = row["equipment_name"]
         one_rm = one_rms[name] if name in one_rms else 0
         main = row["main_muscle_group"]
-        sub = row["sub_muscle_groups"]["tags"]
+        sub = sorted(row["sub_muscle_groups"]["tags"])
         sub = ", ".join(sub)
 
         data.append(
@@ -302,32 +304,68 @@ def equipment_manager():
                 "1rm": round(one_rm, 1),
                 "main_group": main,
                 "sub_groups": sub,
-                "is_custom": "False",
+                "is_custom": False,  # False
             }
         )
 
     for name in custom_equip:
-        # row = row.__dict__
-        # print("entry:", row)
-        # name = row["equipment_name"]
         one_rm = one_rms[name] if name in one_rms else 0
-        main = row["main_muscle_group"]
-        sub = row["sub_muscle_groups"]["tags"]
-        sub = ", ".join(sub)
+        # main = row["main_muscle_group"]
+        # sub = row["sub_muscle_groups"]["tags"]
+        # sub = ", ".join(sub)
 
         data.append(
             {
                 "name": name,
                 "1rm": round(one_rm, 1),
-                "main_group": main,
-                "sub_groups": sub,
-                "is_custom": "True",
+                "main_group": "",
+                "sub_groups": "",
+                "is_custom": True,  # True
             }
         )
 
     # print("***ALL", all_equip)
+    data = sorted(data, key=lambda x: x["name"])
 
     return {"data": data}
+
+
+# def sort_equipment_by_name
+
+
+# Ajax function for /data/equipment_manager update 1rm
+@app.route("/update_1rm", methods=["POST"])
+def update_1rm():
+    user_name = request.args.get("user_name")
+    equipment_name = request.args.get("equipment_name")
+    new_1rm = float(request.args.get("new_1rm"))
+
+    print("new 1rm", new_1rm)
+
+    insert_1RM(session, user_name, equipment_name, new_1rm)
+
+    response = make_response(
+        {
+            "success": True,
+        }
+    )
+    return response
+
+
+# Ajax function for /data/equipment_manager delete custom equipment
+@app.route("/delete_custom", methods=["POST"])
+def delete_custom():
+    user_name = request.args.get("user_name")
+    equipment_name = request.args.get("equipment_name")
+
+    delete_custom_equipment(session, equipment_name, user_name)
+
+    response = make_response(
+        {
+            "success": True,
+        }
+    )
+    return response
 
 
 # Ajax function for /data bodyweight chart
