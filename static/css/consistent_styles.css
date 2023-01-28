@@ -323,3 +323,7 @@ h4 {
 .profile-button {
   width: 40%;
 }
+
+.display-none {
+    display: none;
+}

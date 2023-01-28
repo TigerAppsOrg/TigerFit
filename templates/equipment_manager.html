@@ -67,7 +67,7 @@
                                         return
                                     }
 
-                                    let new_1rm = prompt("Change one-rep max for " + JSON.stringify(equipment_name) + "?")
+                                    let new_1rm = prompt("Enter new one-rep max for " + JSON.stringify(equipment_name).replace(/\"/g, "") + ".")
                                     //console.log("NEW 1RM TO UPDATE: " + new_1rm)
 
                                     if (new_1rm == "" || isNaN(new_1rm) || new_1rm == null) {
@@ -105,7 +105,26 @@
                 },
                 { id: 'main_group', name: 'Main Muscle Group' },
                 { id: 'sub_groups', name: 'Sub Muscle Groups' },
-                { id: 'is_custom', name: 'Custom?' },
+                { id: 'is_custom', name: 'Custom?', hidden: true },
+                {
+                    id: 'delete', name: 'Delete',
+                    formatter: (cell, row) => {
+                        let is_custom = row.cells[4].data
+                        return h('button', {
+                            className: is_custom ? 'btn btn-danger' : 'display-none',
+                            onClick: () => {
+                                let equipment_name = row.cells[0].data
+                                if (is_custom) {
+                                    if (confirm('Are you sure you want to delete this custom equipment? Row will delete on page refresh.')) {
+                                        handleCustomDelete(equipment_name)
+                                    }
+                                    //alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}. iscustom? ${is_custom}"`)
+                                }
+
+                            }
+                        }, is_custom ? html(`<i class="fa fa-trash"></i>`) : '');
+                    }
+                },
 
             ],
             server: {
@@ -127,7 +146,14 @@
 
             search: true,
             sort: true,
-            pagination: { resetPageOnUpdate: true },
+            pagination: {
+                resetPageOnUpdate: true,
+                summary: true,
+                buttonsCount: 0,
+                nextButton: false,
+                prevButton: false,
+
+            },
         }).render(document.getElementById('equipment-manager-wrapper'));
 
         function handle1RMUpdate(equipment_name, new_1rm) {
@@ -151,14 +177,32 @@
                 //success: updateBodyweightChart,
             });
         }
-        //// On Input change of value
-        //$(document).ready(() => {
-        //    $(document).on("input", function () {
-        //        alert($(this).attr('id'))
-        //    });
-        //
-//
-        //});
+
+        function handleCustomDelete(equipment_name) {
+            let user_name = "{{ user_name }}";
+            let url =
+                "/delete_custom?user_name=" +
+                encodeURIComponent(user_name) +
+                "&equipment_name=" +
+                encodeURIComponent(equipment_name)
+            console.log("url", url);
+
+            console.log("Updating...");
+
+            // if (request != null) request.abort() // ? confused about this
+
+            let request = $.ajax({
+                type: "POST",
+                url: url,
+                //success: updateBodyweightChart,
+            });
+        }
+
+        // Change placeholder of search bar
+        $(document).ready(() => {
+            $('.gridjs-search-input').prop("placeholder", `Search Equipment...`);
+        })
+
     </script>
 </body>
 
