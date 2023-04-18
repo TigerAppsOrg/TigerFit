@@ -52,6 +52,33 @@
     </div>
     {% else %}
 
+    <!-- ! CHATGPT TESTING -->
+    <div class="input-group input-group-sm mb-3" id="workout-filter">
+        <span class="input-group-text" id="search-icon"><i class="fa fa-search"></i></span>
+        <input type="text" class="form-control" placeholder="Search by workout title" aria-label="Search by workout title" aria-describedby="search-icon">
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#workout-filter input").on("keyup", function () {
+                var searchText = $(this).val().toLowerCase();
+                $(".accordion-item").each(function () {
+                    var workoutTitle = $(this).find(".accordion-header strong").text().toLowerCase();
+                    var equipName = $(this).find(".underline-text").text().toLowerCase();
+                    if (workoutTitle.indexOf(searchText) !== -1 || equipName.indexOf(searchText) !== -1) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
+
+    </script>
+
+
+    <!-- ! -->
+
     <center>
         <div style="overflow: auto; width: 90vw;">
             <div class="accordion" id="history_accordion">
