@@ -58,7 +58,81 @@
         <input type="text" class="form-control" placeholder="Search by workout title" aria-label="Search by workout title" aria-describedby="search-icon">
     </div>
 
+    <div>
+        <label for="sort-select">Sort by:</label>
+        <select id="sort-select" name="sort-select">
+            <option default value="date-desc">Date (Recent
+                First)</option>
+            <option value="date-asc">Date (Older First)</option>
+            <option value="title-asc">Workout Title (A-Z)</option>
+            <option value="title-desc">Workout Title (Z-A)</option>
+        </select>
+    </div>
+
     <script>
+        // function to sort accordion by workout title ascending
+        function sortTitleAsc() {
+            let items = $('.accordion-item').get();
+            items.sort(function (a, b) {
+                let aTitle = $(a).find('.accordion-button strong').text().toUpperCase();
+                let bTitle = $(b).find('.accordion-button strong').text().toUpperCase();
+                return aTitle.localeCompare(bTitle);
+            });
+            $('#history_accordion').append(items);
+        }
+
+        // function to sort accordion by workout title descending
+        function sortTitleDesc() {
+            let items = $('.accordion-item').get();
+            items.sort(function (a, b) {
+                let aTitle = $(a).find('.accordion-button strong').text().toUpperCase();
+                let bTitle = $(b).find('.accordion-button strong').text().toUpperCase();
+                return bTitle.localeCompare(aTitle);
+            });
+            $('#history_accordion').append(items);
+        }
+
+        // function to sort accordion by workout date ascending
+        function sortDateAsc() {
+            let items = $('.accordion-item').get();
+            items.sort(function (a, b) {
+                let aDate = new Date($(a).find('.accordion-button .workout-date').text());
+                let bDate = new Date($(b).find('.accordion-button .workout-date').text());
+                return aDate - bDate;
+            });
+            $('#history_accordion').append(items);
+        }
+
+        // function to sort accordion by workout date descending
+        function sortDateDesc() {
+            let items = $('.accordion-item').get();
+            items.sort(function (a, b) {
+                let aDate = new Date($(a).find('.accordion-button .workout-date').text());
+                let bDate = new Date($(b).find('.accordion-button .workout-date').text());
+                return bDate - aDate;
+            });
+            $('#history_accordion').append(items);
+        }
+
+        // event listener for sort dropdown
+        $('#sort-select').on('change', function () {
+            let selected = $(this).val();
+            switch (selected) {
+                case 'title-asc':
+                    sortTitleAsc();
+                    break;
+                case 'title-desc':
+                    sortTitleDesc();
+                    break;
+                case 'date-asc':
+                    sortDateAsc();
+                    break;
+                case 'date-desc':
+                    sortDateDesc();
+                    break;
+            }
+        });
+
         $(document).ready(function () {
             $("#workout-filter input").on("keyup", function () {
                 var searchText = $(this).val().toLowerCase();
@@ -71,8 +145,8 @@
                         $(this).hide();
                     }
                 });
-            });
-        });
+            })
+        })
 
     </script>
 
@@ -99,7 +173,7 @@
                                         + 1}})
 
                                     </div>
-                                    <div>
+                                    <div class="workout-date">
                                         {{workout['workoutinfo']['date']}}
                                         ({{workout['workoutinfo']['minutes_taken']
                                         //60}}:{%
