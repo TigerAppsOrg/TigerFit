@@ -112,6 +112,9 @@ $(document).ready(() => {
     .replaceAll("?set_num?", 1);
   $(`#exercises>li>table>tbody`).append(html);
 
+  localStorage.setItem(`1_1_reps_ph`, "Reps");
+  localStorage.setItem(`1_1_weight_ph`, "Weight");
+
   // html = $(`.hidden_exercise`).clone().prop("hidden", false).prop("outerHTML").replaceAll("?ex_num?", 1);
   // $(`#exercises`).append(html);
 
@@ -158,6 +161,9 @@ $(document).ready(() => {
       .prop("outerHTML")
       .replaceAll("?set_num?", set_num);
 
+    localStorage.setItem(`${ex_num}_${set_num}_reps_ph`, "Reps");
+    localStorage.setItem(`${ex_num}_${set_num}_weight_ph`, "Weight");
+
     $(`#exercise_${ex_num}_sets`).append(html);
 
     // Copy data from previous set
@@ -173,6 +179,16 @@ $(document).ready(() => {
 
       localStorage.setItem(`${ex_num}_${set_num}_reps`, prev_reps);
       localStorage.setItem(`${ex_num}_${set_num}_weight`, prev_weight);
+
+      //   if (prev_reps === null) {
+      //     localStorage.setItem(
+      //       `${ex_num}_${set_num}_weight_ph`,
+      //       "Weight"
+      //     );
+      //   }
+      //   if (prev_weight === null) {
+      //     localStorage.setItem(`${ex_num}_${set_num}_reps_ph`, "Reps");
+      //   }
 
       //   // Store attributes for inputs into localStorage
       //   if (!$(this).attr("name").includes("?")) {
@@ -585,6 +601,9 @@ function clickSelectEquipmentButton(selected_equip_name) {
     .prop("outerHTML")
     .replaceAll("?ex_num?", ex_num);
   $(`ul#exercises`).append(html);
+
+  localStorage.setItem(`${ex_num}_1_reps_ph`, "Reps");
+  localStorage.setItem(`${ex_num}_1_weight_ph`, "Weight");
 
   // Adds "required" attribute to non-hidden, number inputs
   add_required_attribute();
