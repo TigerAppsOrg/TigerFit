@@ -692,9 +692,9 @@ def add_workout():
         weight_volume += dot_product(num_reps_list, weights_list)
 
         if is_bodyweight_exercise(session, equipment_name):
-            weight_volume += total_reps * get_most_recent_bodyweight(
-                session, user_name
-            )
+            weight_volume += sum(
+                num_reps_list
+            ) * get_most_recent_bodyweight(session, user_name)
 
         num_sets = 0
         num_reps_list = []
