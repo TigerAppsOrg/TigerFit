@@ -47,6 +47,8 @@ from database_methods import (
     get_all_1rms,
     insert_1RM,
     delete_custom_equipment,
+    get_most_recent_bodyweight,
+    is_bodyweight_exercise,
 )
 
 from casclient import CasClient
@@ -59,10 +61,10 @@ import os
 
 
 # ! Production
-session, engine = create_session()
+# session, engine = create_session()
 
 # ! Local testing
-# session, engine = create_local_session()
+session, engine = create_local_session()
 
 # Begin App
 
@@ -615,6 +617,7 @@ def add_workout():
         workout_title,
         minutes_taken=workout_time_minutes,
     )
+
     print("New workout ID", workout_id)
 
     num_sets = 0
@@ -683,9 +686,15 @@ def add_workout():
             "was_pr": [],
         }
 
+        total_reps += sum(num_reps_list)
+
         # Includes failed sets in volume too
         weight_volume += dot_product(num_reps_list, weights_list)
-        total_reps += sum(num_reps_list)
+
+        if is_bodyweight_exercise(session, equipment_name):
+            weight_volume += total_reps * get_most_recent_bodyweight(
+                session, user_name
+            )
 
         num_sets = 0
         num_reps_list = []
