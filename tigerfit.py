@@ -49,6 +49,7 @@ from database_methods import (
     delete_custom_equipment,
     get_most_recent_bodyweight,
     is_bodyweight_exercise,
+    get_most_recent_workout,
 )
 
 from casclient import CasClient
@@ -61,10 +62,10 @@ import os
 
 
 # ! Production
-session, engine = create_session()
+# session, engine = create_session()
 
 # ! Local testing
-# session, engine = create_local_session()
+session, engine = create_local_session()
 
 # Begin App
 
@@ -263,11 +264,15 @@ def data():
         html.escape(customex) for customex in custom_equipment_list
     ]
     used_equipment_list = get_all_used_equipment(session, user_name)
-    if len(used_equipment_list) > 0:
-        first_used_equipment = used_equipment_list[0]
-    else:
-        first_used_equipment = ""
-    print("*first used equip", first_used_equipment)
+
+    most_recent_workout = get_most_recent_workout(session, user_name)
+    most_recent_equipment = most_recent_workout[2].equipment_name
+
+    # if len(used_equipment_list) > 0:
+    #     first_used_equipment = used_equipment_list[0]
+    # else:
+    #     first_used_equipment = ""
+    # print("*first used equip", first_used_equipment)
 
     return render_template(
         "data.html",
@@ -275,7 +280,7 @@ def data():
         equipment_list=equipment_list,
         custom_equipment_list=custom_equipment_list,
         used_equipment_list=used_equipment_list,
-        first_used_equipment=html.escape(first_used_equipment),
+        most_recent_equipment=html.escape(most_recent_equipment),
         is_add_workout_page=False,
         has_agreed_liability=has_agreed_liability,
     )

@@ -298,7 +298,7 @@ $(document).ready(() => {
 // Inserted scripts to generate chart
 function setup_equipment() {
   //default_equip_name = "Back Squat"
-  let default_equip_name = "{{first_used_equipment}}";
+  let default_equip_name = "{{most_recent_equipment}}";
   if (default_equip_name != "") {
     $(`#chart-equipment-name-header`).html(default_equip_name);
     $(`#chart-equipment-name-header`).css("color", "orange");

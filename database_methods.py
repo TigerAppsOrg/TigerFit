@@ -756,9 +756,28 @@ def get_most_recent_workout(session, user_name):
                 UserWorkouts.user_name == user_name,
             )
         )
-        .order_by(desc(UserWorkouts.date))
-        .first()
+        .order_by(desc(UserWorkouts.date), desc(UserExercises.exercise_id)).first()
     )
+
+
+# # Returns one most recent exercise of selected user
+# def get_most_recent_exercise(session, user_name):
+#     return (
+#         session.query(UserExercises.equipment_name)
+#         .join(UserWorkouts, Users.user_name == UserWorkouts.user_name)
+#         .join(
+#             UserExercises,
+#             UserWorkouts.workout_id == UserExercises.workout_id,
+#         )
+#         .filter(
+#             and_(
+#                 Users.user_name == user_name,
+#                 UserWorkouts.user_name == user_name,
+#             )
+#         )
+#         .order_by(desc(UserExercises.exercise_id))
+#         .first()
+#     )
 
 
 # Returns one most recent bodyweight of selected user
