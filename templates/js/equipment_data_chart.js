@@ -449,6 +449,8 @@ function updateEquipmentChart(response) {
   let ctx = document
     .getElementById("equipment_chart_canvas")
     .getContext("2d");
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
   let chart = new Chart(ctx, {
     type: "scatter",
     data: { datasets: data },
