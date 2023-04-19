@@ -24,6 +24,18 @@ let add_required_attribute = () => {
 let restore_local_storage = (storage) => {
   $("#add_workout_form_content").html(storage);
 
+  console.log("DATE = ", localStorage.getItem("date"));
+  // Default to today's date, with correct timezone offset
+  if (localStorage.getItem("date") === null) {
+    let todaysDate = new Date(
+      new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000
+    )
+      .toISOString()
+      .slice(0, 10);
+
+    localStorage.setItem("date", todaysDate);
+  }
+
   $(".save_value").each(function () {
     // console.log($(this).attr("name"));
     let element_name = $(this).attr("name");
@@ -31,7 +43,6 @@ let restore_local_storage = (storage) => {
       if ($(this).attr("type") == "checkbox") {
         $(this).prop("checked", localStorage.getItem(element_name));
       } else {
-        console.log("ELEMENT NAME", element_name);
         console.log("ELEMENT NAME", element_name);
         $(this).val(localStorage.getItem(element_name));
 
