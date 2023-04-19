@@ -12,6 +12,22 @@
 </head>
 
 <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12"></div>
+            <h2 class="subheader">
+                Equipment Manager
+                <span class="info-tooltip" data-toggle="tooltip" data-placement="top" title="Use this table to view
+                information about various TigerFit equipment and your
+                own custom ones! Click on a 1RM entry to edit its value.">
+                    &nbsp
+                    <span class="material-icons" style="font-size:15px">info</span>
+                </span>
+
+            </h2>
+        </div>
+    </div>
+
     <div id="equipment-manager-wrapper"></div>
     <script type="module">
         import {
@@ -201,6 +217,14 @@
         // Change placeholder of search bar
         $(document).ready(() => {
             $('.gridjs-search-input').prop("placeholder", `Search Equipment...`);
+            $('.gridjs-search').css({
+                'margin': '0px auto',
+                'display': 'block',
+                'width': '100%'
+            });
+            $('.gridjs-head').css({
+                'text-align': 'center',
+            });
         })
 
     </script>
