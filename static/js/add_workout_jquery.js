@@ -895,4 +895,7 @@ function handleWorkoutCopying(workout_id) {
   //   console.log("c");
 }
 
-
+// Enable tooltips on page load
+$(document).ready(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+});
