@@ -1,104 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
+<div class="container">
+    <br>
+    <h2 class="subheader">Tools</h2>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
-    <!-- Tool Buttons -->
-    <button id="plate-calculator-tool" class="btn-grey btn btn-dark
+    <div class="row justify-content-center">
+        <div class="col-3 text-center">
+            <button id="plate-calculator-tool" class="btn-grey btn btn-dark
     square-btn btn-m-l" data-toggle="modal" data-target="#plate-calculator-modal">
-        <i class="fa fa-dumbbell"></i>
-    </button>
-
-    <button id="percentage-calculator-tool" class="btn-grey btn btn-dark
-    square-btn btn-m-l" data-toggle="modal" data-target="#percentage-calculator-modal">
-        <i class="fa fa-percent"></i>
-    </button>
-
-    <button id="stopwatch-tool" class="btn-grey btn btn-dark
+                <i class="fa fa-dumbbell"></i>
+            </button>
+        </div>
+        <div class="col-3 text-center">
+            <button id="percentage-calculator-tool" class="btn-grey btn btn-dark
+                    square-btn btn-m-l" data-toggle="modal" data-target="#percentage-calculator-modal">
+                <i class="fa fa-percent"></i>
+            </button>
+        </div>
+        <div class="col-3 text-center">
+            <button id="stopwatch-tool" class="btn-grey btn btn-dark
         square-btn btn-m-l" data-toggle="modal" data-target="#stopwatch-modal">
-        <i class="fa fa-stopwatch-20"></i>
-    </button>
-
-    <button id="1rm-calculator-tool" class="btn-grey btn btn-dark
+                <i class="fa fa-stopwatch-20"></i>
+            </button>
+        </div>
+        <div class="col-3 text-center">
+            <button id="1rm-calculator-tool" class="btn-grey btn btn-dark
         square-btn btn-m-l" data-toggle="modal" data-target="#1rm-calculator-modal">
-        <i class="fa fa-ranking-star"></i>
-    </button>
+                <i class="fa fa-ranking-star"></i>
+            </button>
+        </div>
+    </div>
+</div>
 
-    <script>
-        // * Workout Tools Section
-        $(document).ready(() => {
-            $(document).on("click", "#plate-calculator-tool", function () {
-                $("#plate-calculator-modal").modal("show");
-            });
-            $(document).on("click", "#percentage-calculator-tool", function () {
-                $("#percentage-calculator-modal").modal("show");
-            });
-            $(document).on("click", "#stopwatch-tool", function () {
-                $("#stopwatch-modal").modal("show");
-            });
-            $(document).on("click", "#1rm-calculator-tool", function () {
-                $("#1rm-calculator-modal").modal("show");
-            });
+
+<script>
+    // * Workout Tools Section
+    $(document).ready(() => {
+        $(document).on("click", "#plate-calculator-tool", function () {
+            $("#plate-calculator-modal").modal("show");
         });
-    </script>
+        $(document).on("click", "#percentage-calculator-tool", function () {
+            $("#percentage-calculator-modal").modal("show");
+        });
+        $(document).on("click", "#stopwatch-tool", function () {
+            $("#stopwatch-modal").modal("show");
+        });
+        $(document).on("click", "#1rm-calculator-tool", function () {
+            $("#1rm-calculator-modal").modal("show");
+        });
+    });
+</script>
 
-    <!-- Tool Modals -->
-    <div class="modal fade" id="plate-calculator-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            {% include "workout_tools/plate_calculator.html" %}
-        </div>
+<!-- Tool Modals -->
+<div class="modal fade" id="plate-calculator-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        {% include "workout_tools/plate_calculator.html" %}
     </div>
+</div>
 
-    <div class="modal fade" id="percentage-calculator-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            {% include "workout_tools/percentage_calculator.html" %}
-        </div>
+<div class="modal fade" id="percentage-calculator-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        {% include "workout_tools/percentage_calculator.html" %}
     </div>
+</div>
 
-    <div class="modal fade" id="stopwatch-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            {% include "workout_tools/stopwatch.html" %}
-        </div>
+<div class="modal fade" id="stopwatch-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        {% include "workout_tools/stopwatch.html" %}
     </div>
+</div>
 
-    <div class="modal fade" id="1rm-calculator-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            {% include "workout_tools/1rm_calculator.html" %}
-        </div>
+<div class="modal fade" id="1rm-calculator-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        {% include "workout_tools/1rm_calculator.html" %}
     </div>
+</div>
 
 
 
-    <!-- Loads jQuery scripts from static folder (Flask thing) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/select_equipment_modal.css') }}" />
+<!-- Loads jQuery scripts from static folder (Flask thing) -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/select_equipment_modal.css') }}" />
 
 
+<style>
+    .square-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+        text-align: center;
+        line-height: 1.2;
+        margin: 0px 10px;
+    }
 
-
-
-
-
-
-
-
-    <style>
-        .square-btn {
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
-            text-align: center;
-            line-height: 1.2;
-            padding: 0;
-        }
-
-    </style>
-
-</body>
-
-</html>
+</style>
