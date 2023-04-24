@@ -4,6 +4,11 @@
             <div class="row">
                 <h2 class="modal-title col-12 text-center py-1" id="exampleModalLabel" style="font-weight: bolder">
                     Stopwatch
+                    <span class="info-tooltip" data-toggle="tooltip" data-placement="bottom" title="Use the stopwatch to
+                    time your rest, reps, sets, etc.">
+                        &nbsp
+                        <span class="material-icons" style="font-size:15px">info</span>
+                    </span>
                 </h2>
 
                 <button type="button" id="close-modal-button" class="col-1 btn btn-danger btn-red m-3" data-bs-dismiss="modal" style="
@@ -22,66 +27,84 @@
     </div>
 
     <div class="modal-body">
-        <div class="row justify-content-center">
-            <h1 id="timer">0:00</h1>
-            <button id="startBtn">Start</button>
-            <button id="pauseBtn">Pause</button>
-            <button id="resetBtn">Reset</button>
-            <script>
-                let timerInterval; // Stores the setInterval object for the timer
-
-                const timer = document.getElementById("timer");
-                const startBtn = document.getElementById("startBtn");
-                const pauseBtn = document.getElementById("pauseBtn");
-                const resetBtn = document.getElementById("resetBtn");
-
-                let seconds = 0;
-                let minutes = 0;
-
-                // Format the time as "mm:ss"
-                function formatTime() {
-                    const secStr = seconds < 10 ? "0" + seconds : seconds;
-                    const minStr = minutes < 10 ? "0" + minutes : minutes;
-                    return `${minStr}:${secStr}`;
-                }
-
-                function startTimer() {
-                    timerInterval = setInterval(function () {
-                        seconds++;
-                        if (seconds === 60) {
-                            seconds = 0;
-                            minutes++;
-                        }
-                        timer.innerHTML = formatTime();
-                    }, 1000);
-                    startBtn.disabled = true;
-                    pauseBtn.disabled = false;
-                }
-
-                function pauseTimer() {
-                    clearInterval(timerInterval);
-                    startBtn.disabled = false;
-                    pauseBtn.disabled = true;
-                }
-
-                function resetTimer() {
-                    clearInterval(timerInterval);
-                    seconds = 0;
-                    minutes = 0;
-                    timer.innerHTML = formatTime();
-                    startBtn.disabled = false;
-                    pauseBtn.disabled = true;
-                }
-
-                startBtn.addEventListener("click", startTimer);
-                pauseBtn.addEventListener("click", pauseTimer);
-                resetBtn.addEventListener("click", resetTimer);
-
-                pauseBtn.disabled = true;
-            </script>
-
-
+        <div class="container-fluid">
+            <div class="row justify-content-center workout_title_input header-input">
+                <div class="col-12 d-flex justify-content-center">
+                    <h1 id="timer" class="header">00:00.00</h1>
+                </div>
+            </div>
+            <div class="row justify-content-center workout_title_input header-input">
+                <div class="col-4 d-flex justify-content-center my-3">
+                    <button id="startBtn" class="btn btn-outline-success btn-green">Start</button>
+                </div>
+                <div class="col-4 d-flex justify-content-center my-3">
+                    <button id="pauseBtn" class="btn btn-outline-warning btn-orange">Pause</button>
+                </div>
+                <div class="col-4 d-flex justify-content-center my-3">
+                    <button id="resetBtn" class="btn btn-outline-danger btn-red">Reset</button>
+                </div>
+            </div>
         </div>
-
     </div>
 </div>
+
+<script>
+    let timerInterval; // Stores the setInterval object for the timer
+
+    const timer = document.getElementById("timer");
+    const startBtn = document.getElementById("startBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    let milliseconds = 0;
+    let seconds = 0;
+    let minutes = 0;
+
+    // Format the time as "mm:ss.ms"
+    function formatTime() {
+        // Get first digit of milliseconds
+        const msStr = "" + Math.floor(milliseconds / 100);
+        const secStr = seconds < 10 ? "0" + seconds : seconds;
+        const minStr = minutes < 10 ? "0" + minutes : minutes;
+        return `${minStr}:${secStr}.${msStr}`;
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(function () {
+            milliseconds += 100;
+            if (milliseconds === 1000) {
+                milliseconds = 0;
+                seconds++;
+            }
+            if (seconds === 60) {
+                seconds = 0;
+                minutes++;
+            }
+            timer.innerHTML = formatTime();
+        }, 100);
+        startBtn.disabled = true;
+        pauseBtn.disabled = false;
+    }
+
+    function pauseTimer() {
+        clearInterval(timerInterval);
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+    }
+
+    function resetTimer() {
+        clearInterval(timerInterval);
+        milliseconds = 0;
+        seconds = 0;
+        minutes = 0;
+        timer.innerHTML = formatTime();
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+    }
+
+    startBtn.addEventListener("click", startTimer);
+    pauseBtn.addEventListener("click", pauseTimer);
+    resetBtn.addEventListener("click", resetTimer);
+
+    pauseBtn.disabled = true;
+</script>
