@@ -1,0 +1,174 @@
+<div class="modal-content">
+    <div class="modal-header modal-header--sticky">
+        <div class="container-fluid justify-content-center">
+            <div class="row">
+                <h2 class="modal-title col-12 text-center py-1" id="exampleModalLabel" style="font-weight: bolder">
+                    1RM Calculator
+                    <span class="info-tooltip" data-toggle="tooltip" data-placement="bottom" title="Use the one rep max
+                    calculator to estimate either the one rep max,
+                    weight to lift, or reps to lift. Uses the Brzycki
+                    formula for estimations.">
+                        &nbsp
+                        <span class="material-icons" style="font-size:15px">info</span>
+                    </span>
+                </h2>
+
+                <button type="button" id="close-modal-button" class="col-1 btn btn-danger btn-red m-3" data-bs-dismiss="modal" style="
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 30px;
+                    height: 30px;
+                  ">
+                    <i class="fa fa-times" style="position: absolute; right: 7.5px; top: 6px"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row justify-content-center workout_title_input header-input">
+                <div class="col-4 d-flex justify-content-center">
+                    <input type="number" id="1rm-calculator-max-input" placeholder="1RM" class="form-control" min="0" step="0.5">
+                </div>
+                <div class="col-4 d-flex justify-content-center">
+                    <input type="number" id="1rm-calculator-weight-input" placeholder="Weight" class="form-control" step="0.5">
+                </div>
+                <div class="col-4 d-flex justify-content-center">
+                    <input type="number" id="1rm-calculator-reps-input" placeholder="# Reps" class="form-control" step="1">
+                </div>
+            </div>
+            <div class="row justify-content-center workout_title_input header-input">
+                <div class="col-12 d-flex justify-content-center my-3">
+                    <button id="1rm-calculator-button" class="btn
+                            btn-outline-success btn-green">Calculate</button>
+                </div>
+            </div>
+            <div class="row justify-content-center workout_title_input header-input">
+                <div class="col-12 d-flex justify-content-center">
+                    <div id="1rm-calculator-result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const MAX_REP_LIMIT = 12
+    function estimate_one_rep_max(weight, reps) {
+
+        if (reps <= 0) {
+            return 0
+        }
+        else if (reps > MAX_REP_LIMIT) {
+            return 36 * weight / (37 - MAX_REP_LIMIT)
+        }
+        else {
+            return 36 * weight / (37 - reps)
+        }
+    }
+
+    function estimate_weight(one_rep_max, reps) {
+        if (reps <= 0) {
+            return 0
+        }
+        else if (reps > MAX_REP_LIMIT) {
+            reps = 12;
+            return (37 - reps) * one_rep_max / 36
+        }
+        else {
+            return (37 - reps) * one_rep_max / 36
+        }
+    }
+
+    function estimate_reps(one_rep_max, weight) {
+        let rep_estimation = 37 - 36 * weight / one_rep_max
+
+        if (rep_estimation <= 0) {
+            return 0
+        }
+        if (rep_estimation > MAX_REP_LIMIT) {
+            return MAX_REP_LIMIT
+        }
+
+        return rep_estimation
+    }
+
+    // Disable non-filled input when 2/3 are filled
+    $(document).ready(function () {
+        $('#1rm-calculator-max-input,#1rm-calculator-weight-input,#1rm-calculator-reps-input').on('input', function () {
+            // Get the values of the three input elements
+            let max = $('#1rm-calculator-max-input').val();
+            let weight = $('#1rm-calculator-weight-input').val();
+            let reps = $('#1rm-calculator-reps-input').val();
+
+            // Check how many of the inputs have a value
+            let numFilled = (max ? 1 : 0) + (weight ? 1 : 0) + (reps ? 1 : 0);
+
+            // Disable any input that is not empty when two of the three inputs have a value
+            if (numFilled >= 2) {
+                if (!max) {
+                    $('#1rm-calculator-max-input').prop('disabled', true);
+                }
+                if (!weight) {
+                    $('#1rm-calculator-weight-input').prop('disabled', true);
+                }
+                if (!reps) {
+                    $('#1rm-calculator-reps-input').prop('disabled', true);
+                }
+            } else {
+                // Re-enable all inputs if less than two inputs have a value
+                $('#1rm-calculator-max-input, #1rm-calculator-weight-input, #1rm-calculator-reps-input').prop('disabled', false);
+            }
+        });
+    });
+
+    $(document).on('click', '#1rm-calculator-button', function () {
+        const max = parseFloat($('#1rm-calculator-max-input').val());
+        const weight = parseFloat($('#1rm-calculator-weight-input').val());
+        const reps = parseFloat($('#1rm-calculator-reps-input').val());
+
+        // 1RM not given, so estimate it
+        if (isNaN(max)) {
+            let estimatedMax = estimate_one_rep_max(weight, reps)
+
+            // Round to nearest 2.5 lbs
+            estimatedMax = Math.round(estimatedMax / 2.5) * 2.5;
+
+            let resultHTML = "1RM Estimation:<br>" + estimatedMax + " lbs";
+            $('#1rm-calculator-result').html(resultHTML);
+        }
+        // Weight not given, so estimate it
+        else if (isNaN(weight)) {
+            let estimatedWeight = estimate_weight(max, reps)
+            // Round to nearest 2.5 lbs
+            estimatedWeight = Math.round(estimatedWeight / 2.5) * 2.5;
+
+            let resultHTML = "Weight Estimation:<br>" + estimatedWeight + " lbs";
+            $('#1rm-calculator-result').html(resultHTML);
+        }
+        // Reps not given, so estimate it
+        else if (isNaN(reps)) {
+            let estimatedReps = estimate_reps(max, weight)
+
+            // Round to nearest 1 lb
+            estimatedReps = Math.round(estimatedReps);
+
+            let resultHTML = "Reps Estimation:<br>"
+            if (estimatedReps >= MAX_REP_LIMIT) {
+                resultHTML += estimatedReps + "+ reps";
+            }
+            else {
+                resultHTML += estimatedReps + " reps";
+            }
+            $('#1rm-calculator-result').html(resultHTML);
+        }
+        else {
+            let resultHTML = 'Cannot calculate';
+            $('#1rm-calculator-result').html(resultHTML);
+            return
+        }
+
+    });
+</script>

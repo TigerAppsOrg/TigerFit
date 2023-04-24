@@ -1,0 +1,92 @@
+<div class="modal-content">
+    <div class="modal-header modal-header--sticky">
+        <div class="container-fluid justify-content-center">
+            <div class="row">
+                <h2 class="modal-title col-12 text-center py-1" id="exampleModalLabel" style="font-weight: bolder">
+                    % Calculator
+                    <span class="info-tooltip" data-toggle="tooltip" data-placement="bottom" title="Use the percentage
+                    calculator to easily multiply a given weight by a
+                    percentage.">
+                        &nbsp
+                        <span class="material-icons" style="font-size:15px">info</span>
+                    </span>
+                </h2>
+
+                <button type="button" id="close-modal-button" class="col-1 btn btn-danger btn-red m-3" data-bs-dismiss="modal" style="
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 30px;
+                    height: 30px;
+                  ">
+                    <i class="fa fa-times" style="position: absolute; right: 7.5px; top: 6px"></i>
+                </button>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="container-fluid">
+            <div class="row justify-content-center workout_title_input header-input">
+                <div class="col-6 d-flex justify-content-center">
+                    <input type="number" id="percentage-calculator-weight-input" placeholder="Total Weight" class="form-control" min="0" step="0.5">
+                </div>
+                <div class="col-6 d-flex justify-content-center">
+                    <input type="number" id="percentage-calculator-percentage-input" placeholder="Percent 0-300%" class="form-control" min="0" max="300"
+                        step="0.5">
+                </div>
+            </div>
+            <div class="row justify-content-center workout_title_input header-input">
+                <div class="col-12 d-flex justify-content-center my-3">
+                    <button id="percentage-calculator-button" class="btn
+                    btn-outline-success btn-green">Calculate</button>
+                </div>
+            </div>
+            <div class="row justify-content-center workout_title_input header-input">
+                <div class="col-12 d-flex justify-content-center">
+                    <div id="percentage-calculator-result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Calculates percentage of given weight and rounds to
+    // nearest 2.5
+    function calculatePercentage(weight, percentage) {
+        let product = weight * percentage / 100;
+        return Math.round(product / 2.5) * 2.5
+    }
+
+
+    $(document).on('click', '#percentage-calculator-button', function () {
+        const weight = parseFloat($('#percentage-calculator-weight-input').val());
+        const percentage = parseFloat($('#percentage-calculator-percentage-input').val());
+
+        // Ensure that inputs are filled in
+        if (isNaN(weight) || isNaN(percentage)) {
+            let resultHTML = 'Please fill in all inputs';
+            $('#percentage-calculator-result').html(resultHTML);
+            return
+        }
+
+        // Ensure that percentage is within [0, 300]
+        if (percentage < 0 || percentage > 300) {
+            let resultHTML = 'Please enter a percentage value between 0 and 300';
+            $('#percentage-calculator-result').html(resultHTML);
+            return
+        }
+
+        let resultWeight = calculatePercentage(weight, percentage);
+
+        // Determines result HTML
+        let resultHTML = resultWeight + " lbs";
+        resultHTML += ` = ${weight} lbs * ${percentage}%`;
+        $('#percentage-calculator-result').html(resultHTML);
+    });
+</script>

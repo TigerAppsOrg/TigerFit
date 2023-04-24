@@ -894,3 +894,5 @@ function handleWorkoutCopying(workout_id) {
   //   clickSelectEquipmentButton("Back Squat");
   //   console.log("c");
 }
+
+
