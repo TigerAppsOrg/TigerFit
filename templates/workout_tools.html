@@ -12,7 +12,7 @@
     <!-- Tool Buttons -->
     <button id="plate-calculator-tool" class="btn-grey btn btn-dark
     square-btn btn-m-l" data-toggle="modal" data-target="#plate-calculator-modal">
-        <i class="fa fa-stopwatch"></i>
+        <i class="fa fa-dumbbell"></i>
     </button>
 
     <button id="percentage-calculator-tool" class="btn-grey btn btn-dark
@@ -23,6 +23,11 @@
     <button id="stopwatch-tool" class="btn-grey btn btn-dark
         square-btn btn-m-l" data-toggle="modal" data-target="#stopwatch-modal">
         <i class="fa fa-stopwatch-20"></i>
+    </button>
+
+    <button id="1rm-calculator-tool" class="btn-grey btn btn-dark
+        square-btn btn-m-l" data-toggle="modal" data-target="#1rm-calculator-modal">
+        <i class="fa fa-ranking-star"></i>
     </button>
 
     <script>
@@ -36,6 +41,9 @@
             });
             $(document).on("click", "#stopwatch-tool", function () {
                 $("#stopwatch-modal").modal("show");
+            });
+            $(document).on("click", "#1rm-calculator-tool", function () {
+                $("#1rm-calculator-modal").modal("show");
             });
         });
     </script>
@@ -56,6 +64,12 @@
     <div class="modal fade" id="stopwatch-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             {% include "workout_tools/stopwatch.html" %}
+        </div>
+    </div>
+
+    <div class="modal fade" id="1rm-calculator-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            {% include "workout_tools/1rm_calculator.html" %}
         </div>
     </div>
 
