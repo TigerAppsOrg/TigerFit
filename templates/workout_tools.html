@@ -1,6 +1,13 @@
 <div class="container">
     <br>
-    <h2 class="subheader">Tools</h2>
+    <h2 class="subheader">Tools
+        <span class="info-tooltip" data-toggle="tooltip" data-placement="top" title="Use these tools to aid your workout
+        logging! Tools include Plate Calculator, % Calculator, One Rep
+        Max Calculator, and Stopwatch.">
+            &nbsp
+            <span class="material-icons" style="font-size:15px">info</span>
+        </span>
+    </h2>
 
     <div class="row justify-content-center">
         <div class="col-3 text-center">
@@ -16,15 +23,15 @@
             </button>
         </div>
         <div class="col-3 text-center">
-            <button id="stopwatch-tool" class="btn-grey btn btn-dark
-        square-btn btn-m-l" data-toggle="modal" data-target="#stopwatch-modal">
-                <i class="fa fa-stopwatch-20"></i>
+            <button id="1rm-calculator-tool" class="btn-grey btn btn-dark
+                square-btn btn-m-l" data-toggle="modal" data-target="#1rm-calculator-modal">
+                <i class="fa fa-ranking-star"></i>
             </button>
         </div>
         <div class="col-3 text-center">
-            <button id="1rm-calculator-tool" class="btn-grey btn btn-dark
-        square-btn btn-m-l" data-toggle="modal" data-target="#1rm-calculator-modal">
-                <i class="fa fa-ranking-star"></i>
+            <button id="stopwatch-tool" class="btn-grey btn btn-dark
+                    square-btn btn-m-l" data-toggle="modal" data-target="#stopwatch-modal">
+                <i class="fa fa-stopwatch-20"></i>
             </button>
         </div>
     </div>
@@ -62,18 +69,17 @@
     </div>
 </div>
 
-<div class="modal fade" id="stopwatch-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        {% include "workout_tools/stopwatch.html" %}
-    </div>
-</div>
-
 <div class="modal fade" id="1rm-calculator-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         {% include "workout_tools/1rm_calculator.html" %}
     </div>
 </div>
 
+<div class="modal fade" id="stopwatch-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        {% include "workout_tools/stopwatch.html" %}
+    </div>
+</div>
 
 
 <!-- Loads jQuery scripts from static folder (Flask thing) -->
