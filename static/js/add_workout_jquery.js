@@ -895,10 +895,4 @@ function handleWorkoutCopying(workout_id) {
   //   console.log("c");
 }
 
-// * Workout Tools Section
-// Runs onclick of #plate_calculator_button (at start of modal popup)
-$(document).ready(() => {
-  $(document).on("click", "#plate-calculator-tool", function () {
-    $("#plate-calculator-modal").modal("show");
-  });
-});
+

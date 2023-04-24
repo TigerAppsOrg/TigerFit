@@ -23,9 +23,9 @@
 
     <div class="modal-body">
         <div class="row justify-content-center">
-            <input type="number" id="total-weight-input" placeholder="Total Weight"><br>
+            <input type="number" id="plate-calculator-total-input" placeholder="Total Weight"><br>
 
-            <input type="number" id="bar-weight-input" placeholder="Bar Weight"><br>
+            <input type="number" id="plate-calculator-bar-input" placeholder="Bar Weight"><br>
 
             <button id="plate-calculator-button">Calculate</button>
 
@@ -36,7 +36,7 @@
 
                 // Calculates how many of each plate are needed
                 function calculatePlates(totalWeight, barWeight) {
-                    const plateCounts = [0, 0, 0, 0, 0];
+                    const plateCounts = [0, 0, 0, 0, 0, 0];
 
 
                     let weightRemaining = (totalWeight - barWeight) / 2;
@@ -52,19 +52,13 @@
 
 
                 $(document).on('click', '#plate-calculator-button', function () {
-                    const totalWeight = parseFloat($('#total-weight-input').val());
-                    const barWeight = parseFloat($('#bar-weight-input').val());
-
-                    if (isNaN(totalWeight) || isNaN(barWeight)) {
-                        let resultHTML = '';
-                        $('#plate-calculator-result').html(resultHTML);
-                        return
-                    }
+                    const totalWeight = parseFloat($('#plate-calculator-total-input').val());
+                    const barWeight = parseFloat($('#plate-calculator-bar-input').val());
 
                     // Ensures that the weight added to bar is a
                     // multiple of 2.5
                     // And totalWeight > barWeight
-                    if ((totalWeight - barWeight) % 2.5 !== 0 || totalWeight <= barWeight) {
+                    if (isNaN(totalWeight) || isNaN(barWeight) || (totalWeight - barWeight) % 2.5 !== 0 || totalWeight <= barWeight) {
                         let resultHTML = 'Cannot calculate weight';
                         $('#plate-calculator-result').html(resultHTML);
                         return
@@ -76,11 +70,8 @@
                     let resultHTML = '';
                     for (let i = 0; i < plateCounts.length; i++) {
                         if (plateCounts[i] > 0) {
-                            resultHTML += plateCounts[i] + ' x ' + PLATE_WEIGHTS[i] + ' lb<br>';
+                            resultHTML += plateCounts[i] + ' x ' + PLATE_WEIGHTS[i] + ' lbs<br>';
                         }
-                    }
-                    if (weightRemaining > 0) {
-                        resultHTML += '+' + weightRemaining + ' lbs extra<br>';
                     }
 
                     $('#plate-calculator-result').html(resultHTML);

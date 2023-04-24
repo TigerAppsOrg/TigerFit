@@ -9,12 +9,53 @@
 </head>
 
 <body>
-    <button id="plate-calculator-tool" class="btn-grey btn btn-dark square-btn btn-m-l" data-toggle="modal" data-target="#plate-calculator-modal">A</button>
+    <!-- Tool Buttons -->
+    <button id="plate-calculator-tool" class="btn-grey btn btn-dark
+    square-btn btn-m-l" data-toggle="modal" data-target="#plate-calculator-modal">
+        <i class="fa fa-stopwatch"></i>
+    </button>
 
+    <button id="percentage-calculator-tool" class="btn-grey btn btn-dark
+    square-btn btn-m-l" data-toggle="modal" data-target="#percentage-calculator-modal">
+        <i class="fa fa-percent"></i>
+    </button>
 
+    <button id="stopwatch-tool" class="btn-grey btn btn-dark
+        square-btn btn-m-l" data-toggle="modal" data-target="#stopwatch-modal">
+        <i class="fa fa-stopwatch-20"></i>
+    </button>
+
+    <script>
+        // * Workout Tools Section
+        $(document).ready(() => {
+            $(document).on("click", "#plate-calculator-tool", function () {
+                $("#plate-calculator-modal").modal("show");
+            });
+            $(document).on("click", "#percentage-calculator-tool", function () {
+                $("#percentage-calculator-modal").modal("show");
+            });
+            $(document).on("click", "#stopwatch-tool", function () {
+                $("#stopwatch-modal").modal("show");
+            });
+        });
+    </script>
+
+    <!-- Tool Modals -->
     <div class="modal fade" id="plate-calculator-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             {% include "workout_tools/plate_calculator.html" %}
+        </div>
+    </div>
+
+    <div class="modal fade" id="percentage-calculator-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            {% include "workout_tools/percentage_calculator.html" %}
+        </div>
+    </div>
+
+    <div class="modal fade" id="stopwatch-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            {% include "workout_tools/stopwatch.html" %}
         </div>
     </div>
 
@@ -29,15 +70,8 @@
 
 
 
-    <button class="btn-grey btn btn-dark square-btn btn-m-l">
-        B
-    </button>
-    <button class="btn-grey btn btn-dark square-btn btn-m-l">
-        C
-    </button>
-    <button class="btn-grey btn btn-dark square-btn btn-m-l">
-        D
-    </button>
+
+
 
     <style>
         .square-btn {

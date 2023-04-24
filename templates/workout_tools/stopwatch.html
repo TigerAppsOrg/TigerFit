@@ -1,0 +1,87 @@
+<div class="modal-content">
+    <div class="modal-header modal-header--sticky">
+        <div class="container-fluid justify-content-center">
+            <div class="row">
+                <h2 class="modal-title col-12 text-center py-1" id="exampleModalLabel" style="font-weight: bolder">
+                    Stopwatch
+                </h2>
+
+                <button type="button" id="close-modal-button" class="col-1 btn btn-danger btn-red m-3" data-bs-dismiss="modal" style="
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 30px;
+                    height: 30px;
+                  ">
+                    <i class="fa fa-times" style="position: absolute; right: 7.5px; top: 6px"></i>
+                </button>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <div class="row justify-content-center">
+            <h1 id="timer">0:00</h1>
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="resetBtn">Reset</button>
+            <script>
+                let timerInterval; // Stores the setInterval object for the timer
+
+                const timer = document.getElementById("timer");
+                const startBtn = document.getElementById("startBtn");
+                const pauseBtn = document.getElementById("pauseBtn");
+                const resetBtn = document.getElementById("resetBtn");
+
+                let seconds = 0;
+                let minutes = 0;
+
+                // Format the time as "mm:ss"
+                function formatTime() {
+                    const secStr = seconds < 10 ? "0" + seconds : seconds;
+                    const minStr = minutes < 10 ? "0" + minutes : minutes;
+                    return `${minStr}:${secStr}`;
+                }
+
+                function startTimer() {
+                    timerInterval = setInterval(function () {
+                        seconds++;
+                        if (seconds === 60) {
+                            seconds = 0;
+                            minutes++;
+                        }
+                        timer.innerHTML = formatTime();
+                    }, 1000);
+                    startBtn.disabled = true;
+                    pauseBtn.disabled = false;
+                }
+
+                function pauseTimer() {
+                    clearInterval(timerInterval);
+                    startBtn.disabled = false;
+                    pauseBtn.disabled = true;
+                }
+
+                function resetTimer() {
+                    clearInterval(timerInterval);
+                    seconds = 0;
+                    minutes = 0;
+                    timer.innerHTML = formatTime();
+                    startBtn.disabled = false;
+                    pauseBtn.disabled = true;
+                }
+
+                startBtn.addEventListener("click", startTimer);
+                pauseBtn.addEventListener("click", pauseTimer);
+                resetBtn.addEventListener("click", resetTimer);
+
+                pauseBtn.disabled = true;
+            </script>
+
+
+        </div>
+
+    </div>
+</div>

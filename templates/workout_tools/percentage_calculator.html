@@ -1,0 +1,69 @@
+<div class="modal-content">
+    <div class="modal-header modal-header--sticky">
+        <div class="container-fluid justify-content-center">
+            <div class="row">
+                <h2 class="modal-title col-12 text-center py-1" id="exampleModalLabel" style="font-weight: bolder">
+                    Percentage Calculator
+                </h2>
+
+                <button type="button" id="close-modal-button" class="col-1 btn btn-danger btn-red m-3" data-bs-dismiss="modal" style="
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 30px;
+                    height: 30px;
+                  ">
+                    <i class="fa fa-times" style="position: absolute; right: 7.5px; top: 6px"></i>
+                </button>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <div class="row justify-content-center">
+            <input type="number" id="percentage-calculator-weight-input" placeholder="Total Weight" min="0" step="0.5"><br>
+
+            <input type="number" id="percentage-calculator-percentage-input" placeholder="Percentage 0-100" min="0" max="100" step="0.5"><br>
+
+            <button id="percentage-calculator-button">Calculate</button>
+
+            <div id="percentage-calculator-result"></div>
+
+            <script>
+                // Calculates percentage of given weight and rounds to
+                // nearest 2.5
+                function calculatePercentage(weight, percentage) {
+                    let product = weight * percentage / 100;
+                    return Math.round(product / 2.5) * 2.5
+                }
+
+
+                $(document).on('click', '#percentage-calculator-button', function () {
+                    const weight = parseFloat($('#percentage-calculator-weight-input').val());
+                    const percentage = parseFloat($('#percentage-calculator-percentage-input').val());
+
+                    // Ensure that percentage is within [0, 100]
+                    if (isNaN(weight) || isNaN(percentage) ||
+                        percentage < 0 || percentage > 100
+                    ) {
+                        let resultHTML = 'Cannot calculate percentage';
+                        $('#percentage-calculator-result').html(resultHTML);
+                        return
+                    }
+
+
+                    let resultWeight = calculatePercentage(weight, percentage);
+
+                    // Determines result HTML
+                    let resultHTML = resultWeight + " lbs";
+                    resultHTML += ` = ${weight} lbs * ${percentage}%`;
+                    $('#percentage-calculator-result').html(resultHTML);
+                });
+            </script>
+
+        </div>
+
+    </div>
+</div>
