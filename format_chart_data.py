@@ -60,23 +60,23 @@ def format_rep_range_data(equip_history):
 
     # Formatting string to be in a readable format by chart.js
     FORMAT_STRING = "%Y-%m-%d"
-    rep_range_1 = []
-    rep_range_2_6 = []
+    # rep_range_1 = []
+    rep_range_1_6 = []
     rep_range_7_12 = []
     rep_range_13_plus = []
 
-    rep_range_1_avgs = []
-    rep_range_2_6_avgs = []
+    # rep_range_1_avgs = []
+    rep_range_1_6_avgs = []
     rep_range_7_12_avgs = []
     rep_range_13_plus_avgs = []
 
-    rep_range_1_failed = []
-    rep_range_2_6_failed = []
+    # rep_range_1_failed = []
+    rep_range_1_6_failed = []
     rep_range_7_12_failed = []
     rep_range_13_plus_failed = []
 
-    rep_range_1_num_reps = []
-    rep_range_2_6_num_reps = []
+    # rep_range_1_num_reps = []
+    rep_range_1_6_num_reps = []
     rep_range_7_12_num_reps = []
     rep_range_13_plus_num_reps = []
 
@@ -86,8 +86,8 @@ def format_rep_range_data(equip_history):
         sets = workout[2].sets
         num_sets = sets["num_sets"]
 
-        weights_1 = []
-        weights_2_6 = []
+        # weights_1 = []
+        weights_1_6 = []
         weights_7_12 = []
         weights_13_plus = []
 
@@ -98,21 +98,21 @@ def format_rep_range_data(equip_history):
 
             # Separate data into 4 groups based on selected rep ranges
             # Rep ranges: 1, 2-6, 7-12, 13+
-            if num_reps == 1:
-                # x-y coordinates to be graphed
-                rep_range_1.append({"x": date, "y": weight})
-                # python T/F not defined in JS
-                rep_range_1_failed.append(1 if failed else 0)
-                rep_range_1_num_reps.append(num_reps)
-                # weights used to calculate averages for each day
+            # if num_reps == 1:
+            #     # x-y coordinates to be graphed
+            #     rep_range_1.append({"x": date, "y": weight})
+            #     # python T/F not defined in JS
+            #     rep_range_1_failed.append(1 if failed else 0)
+            #     rep_range_1_num_reps.append(num_reps)
+            #     # weights used to calculate averages for each day
+            #     if not failed:
+            #         weights_1.append(weight)
+            if num_reps <= 6:
+                rep_range_1_6.append({"x": date, "y": weight})
+                rep_range_1_6_failed.append(1 if failed else 0)
+                rep_range_1_6_num_reps.append(num_reps)
                 if not failed:
-                    weights_1.append(weight)
-            elif num_reps <= 6:
-                rep_range_2_6.append({"x": date, "y": weight})
-                rep_range_2_6_failed.append(1 if failed else 0)
-                rep_range_2_6_num_reps.append(num_reps)
-                if not failed:
-                    weights_2_6.append(weight)
+                    weights_1_6.append(weight)
             elif num_reps <= 12:
                 rep_range_7_12.append({"x": date, "y": weight})
                 rep_range_7_12_failed.append(1 if failed else 0)
@@ -134,12 +134,12 @@ def format_rep_range_data(equip_history):
             return {"x": date, "y": avg}
 
         # Calculate and append averages (for line plots)
-        avg_obj = list_avg(weights_1)
+        avg_obj = list_avg(weights_1_6)
+        # if avg_obj != 0:
+        #     rep_range_1_6_avgs.append(list_avg(weights_1))
+        # avg_obj = list_avg(weights_2_6)
         if avg_obj != 0:
-            rep_range_1_avgs.append(list_avg(weights_1))
-        avg_obj = list_avg(weights_2_6)
-        if avg_obj != 0:
-            rep_range_2_6_avgs.append(list_avg(weights_2_6))
+            rep_range_1_6_avgs.append(list_avg(weights_1_6))
         avg_obj = list_avg(weights_7_12)
         if avg_obj != 0:
             rep_range_7_12_avgs.append(list_avg(weights_7_12))
@@ -148,20 +148,20 @@ def format_rep_range_data(equip_history):
             rep_range_13_plus_avgs.append(list_avg(weights_13_plus))
 
     rep_range_data = {
-        "rep_range_1": rep_range_1,
-        "rep_range_2_6": rep_range_2_6,
+        # "rep_range_1": rep_range_1,
+        "rep_range_1_6": rep_range_1_6,
         "rep_range_7_12": rep_range_7_12,
         "rep_range_13_plus": rep_range_13_plus,
-        "rep_range_1_avgs": rep_range_1_avgs,
-        "rep_range_2_6_avgs": rep_range_2_6_avgs,
+        # "rep_range_1_avgs": rep_range_1_avgs,
+        "rep_range_1_6_avgs": rep_range_1_6_avgs,
         "rep_range_7_12_avgs": rep_range_7_12_avgs,
         "rep_range_13_plus_avgs": rep_range_13_plus_avgs,
-        "rep_range_1_failed": rep_range_1_failed,
-        "rep_range_2_6_failed": rep_range_2_6_failed,
+        # "rep_range_1_failed": rep_range_1_failed,
+        "rep_range_1_6_failed": rep_range_1_6_failed,
         "rep_range_7_12_failed": rep_range_7_12_failed,
         "rep_range_13_plus_failed": rep_range_13_plus_failed,
-        "rep_range_1_num_reps": rep_range_1_num_reps,
-        "rep_range_2_6_num_reps": rep_range_2_6_num_reps,
+        # "rep_range_1_num_reps": rep_range_1_num_reps,
+        "rep_range_1_6_num_reps": rep_range_1_6_num_reps,
         "rep_range_7_12_num_reps": rep_range_7_12_num_reps,
         "rep_range_13_plus_num_reps": rep_range_13_plus_num_reps,
     }

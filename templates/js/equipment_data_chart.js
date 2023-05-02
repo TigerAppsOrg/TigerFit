@@ -389,19 +389,19 @@ function updateEquipmentChart(response) {
   // Hard-coded rep-ranges and constants (in agreement with python file)
   let chart_constants = [
     {
-      label: "1",
-      rep_range: "1",
+      label: "1-6",
+      rep_range: "1_6",
       color: "#FF000055",
     },
-    {
-      label: "2-6",
-      rep_range: "2_6",
-      color: "#FFA50055",
-    },
+    // {
+    //   label: "2-6",
+    //   rep_range: "2_6",
+    //   color: "#FFA50055",
+    // },
     {
       label: "7-12",
       rep_range: "7_12",
-      color: "#0000FF55",
+      color: "#FFA50055",
     },
     {
       label: "13+",
@@ -491,9 +491,9 @@ function updateEquipmentChart(response) {
             // Provide advanced tooltip descriptions
             let dataset_index = tooltipItems.datasetIndex;
             let rep_range = "13_plus";
-            if (dataset_index === 1) rep_range = "1";
-            else if (dataset_index === 3) rep_range = "2_6";
-            else if (dataset_index === 5) rep_range = "7_12";
+            if (dataset_index === 1) rep_range = "1_6";
+            // else if (dataset_index === 3) rep_range = "2_6";
+            else if (dataset_index === 3) rep_range = "7_12";
 
             let num_reps =
               rep_range_data[`rep_range_${rep_range}_num_reps`][
