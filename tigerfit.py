@@ -62,10 +62,10 @@ import os
 
 
 # ! Production
-session, engine = create_session()
+# session, engine = create_session()
 
 # ! Local testing
-# session, engine = create_local_session()
+session, engine = create_local_session()
 
 # Begin App
 
@@ -79,13 +79,13 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 def get_earliest_date(date_range):
     DAYS_IN_MONTH = 30
     if date_range == "1 Month":
-        return datetime.today() - relativedelta(days=DAYS_IN_MONTH * 1)
+        return datetime.today() - relativedelta(months=1)
     elif date_range == "3 Months":
-        return datetime.today() - relativedelta(days=DAYS_IN_MONTH * 3)
+        return datetime.today() - relativedelta(months=3)
     elif date_range == "6 Months":
-        return datetime.today() - relativedelta(days=DAYS_IN_MONTH * 6)
+        return datetime.today() - relativedelta(months=6)
     elif date_range == "12 Months":
-        return datetime.today() - relativedelta(days=DAYS_IN_MONTH * 12)
+        return datetime.today() - relativedelta(months=12)
     else:
         return datetime.min + timedelta(days=1)
 
