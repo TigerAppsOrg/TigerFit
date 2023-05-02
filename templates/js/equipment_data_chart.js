@@ -165,7 +165,6 @@ $(document).ready(() => {
     "change",
     'input[name="equipment_list_radios"]',
     function () {
-      // alert($(this).data("equipment_name"));
       let selected_equip_name = $(this).data("equipment_name");
 
       if (selected_equip_name === undefined) {
@@ -297,18 +296,20 @@ $(document).ready(() => {
 
 // Inserted scripts to generate chart
 function setup_equipment() {
-  //default_equip_name = "Back Squat"
   let default_equip_name = "{{most_recent_equipment}}";
   if (default_equip_name != "") {
     $(`#chart-equipment-name-header`).html(default_equip_name);
     $(`#chart-equipment-name-header`).css("color", "orange");
   }
 
+  $("#hidden-chart-equipment-name").val(default_equip_name);
+
   let default_date_range = "All Time";
   handleEquipmentChartUpdate(default_equip_name, default_date_range);
 }
 $(document).ready(() => {
   setup_equipment();
+  $("#date_range").val(default_date_range);
 });
 
 $(document).ready(() => {
@@ -343,7 +344,6 @@ $(document).ready(() => {
   $(document).on("change", "#date_range", function () {
     //localStorage.setItem('date_range', $('#date_range').val())
     //$('#equipment_chart_form').submit()
-
     handleEquipmentChartUpdate(
       $("#hidden-chart-equipment-name").val(),
       $(this).val()

@@ -756,7 +756,10 @@ def get_most_recent_workout(session, user_name):
                 UserWorkouts.user_name == user_name,
             )
         )
-        .order_by(desc(UserWorkouts.date), desc(UserExercises.exercise_id)).first()
+        .order_by(
+            desc(UserWorkouts.date), desc(UserExercises.exercise_id)
+        )
+        .first()
     )
 
 
@@ -851,8 +854,10 @@ def is_bodyweight_exercise(session, equipment_name):
 # equipment, starting at the start date and ending today
 def get_equipment_data(session, user_name, equipment_name, start_date):
     assert session is not None
+    
     # add buffer to fully capture requests landing on the same day
     start_date -= timedelta(days=1)
+
     return (
         session.query(Users, UserWorkouts, UserExercises)
         .join(UserWorkouts, Users.user_name == UserWorkouts.user_name)

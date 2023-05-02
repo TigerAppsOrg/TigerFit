@@ -77,7 +77,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 
 # Helper function to map date_range string to date object
 def get_earliest_date(date_range):
-    DAYS_IN_MONTH = 30
     if date_range == "1 Month":
         return datetime.today() - relativedelta(months=1)
     elif date_range == "3 Months":
@@ -449,6 +448,7 @@ def update_equipment_chart():
     equipment_name = request.args.get("equipment_name")
     date_range = request.args.get("date_range")
     start_date = get_earliest_date(date_range)
+    print("******** date_range = ", date_range)
 
     print("GET request for /update_equipment_chart")
 
