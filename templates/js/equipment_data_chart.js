@@ -220,7 +220,6 @@ function hashCode(str) {
 }
 function intToRGB(i) {
   var c = (i & 0x00ffffff).toString(16).toUpperCase();
-  console.log("test");
   return "00000".substring(0, 6 - c.length) + c;
 }
 
