@@ -89,6 +89,7 @@ function updateBodyweightChart(response) {
       showLine: true,
       label: `Goal Weight (lbs)`,
       borderColor: "lime",
+      backgroundColor: "#0000",
       // Take first and last data point from goal
       data: [
         bodyweight_data["goal_dataset"][0],
@@ -105,6 +106,8 @@ function updateBodyweightChart(response) {
       .getElementById("bodyweight_chart_canvas")
       .getContext("2d");
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    let darkMode = localStorage.getItem("theme") === "dark";
 
     let chart = new Chart(ctx, {
       type: "scatter",
@@ -123,11 +126,11 @@ function updateBodyweightChart(response) {
             {
               type: "time",
               ticks: {
-                fontColor: "white",
-                color: "white",
+                fontColor: darkMode ? "white" : "grey",
+                color: darkMode ? "white" : "grey",
               },
               gridLines: {
-                color: "grey", // Change the color of the gridlines
+                color: darkMode ? "grey" : "grey", // Change the color of the gridlines
               },
               time: {
                 unit: "month",
@@ -139,21 +142,21 @@ function updateBodyweightChart(response) {
               scaleLabel: {
                 display: true,
                 labelString: "Body Weight (lbs)",
-                fontColor: "white",
+                fontColor: darkMode ? "white" : "grey",
               },
               ticks: {
                 beginAtZero: false,
-                fontColor: "white",
+                fontColor: darkMode ? "white" : "grey",
               },
               gridLines: {
-                color: "grey", // Change the color of the gridlines
+                color: darkMode ? "grey" : "grey", // Change the color of the gridlines
               },
             },
           ],
         },
         legend: {
           labels: {
-            fontColor: "white", // Change the font color of the legend labels
+            fontColor: darkMode ? "white" : "grey", // Change the font color of the legend labels
           },
         },
         tooltips: {

@@ -417,6 +417,7 @@ function updateEquipmentChart(response) {
         showLine: true,
         label: `${label} Rep Trend`,
         borderColor: color,
+        backgroundColor: "#0000",
         data: rep_range_data[`rep_range_${rep_range}_avgs`],
         fill: false,
         pointRadius: 0,
@@ -432,7 +433,7 @@ function updateEquipmentChart(response) {
         data: rep_range_data[`rep_range_${rep_range}`],
         pointBackgroundColor: rep_range_data[
           `rep_range_${rep_range}_failed`
-        ].map((failed) => (failed ? "white" : color)),
+        ].map((failed) => (failed ? "#0000" : color)),
         order: 0,
       });
     };
@@ -450,6 +451,8 @@ function updateEquipmentChart(response) {
     .getContext("2d");
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
+  let darkMode = localStorage.getItem("theme") === "dark";
+
   let chart = new Chart(ctx, {
     type: "scatter",
     data: { datasets: data },
@@ -464,11 +467,11 @@ function updateEquipmentChart(response) {
           {
             type: "time",
             ticks: {
-              fontColor: "white",
-              color: "white",
+              fontColor: darkMode ? "white" : "grey",
+              color: darkMode ? "white" : "grey",
             },
             gridLines: {
-              color: "grey", // Change the color of the gridlines
+              color: darkMode ? "grey" : "grey", // Change the color of the gridlines
             },
             // time: {
             //   unit: "day",
@@ -480,21 +483,21 @@ function updateEquipmentChart(response) {
             scaleLabel: {
               display: true,
               labelString: "Lifted Weight (lbs)",
-              fontColor: "white",
+              fontColor: darkMode ? "white" : "grey",
             },
             ticks: {
-              fontColor: "white",
-              color: "white",
+              fontColor: darkMode ? "white" : "grey",
+              color: darkMode ? "white" : "grey",
             },
             gridLines: {
-              color: "grey", // Change the color of the gridlines
+              color: darkMode ? "grey" : "grey", // Change the color of the gridlines
             },
           },
         ],
       },
       legend: {
         labels: {
-          fontColor: "white", // Change the font color of the legend labels
+          fontColor: darkMode ? "white" : "grey", // Change the font color of the legend labels
         },
       },
       tooltips: {
