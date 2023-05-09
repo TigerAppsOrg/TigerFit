@@ -55,7 +55,7 @@ function updateBodyweightChart(response) {
   // Create daily change text
   let fragment = "";
   if (response.good_change) {
-    fragment = "<strong style='color: green'>";
+    fragment = "<strong style='color: lime'>";
   } else {
     fragment = "<strong style='color: red'>";
   }
@@ -88,7 +88,7 @@ function updateBodyweightChart(response) {
     data.push({
       showLine: true,
       label: `Goal Weight (lbs)`,
-      borderColor: "#0000FFAA",
+      borderColor: "lime",
       // Take first and last data point from goal
       data: [
         bodyweight_data["goal_dataset"][0],
@@ -122,9 +122,16 @@ function updateBodyweightChart(response) {
           xAxes: [
             {
               type: "time",
-              //   time: {
-              //     unit: "week",
-              //   },
+              ticks: {
+                fontColor: "white",
+                color: "white",
+              },
+              gridLines: {
+                color: "grey", // Change the color of the gridlines
+              },
+              time: {
+                unit: "month",
+              },
             },
           ],
           yAxes: [
@@ -132,12 +139,22 @@ function updateBodyweightChart(response) {
               scaleLabel: {
                 display: true,
                 labelString: "Body Weight (lbs)",
+                fontColor: "white",
               },
               ticks: {
                 beginAtZero: false,
+                fontColor: "white",
+              },
+              gridLines: {
+                color: "grey", // Change the color of the gridlines
               },
             },
           ],
+        },
+        legend: {
+          labels: {
+            fontColor: "white", // Change the font color of the legend labels
+          },
         },
         tooltips: {
           enabled: true,

@@ -9,12 +9,12 @@ html {
 body {
   min-height: 100vh;
   /* background: linear-gradient(25deg, rgba(199, 109, 0, 0.315) 5%, bisque) !important; */
-  background: linear-gradient(
+  /* background: linear-gradient(
     0deg,
     rgb(192, 192, 192) 0%,
     #eeeeee
-  ) !important;
-  background: #eeee !important;
+  ) !important; */
+  background: #212121 !important;
 }
 
 .header-background-image {
@@ -37,18 +37,18 @@ body {
 }
 
 #welcome-user-header {
-  color: black;
+  color: orange;
   font-weight: bolder;
-  text-shadow: 1.4px 1.4px 1.4px rgba(146, 101, 17, 0.651);
+  /* text-shadow: 1.4px 1.4px 1.4px rgba(255, 255, 255, 0.938); */
 
   margin: 10px;
   text-align: center;
 }
 
 .page-title-header {
-  color: black;
+  color: orange;
   font-weight: bolder;
-  text-shadow: 2px 2px 2px rgba(146, 101, 17, 0.651);
+  /* text-shadow: 2px 2px 2px rgba(228, 148, 10, 0.938); */
 
   margin: 10px;
   text-align: center;
@@ -56,26 +56,26 @@ body {
 }
 
 .btn-black {
-  background: rgba(0, 0, 0, 0.2) !important;
-  color: black;
+  background: rgba(0, 0, 0, 0.5) !important;
+  color: white !important;
   font-weight: bold !important;
 }
 .btn-black:active {
   background: black !important;
 }
 .btn-orange {
-  background: rgba(255, 166, 0, 0.2) !important;
-  color: rgb(141, 92, 1) !important;
-  border-color: rgba(141, 92, 1, 0.5) !important;
+  background: rgba(33, 28, 17, 0.5) !important;
+  color: white !important;
+  /* border-color: rgba(141, 92, 1, 0.5) !important; */
   font-weight: bold !important;
 }
 .btn-orange:active {
-  background: orange !important;
+  background: rgb(255, 165, 0) !important;
   color: white !important;
 }
 .btn-red {
-  background: rgba(255, 0, 0, 0.2) !important;
-  color: red !important;
+  background: rgba(255, 0, 0, 0.5) !important;
+  color: white !important;
   font-weight: bold !important;
 }
 .btn-red:active {
@@ -83,8 +83,8 @@ body {
   color: white !important;
 }
 .btn-green {
-  background: rgba(0, 128, 0, 0.2) !important;
-  color: green !important;
+  background: rgba(0, 128, 0, 0.5) !important;
+  color: white !important;
   font-weight: bold !important;
 }
 .btn-green:active {
@@ -92,8 +92,8 @@ body {
   color: white !important;
 }
 .btn-grey {
-  background: rgba(128, 128, 128, 0.2) !important;
-  color: rgb(46, 46, 46) !important;
+  background: rgba(128, 128, 128, 0.5) !important;
+  color: white !important;
   border: 1px solid black;
   font-weight: bold !important;
 }
@@ -102,8 +102,8 @@ body {
   color: white !important;
 }
 .btn-blue {
-  background: rgba(52, 180, 235, 0.2) !important;
-  color: rgb(52, 122, 235) !important;
+  background: rgba(52, 180, 235, 0.5) !important;
+  color: white !important;
   font-weight: bold !important;
 }
 .btn-blue:active {
@@ -118,6 +118,26 @@ body {
 .btn-m-l {
   margin-left: 12px;
 }
+
+/* Dark mode text */
+label,
+th,
+hr,
+tr {
+  color: white !important;
+}
+tbody,
+tr {
+  color: grey;
+  border-color: grey !important;
+}
+
+.gridjs-td,
+.gridjs-th-content {
+  color: black;
+}
+
+/* End */
 
 .transparent-background {
   background: transparent;
@@ -170,7 +190,7 @@ body {
 }
 
 .info-tooltip {
-  color: black;
+  color: white;
   border: none;
   position: absolute;
 }

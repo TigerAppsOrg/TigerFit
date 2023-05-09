@@ -20,6 +20,8 @@ from database import (
     UserBodyweights,
 )
 from datetime import datetime, date, timedelta
+from dateutil.relativedelta import relativedelta
+
 
 # from one_rep_estimation import OneRepEstimation
 import json
@@ -854,7 +856,7 @@ def is_bodyweight_exercise(session, equipment_name):
 # equipment, starting at the start date and ending today
 def get_equipment_data(session, user_name, equipment_name, start_date):
     assert session is not None
-    
+
     # add buffer to fully capture requests landing on the same day
     start_date -= timedelta(days=1)
 
@@ -882,6 +884,10 @@ def get_equipment_data(session, user_name, equipment_name, start_date):
 # Returns all bodyweights for selected user (of all time)
 def get_bodyweight_data(session, user_name):
     assert session is not None
+
+    # only get bodyweights of the past year
+    start_date = datetime.today() - relativedelta(years=1)
+
     # add buffer to fully capture requests landing on the same day
     return (
         # ! do this on other tables (select just necessary cols)
@@ -898,6 +904,7 @@ def get_bodyweight_data(session, user_name):
             and_(
                 Users.user_name == user_name,
                 UserBodyweights.user_name == user_name,
+                UserBodyweights.date >= start_date,
             )
         )
         .order_by(UserBodyweights.date)

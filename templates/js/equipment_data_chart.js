@@ -391,7 +391,7 @@ function updateEquipmentChart(response) {
     {
       label: "1-6",
       rep_range: "1_6",
-      color: "#FF000055",
+      color: "red",
     },
     // {
     //   label: "2-6",
@@ -401,12 +401,12 @@ function updateEquipmentChart(response) {
     {
       label: "7-12",
       rep_range: "7_12",
-      color: "#FFA50055",
+      color: "orange",
     },
     {
       label: "13+",
       rep_range: "13_plus",
-      color: "#00FF0055",
+      color: "lime",
     },
   ];
 
@@ -463,6 +463,13 @@ function updateEquipmentChart(response) {
         xAxes: [
           {
             type: "time",
+            ticks: {
+              fontColor: "white",
+              color: "white",
+            },
+            gridLines: {
+              color: "grey", // Change the color of the gridlines
+            },
             // time: {
             //   unit: "day",
             // },
@@ -473,9 +480,22 @@ function updateEquipmentChart(response) {
             scaleLabel: {
               display: true,
               labelString: "Lifted Weight (lbs)",
+              fontColor: "white",
+            },
+            ticks: {
+              fontColor: "white",
+              color: "white",
+            },
+            gridLines: {
+              color: "grey", // Change the color of the gridlines
             },
           },
         ],
+      },
+      legend: {
+        labels: {
+          fontColor: "white", // Change the font color of the legend labels
+        },
       },
       tooltips: {
         enabled: true,
