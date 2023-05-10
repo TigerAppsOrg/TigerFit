@@ -53,10 +53,9 @@
         $('body').toggleClass("dark")
     }
 
-
-    button.addEventListener('click', () => {
+    $(document).on('click', '#dark-mode-toggle', function () {
         toggleColorTheme()
-        window.location.reload()
+        // window.location.reload()
     })
 
     function toggleColorTheme() {

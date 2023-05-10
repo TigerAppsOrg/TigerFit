@@ -471,7 +471,7 @@ function updateEquipmentChart(response) {
               color: darkMode ? "white" : "grey",
             },
             gridLines: {
-              color: darkMode ? "grey" : "grey", // Change the color of the gridlines
+              color: "grey", // Change the color of the gridlines
             },
             // time: {
             //   unit: "day",
@@ -490,7 +490,7 @@ function updateEquipmentChart(response) {
               color: darkMode ? "white" : "grey",
             },
             gridLines: {
-              color: darkMode ? "grey" : "grey", // Change the color of the gridlines
+              color: "grey", // Change the color of the gridlines
             },
           },
         ],
@@ -572,6 +572,25 @@ function updateEquipmentChart(response) {
         },
       },
     },
+  });
+
+  $(document).ready(() => {
+    $(document).on("click", "#dark-mode-toggle", function () {
+      let themeColor = "grey";
+      if (localStorage.getItem("theme") === "dark") {
+        themeColor = "white";
+        alert("changed to white");
+      } else {
+        alert("changed to grey");
+      }
+      chart.options.scales.xAxes[0].ticks.fontColor = themeColor;
+      chart.options.scales.xAxes[0].ticks.color = themeColor;
+      chart.options.scales.yAxes[0].ticks.fontColor = themeColor;
+      chart.options.scales.yAxes[0].ticks.color = themeColor;
+      chart.options.legend.labels.fontColor = themeColor;
+
+      chart.update();
+    });
   });
 }
 
