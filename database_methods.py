@@ -31,6 +31,7 @@ import os
 # ----------------------------------------------------------------------
 # * CONSTRUCTOR METHODS
 
+
 # Creates blank user with given field values (or default)
 # Returns user_id of new user
 # ! case sensitive rn
@@ -189,7 +190,6 @@ def create_new_exercise(
 def insert_1RM_if_greater(
     session, user_name, equipment_name, one_rep_estimation
 ):
-
     previous_one_rep_dict = (
         session.query(Users.one_rep_estimation)
         .filter(Users.user_name == user_name)
@@ -625,6 +625,7 @@ def unwatch_tutorial(session, user_name):
 
 # ----------------------------------------------------------------------
 # * QUERY METHODS
+
 
 # Returns all past workouts of selected user
 def get_past_workouts(session, user_name):
@@ -1086,12 +1087,23 @@ def equipment_in_database(session, equipment_name, user_name):
         return False
 
 
-def has_agreed_to_liability(session, user_name):
-    return (
-        session.query(Users.has_agreed_liability)
-        .filter(Users.user_name == user_name)
-        .one()[0]
+# * first test with sql commands
+def SQL_has_agreed_to_liability(session, user_name):
+    sql_statement = (
+        "select has_agreed_liability from users where user_name = %s"
     )
+    results = session.execute_query(sql_statement, [user_name])
+    row = results[0]
+    has_agreed_to_liability = row[0]
+    return has_agreed_to_liability
+
+
+# def has_agreed_to_liability(session, user_name):
+#     return (
+#         session.query(Users.has_agreed_liability)
+#         .filter(Users.user_name == user_name)
+#         .one()[0]
+#     )
 
 
 def has_watched_tutorial(session, user_name):
@@ -1107,6 +1119,7 @@ def has_watched_tutorial(session, user_name):
 
 # ----------------------------------------------------------------------
 # * UTILITY METHODS
+
 
 # Creates json of all equipment, with value set to 0
 def get_equipment_as_blank_json(session):
@@ -1330,11 +1343,11 @@ def create_tables(engine):
 
 
 def create_local_session(
-    user="rmd",
-    password="xxx",
-    host="localhost",
-    port="5432",
-    database="tigerfit",
+    # user="rmd",
+    # password="xxx",
+    # host="localhost",
+    # port="5432",
+    # database="tigerfit",
 ):
     from dotenv import load_dotenv
 
@@ -1365,6 +1378,86 @@ def create_session():
         return session, engine
 
 
+# ! Helpers for create_sql_section
+import psycopg2
+import os
+
+
+class DatabaseConnection:
+    def __init__(self, host, database, user, password):
+        self.host = host
+        self.database = database
+        self.user = user
+        self.password = password
+        self.connection = None
+        self.cursor = None
+
+    def connect(self):
+        try:
+            self.connection = psycopg2.connect(
+                host=self.host,
+                database=self.database,
+                user=self.user,
+                password=self.password,
+            )
+            self.cursor = self.connection.cursor()
+        except psycopg2.Error as e:
+            print("Error: Unable to connect to the database:", e)
+
+    # params should be a list of parameters
+    def execute_query(self, query, params):
+        if not self.connection:
+            self.connect()
+
+        try:
+            print("executing %s:" % query)
+            self.cursor.execute(query, params)
+            return self.cursor.fetchall()
+        except psycopg2.Error as e:
+            print("Error while executing query:", e)
+            return []
+
+    def close(self):
+        if self.cursor:
+            self.cursor.close()
+        if self.connection:
+            self.connection.close()
+
+
+# New function using SQL instead of SQL alchemy
+# To execute sql query:
+# sql_statement = "..."
+# results = session.execute_query(sql_statement)
+def create_sql_session():
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
+    host = "jelani.db.elephantsql.com"
+    database = "jlmiiewl"
+    user = "jlmiiewl"
+    password = os.environ["DATABASE_PASSWORD"]
+
+    session = DatabaseConnection(host, database, user, password)
+    return session
+
+    # while True:
+    #     sql_statement = input(
+    #         "Enter SQL statement to execute (or 'exit' to quit): "
+    #     )
+
+    #     if sql_statement.lower() == "exit":
+    #         session.close()
+    #         print("Exiting...")
+    #         break
+
+    #     results = session.execute_query(sql_statement)
+    #     print("Query results:", results)
+
+
+# ! END
+
+
 def dangerous_apply_to_all_users(session):
     for user in get_all_users(session):
         pass  # uncomment next line, using something of this form
@@ -1385,6 +1478,8 @@ def main():
         print("Test session", session)
         print("Test engine", engine)
 
+        from dotenv import load_dotenv
+
         load_dotenv()
         session, engine = create_local_session()
         # print("Test session", session)
@@ -1404,6 +1499,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 # One rep estimation methods
 class OneRepEstimation:

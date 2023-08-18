@@ -17,40 +17,7 @@ from flask import (
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 from flask.helpers import make_response
-from database_methods import (
-    create_session,
-    create_local_session,
-    get_all_custom_equipment,
-    get_all_used_equipment,
-    get_all_equipment,
-    get_past_workout_by_id,
-    get_past_workouts,
-    get_equipment_data,
-    create_new_workout,
-    create_new_exercise,
-    get_goal_bodyweight,
-    get_preferred_name,
-    create_new_bodyweight,
-    get_bodyweight_data,
-    get_weight_estimation,
-    get_rep_estimation,
-    equipment_in_database,
-    create_custom_equipment,
-    get_workout_title_by_id,
-    update_profile_settings,
-    has_agreed_to_liability,
-    agree_to_liability,
-    delete_workout_and_exercises,
-    has_watched_tutorial,
-    watch_tutorial,
-    unwatch_tutorial,
-    get_all_1rms,
-    insert_1RM,
-    delete_custom_equipment,
-    get_most_recent_bodyweight,
-    is_bodyweight_exercise,
-    get_most_recent_workout,
-)
+from database_methods import *
 
 from casclient import CasClient
 from format_chart_data import (
@@ -62,10 +29,12 @@ import os
 
 
 # ! Production
-session, engine = create_session()
+session, _ = create_session()
+
+sql_session = create_sql_session()
 
 # ! Local testing
-# session, engine = create_local_session()
+# session, _ = create_local_session()
 
 # Begin App
 
@@ -177,7 +146,10 @@ def about():
 @app.route("/history", methods=["GET", "POST"])
 def history():
     user_name = CasClient().authenticate(session).strip()
-    has_agreed_liability = has_agreed_to_liability(session, user_name)
+
+    has_agreed_liability = SQL_has_agreed_to_liability(
+        sql_session, user_name
+    )
 
     past_workouts = get_past_workouts(session, user_name)
     print("past_workouts: ", len(past_workouts))
@@ -252,7 +224,9 @@ def data():
     print("GET request for /index")
 
     user_name = CasClient().authenticate(session).strip()
-    has_agreed_liability = has_agreed_to_liability(session, user_name)
+    has_agreed_liability = SQL_has_agreed_to_liability(
+        sql_session, user_name
+    )
 
     equipment_list = list(
         map(lambda row: row.__dict__, get_all_equipment(session))
@@ -476,7 +450,9 @@ def update_equipment_chart():
 @app.route("/add", methods=["GET"])
 def add():
     user_name = CasClient().authenticate(session).strip()
-    has_agreed_liability = has_agreed_to_liability(session, user_name)
+    has_agreed_liability = SQL_has_agreed_to_liability(
+        sql_session, user_name
+    )
     has_watched = has_watched_tutorial(session, user_name)
     # print("*has watched tutorial?", has_watched)
     # print("*has agreed liability?", has_agreed_liability)
@@ -822,7 +798,9 @@ def recommend_reps():
 @app.route("/fitness", methods=["GET"])
 def graph():
     user_name = CasClient().authenticate(session).strip()
-    has_agreed_liability = has_agreed_to_liability(session, user_name)
+    has_agreed_liability = SQL_has_agreed_to_liability(
+        sql_session, user_name
+    )
     # retrieve equipment data from database
 
     return render_template(
@@ -888,7 +866,9 @@ def results():
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
     user_name = CasClient().authenticate(session).strip()
-    has_agreed_liability = has_agreed_to_liability(session, user_name)
+    has_agreed_liability = SQL_has_agreed_to_liability(
+        sql_session, user_name
+    )
 
     if request.method == "POST":
         form = request.form.to_dict(flat=True)
@@ -978,3 +958,4 @@ if __name__ == "__main__":
     app.run(
         host="localhost", port="5000", debug=True
     )  # , ssl_context="adhoc")
+    print("running-------------------")
