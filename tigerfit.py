@@ -62,10 +62,10 @@ import os
 
 
 # ! Production
-# session, engine = create_session()
+session, engine = create_session()
 
 # ! Local testing
-session, engine = create_local_session()
+# session, engine = create_local_session()
 
 # Begin App
 
@@ -74,6 +74,7 @@ app.secret_key = os.environ["APP_SECRET_KEY"]
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     "postgresql" + os.environ["DATABASE_URL"][8:]
 )
+
 
 # Helper function to map date_range string to date object
 def get_earliest_date(date_range):
@@ -564,7 +565,6 @@ def add():
 # Activated when user submits workout via /add page
 @app.route("/add", methods=["POST"])
 def add_workout():
-
     user_name = CasClient().authenticate(session).strip()
 
     form = request.form.to_dict(flat=False)
