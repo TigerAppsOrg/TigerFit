@@ -17,7 +17,10 @@ from flask import (
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 from flask.helpers import make_response
-from database_methods import *
+from database_methods import *  # temporary
+import sql_database_methods as sqldb
+
+# import database_connection as db_conn
 
 from casclient import CasClient
 from format_chart_data import (
@@ -31,7 +34,7 @@ import os
 # ! Production
 session, _ = create_session()
 
-sql_session = create_sql_session()
+sql_session = sqldb.create_sql_session()
 
 # ! Local testing
 # session, _ = create_local_session()
@@ -145,9 +148,9 @@ def about():
 # History page
 @app.route("/history", methods=["GET", "POST"])
 def history():
-    user_name = CasClient().authenticate(session).strip()
+    user_name = CasClient().authenticate(sql_session).strip()
 
-    has_agreed_liability = SQL_has_agreed_to_liability(
+    has_agreed_liability = sqldb.has_agreed_liability(
         sql_session, user_name
     )
 
@@ -223,8 +226,8 @@ def delete_workout():
 def data():
     print("GET request for /index")
 
-    user_name = CasClient().authenticate(session).strip()
-    has_agreed_liability = SQL_has_agreed_to_liability(
+    user_name = CasClient().authenticate(sql_session).strip()
+    has_agreed_liability = sqldb.has_agreed_liability(
         sql_session, user_name
     )
 
@@ -449,8 +452,8 @@ def update_equipment_chart():
 # Activated when user accesses /add page
 @app.route("/add", methods=["GET"])
 def add():
-    user_name = CasClient().authenticate(session).strip()
-    has_agreed_liability = SQL_has_agreed_to_liability(
+    user_name = CasClient().authenticate(sql_session).strip()
+    has_agreed_liability = sqldb.has_agreed_liability(
         sql_session, user_name
     )
     has_watched = has_watched_tutorial(session, user_name)
@@ -541,7 +544,7 @@ def add():
 # Activated when user submits workout via /add page
 @app.route("/add", methods=["POST"])
 def add_workout():
-    user_name = CasClient().authenticate(session).strip()
+    user_name = CasClient().authenticate(sql_session).strip()
 
     form = request.form.to_dict(flat=False)
 
@@ -797,8 +800,8 @@ def recommend_reps():
 
 @app.route("/fitness", methods=["GET"])
 def graph():
-    user_name = CasClient().authenticate(session).strip()
-    has_agreed_liability = SQL_has_agreed_to_liability(
+    user_name = CasClient().authenticate(sql_session).strip()
+    has_agreed_liability = sqldb.has_agreed_liability(
         sql_session, user_name
     )
     # retrieve equipment data from database
@@ -865,8 +868,8 @@ def results():
 # Profile page
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
-    user_name = CasClient().authenticate(session).strip()
-    has_agreed_liability = SQL_has_agreed_to_liability(
+    user_name = CasClient().authenticate(sql_session).strip()
+    has_agreed_liability = sqldb.has_agreed_liability(
         sql_session, user_name
     )
 

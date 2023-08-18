@@ -15,8 +15,10 @@ from database_methods import (
     get_user_by_username,
     create_new_user,
 )
+import sql_database_methods as sqldb
 
 # ----------------------------------------------------------------------
+
 
 # Return url after stripping out the "ticket" parameter that was
 # added by the CAS server.
@@ -32,7 +34,6 @@ def strip_ticket(url):
 
 
 class CasClient:
-
     # ------------------------------------------------------------------
 
     # Initialize a new CASClient object so it uses the given CAS
@@ -82,9 +83,12 @@ class CasClient:
         if "username" in session:
             print("Username already in session")
             username = session.get("username")
-            if get_user_by_username(remote_session, username) is None:
+            # if get_user_by_username(remote_session, username) is None:
+            if not sqldb.user_in_database(remote_session, username):
                 print("User not yet encounted - adding %s" % username)
                 create_new_user(remote_session, username)
+            else:
+                print("Welcome %s" % username)
             return username
 
         # If the request does not contain a login ticket, then redirect
@@ -115,8 +119,9 @@ class CasClient:
 
         session["username"] = username
 
-        # ! Add user to database (if first encounter with user)
-        if get_user_by_username(remote_session, username) is None:
+        # ! [New] Add user to database (if first encounter with user)
+        # if get_user_by_username(remote_session, username) is None:
+        if not sqldb.user_in_database(remote_session, username):
             print("User not yet encounted - adding %s" % username)
             create_new_user(remote_session, username)
         else:
@@ -128,7 +133,6 @@ class CasClient:
 
     # Logout the user.
     def logout(self, next_url):
-
         # Delete the user's username from the session.
         session.pop("username")
 

@@ -27,6 +27,8 @@ from dateutil.relativedelta import relativedelta
 import json
 import os
 
+import database_connection as db_conn
+
 
 # ----------------------------------------------------------------------
 # * CONSTRUCTOR METHODS
@@ -577,50 +579,32 @@ def populate_equipment_gifs(session):
 
 # Sets corresponding DB column for user to True
 def agree_to_liability(session, user_name):
-    user = (
-        session.query(Users).filter(Users.user_name == user_name).one()
-    )
-    print("user", user)
-    user.has_agreed_liability = True
+    sql_statement = "update users set has_agreed_liability = true where user_name = %s"
+    _, is_error = session.execute_query(sql_statement, [user_name])
 
-    try:
-        session.commit()
-        return True
-    except exc.SQLAlchemyError as err:
-        session.rollback()
-        return err
+    if is_error:
+        return False
+    return True
 
 
-# Sets corresponding DB column for user to True
+# Sets corresponding DB column for user to True, return True if successful
 def watch_tutorial(session, user_name):
-    user = (
-        session.query(Users).filter(Users.user_name == user_name).one()
-    )
-    print("user", user)
-    user.has_watched_tutorial = True
+    sql_statement = "update users set has_watched_tutorial = true where user_name = %s"
+    _, is_error = session.execute_query(sql_statement, [user_name])
 
-    try:
-        session.commit()
-        return True
-    except exc.SQLAlchemyError as err:
-        session.rollback()
-        return err
+    if is_error:
+        return False
+    return True
 
 
-# Sets corresponding DB column for user to False
+# Sets corresponding DB column for user to False, return True if successful
 def unwatch_tutorial(session, user_name):
-    user = (
-        session.query(Users).filter(Users.user_name == user_name).one()
-    )
-    print("user", user)
-    user.has_watched_tutorial = False
+    sql_statement = "update users set has_watched_tutorial = false where user_name = %s"
+    _, is_error = session.execute_query(sql_statement, [user_name])
 
-    try:
-        session.commit()
-        return True
-    except exc.SQLAlchemyError as err:
-        session.rollback()
-        return err
+    if is_error:
+        return False
+    return True
 
 
 # ----------------------------------------------------------------------
@@ -1010,97 +994,127 @@ def get_all_used_equipment(session, user_name):
     )
 
 
-# Returns requested user (by user_name), or None if not found
-def get_user_by_username(session, user_name):
-    assert session is not None
-    return (
-        session.query(Users)
-        .filter(Users.user_name == user_name)
-        .first()
-    )
+# # Returns requested user (by user_name), or None if not found
+# def get_user_by_username(session, user_name):
+#     assert session is not None
+#     return (
+#         session.query(Users)
+#         .filter(Users.user_name == user_name)
+#         .first()
+#     )
 
 
-# Returns requested equipment (by equipment_id), or None if not found
-def get_equipment_by_id(session, equipment_id):
-    assert session is not None
-    return (
-        session.query(EquipmentList)
-        .filter(EquipmentList.equipment_id == equipment_id)
-        .first()
-    )
+# # Returns requested equipment (by equipment_id), or None if not found
+# def get_equipment_by_id(session, equipment_id):
+#     assert session is not None
+#     return (
+#         session.query(EquipmentList)
+#         .filter(EquipmentList.equipment_id == equipment_id)
+#         .first()
+#     )
 
 
-# Returns requested equipment (by equipment_name), or None if not found
-def get_equipment_by_name(session, equipment_name):
-    assert session is not None
-    return (
-        session.query(EquipmentList)
-        .filter(
-            func.lower(EquipmentList.equipment_name)
-            == func.lower(equipment_name)
-        )
-        .first()
-    )
+# # Returns requested equipment (by equipment_name), or None if not found
+# def get_equipment_by_name(session, equipment_name):
+#     assert session is not None
+#     return (
+#         session.query(EquipmentList)
+#         .filter(
+#             func.lower(EquipmentList.equipment_name)
+#             == func.lower(equipment_name)
+#         )
+#         .first()
+#     )
 
 
 # Returns goal bodyweight of given user
 def get_goal_bodyweight(session, user_name):
-    assert session is not None
-    return (
-        session.query(Users.goal_bodyweight)
-        .filter(Users.user_name == user_name)
-        .first()
-    )[0]
+    sql_statement = "select goal_bw from users where user_name = %s"
+    results, _ = session.execute_query(sql_statement, [user_name])
+    if len(results) == 0:
+        return 0
+
+    row = results[0]
+    goal_bodyweight = row[0]
+    return goal_bodyweight
 
 
 # Returns preferred name of given user
 def get_preferred_name(session, user_name):
-    assert session is not None
-    return (
-        session.query(Users.pref_name)
-        .filter(Users.user_name == user_name)
-        .first()
-    )[0]
-
-
-# Returns True if equipment_name is in EquipmentList and false if not
-def equipment_in_database(session, equipment_name, user_name):
-    assert session is not None
-
-    if (
-        session.query(EquipmentList)
-        .filter(EquipmentList.equipment_name == equipment_name)
-        .first()
-        is not None
-    ):
-        return True
-
-    custom_equipment_list = (
-        session.query(Users.custom_equipment)
-        .filter(Users.user_name == user_name)
-        .one()[0]["names"]
+    sql_statement = (
+        "select has_agreed_liability from users where user_name = %s"
     )
-    if equipment_name in custom_equipment_list:
-        return True
+    results, _ = session.execute_query(sql_statement, [user_name])
+    if len(results) == 0:
+        return ""
 
-    else:
+    row = results[0]
+    pref_name = row[0]
+    return pref_name
+
+
+# Returns True if user_name is in users table, and False if not
+def user_in_database(session, user_name):
+    sql_statement = "select exists (select user_name from users where user_name = %s)"
+    results, _ = session.execute_query(sql_statement, [user_name])
+
+    is_user = results[0][0]
+    return is_user
+
+
+# Returns True if equipment_name is in standard list or custom list of
+# user, and False if not
+def equipment_in_database(session, equipment_name, user_name):
+    return equipment_is_standard(
+        session, equipment_name
+    ) or equipment_is_custom(session, equipment_name, user_name)
+
+
+def equipment_is_standard(session, equipment_name):
+    sql_statement = "select exists (select * from equipment_list where equipment_name = %s)"
+    results, _ = session.execute_query(sql_statement, [equipment_name])
+
+    is_standard = results[0][0]
+    return is_standard
+
+
+def equipment_is_custom(session, equipment_name, user_name):
+    sql_statement = (
+        "select custom_equipment from users where user_name = %s"
+    )
+    results, _ = session.execute_query(sql_statement, [user_name])
+    if len(results) == 0:
         return False
 
+    row = results[0]
+    list_of_customs = row[0]["names"]
+    return equipment_name in list_of_customs
 
-def has_agreed_to_liability(session, user_name):
-    return (
-        session.query(Users.has_agreed_liability)
-        .filter(Users.user_name == user_name)
-        .one()[0]
+
+def has_agreed_liability(session, user_name):
+    sql_statement = (
+        "select has_agreed_liability from users where user_name = %s"
     )
+    results, _ = session.execute_query(sql_statement, [user_name])
+    if len(results) == 0:
+        return False
+
+    row = results[0]
+    has_agreed = row[0]
+    return has_agreed
 
 
 def has_watched_tutorial(session, user_name):
-    return (
-        session.query(Users.has_watched_tutorial)
-        .filter(Users.user_name == user_name)
-        .one()[0]
+    sql_statement = (
+        "select has_watched_tutorial from users where user_name = %s"
     )
+    results, _ = session.execute_query(sql_statement, [user_name])
+    if len(results) == 0:
+        return False
+
+    row = results[0]
+    has_watched = row[0]
+    return has_watched
 
 
 # def count_times_used_equipment(session, user_name, equipment_name):
@@ -1331,40 +1345,40 @@ def create_tables(engine):
     Base.metadata.create_all(engine)
 
 
-def create_local_session(
-    # user="rmd",
-    # password="xxx",
-    # host="localhost",
-    # port="5432",
-    # database="tigerfit",
-):
-    from dotenv import load_dotenv
+# def create_local_session(
+#     # user="rmd",
+#     # password="xxx",
+#     # host="localhost",
+#     # port="5432",
+#     # database="tigerfit",
+# ):
+#     from dotenv import load_dotenv
 
-    load_dotenv()
+#     load_dotenv()
 
-    engine = create_engine(
-        "postgresql"
-        + os.environ["DATABASE_URL"][8:]
-        # % (user, password, host, port, database)
-    )
-    Session = sessionmaker(bind=engine)
-    return Session(), engine
+#     engine = create_engine(
+#         "postgresql"
+#         + os.environ["DATABASE_URL"][8:]
+#         # % (user, password, host, port, database)
+#     )
+#     Session = sessionmaker(bind=engine)
+#     return Session(), engine
 
 
-def create_session():
-    # postgres://username:password@hostname:port/database
-    db_url = "postgresql" + os.environ["DATABASE_URL"][8:]
-    engine = create_engine(db_url)
-    # Session = sessionmaker(bind=engine)
-    # return Session(), engine
+# def create_session():
+#     # postgres://username:password@hostname:port/database
+#     db_url = "postgresql" + os.environ["DATABASE_URL"][8:]
+#     engine = create_engine(db_url)
+#     # Session = sessionmaker(bind=engine)
+#     # return Session(), engine
 
-    # create session and add objects
-    # with sessionmaker(bind=engine)() as session:
-    #     return session, engine
+#     # create session and add objects
+#     # with sessionmaker(bind=engine)() as session:
+#     #     return session, engine
 
-    # with create_engine(db_url) as engine:
-    with sessionmaker(bind=engine)() as session:
-        return session, engine
+#     # with create_engine(db_url) as engine:
+#     with sessionmaker(bind=engine)() as session:
+#         return session, engine
 
 
 def dangerous_apply_to_all_users(session):
@@ -1404,6 +1418,24 @@ def main():
         print("error")
         session.close()
         engine.dispose
+
+
+# New function using SQL instead of SQL alchemy
+# To execute sql query:
+# sql_statement = "..."
+# results = session.execute_query(sql_statement)
+def create_sql_session():
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
+    host = "jelani.db.elephantsql.com"
+    database = "jlmiiewl"
+    user = "jlmiiewl"
+    password = os.environ["DATABASE_PASSWORD"]
+
+    session = db_conn.DatabaseConnection(host, database, user, password)
+    return session
 
 
 if __name__ == "__main__":
