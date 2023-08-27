@@ -67,52 +67,54 @@
 
         </style>
         <br />
-        <div class="row justify-content-center">
-            <center>
-                <h3><b>{{workout_title}}</b></h3>
-                <h2>{{workout_date}}</h2>
-            </center>
-        </div>
-        <div class="row justify-content-center">
-            <center>
-                <h3>
-                    <b>Volume Lifted:</b> {{weight_volume}} lbs
-                    <span class="info-tooltip-inline" data-toggle="tooltip" data-placement="top" title="The total amount of weight lifted (product of
+        <div id="workout-success-container">
+            <div class="row justify-content-center">
+                <center>
+                    <h3><b>{{workout_title}}</b></h3>
+                    <h2>{{workout_date}}</h2>
+                </center>
+            </div>
+            <div class="row justify-content-center">
+                <center>
+                    <h3>
+                        <b>Volume Lifted:</b> {{weight_volume}} lbs
+                        <span class="info-tooltip-inline" data-toggle="tooltip" data-placement="top" title="The total amount of weight lifted (product of
                     reps and weight)">
-                        <span class="material-icons" style="font-size:15px">info</span>
-                    </span>
-                </h3>
+                            <span class="material-icons" style="font-size:15px">info</span>
+                        </span>
+                    </h3>
 
-            </center>
-        </div>
-        <div class="row justify-content-center">
-            <center>
-                <h3><b>Time Taken:</b> {{workout_time_minutes}} min</h3>
-            </center>
-        </div>
-        <div class="row justify-content-center">
-            <center>
-                <h3><b>Volume per Minute:</b> {{volume_per_minute}} lbs/min</h3>
-            </center>
-        </div>
-        <div class="row justify-content-center">
-            <center>
-                <h3><b>Reps per Minute:</b> {{reps_per_minute}} reps/min</h3>
-            </center>
-        </div>
-        {% if all_new_1RMs| length > 0 %}
-        <div class="row justify-content-center">
-            <center>
-                <h3><b>New Personal Best One Rep Max Estimations:</b></h3>
+                </center>
+            </div>
+            <div class="row justify-content-center">
+                <center>
+                    <h3><b>Time Taken:</b> {{workout_time_minutes}} min</h3>
+                </center>
+            </div>
+            <div class="row justify-content-center">
+                <center>
+                    <h3><b>Volume per Minute:</b> {{volume_per_minute}} lbs/min</h3>
+                </center>
+            </div>
+            <div class="row justify-content-center">
+                <center>
+                    <h3><b>Reps per Minute:</b> {{reps_per_minute}} reps/min</h3>
+                </center>
+            </div>
+            {% if all_new_1RMs| length > 0 %}
+            <div class="row justify-content-center">
+                <center>
+                    <h3><b>New Personal Best One Rep Max Estimations:</b></h3>
 
-                {% for item in all_new_1RMs%}
+                    {% for item in all_new_1RMs%}
 
-                <h4><b>{{item['equipment_name']}}:</b> {{item['one_rep_estimation']}} lbs</h4>
+                    <h4><b>{{item['equipment_name']}}:</b> {{item['one_rep_estimation']}} lbs</h4>
 
-                {% endfor %}
-            </center>
+                    {% endfor %}
+                </center>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
         <br />
         <div class="row justify-content-center">
             <center>
