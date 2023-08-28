@@ -23,12 +23,12 @@ body.dark .dark-mode-lighter-gray {
 
 /* Darker Gray */
 body.dark .modal-header,
-.card-header,
-.accordion-button,
-th,
-.gridjs-th-content,
-.gridjs-footer,
-.gridjs-summary,
+body.dark .card-header,
+body.dark .accordion-button,
+body.dark th,
+body.dark .gridjs-th-content,
+body.dark .gridjs-footer,
+body.dark .gridjs-summary,
 #workout-success-container {
   color: white !important;
   background-color: rgb(55, 55, 55) !important;
@@ -36,13 +36,13 @@ th,
 }
 /* Lighter Gray */
 body.dark .modal-body,
-.list-group-item,
-.accordion-body,
-td,
-input,
-select,
-.workout-tool,
-textarea {
+body.dark .list-group-item,
+body.dark .accordion-body,
+body.dark td,
+body.dark input,
+body.dark select,
+body.dark .workout-tool,
+body.dark textarea {
   color: white !important;
   background-color: rgb(76, 76, 76) !important;
   border-color: #ffffff !important;
